@@ -30,11 +30,11 @@ namespace Engine_V2.Controllers
             _logger = logger;
         }
 
-       
+
         [HttpGet]
         public List<int> Get()
         {
-            var rng = new Random();
+        
               var d=   _TaskCampaignBusiness.Get();
             //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             //{

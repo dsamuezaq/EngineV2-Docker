@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Chariot.Engine.Business.Mardiscore;
 using Chariot.Engine.DataObject;
+using Chariot.Framework.Complement;
 using Engine_V2.Libraries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,7 @@ namespace Engine_V2.Controllers
     {
 
         private readonly TaskCampaignBusiness _TaskCampaignBusiness;
+
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -23,19 +25,22 @@ namespace Engine_V2.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger
-                                        , ChariotContext _chariotContext) : base(_chariotContext)
+        public WeatherForecastController(    ILogger<WeatherForecastController> logger,
+                                            RedisCache distributedCache, 
+                                            ChariotContext _chariotContext) : base(_chariotContext,distributedCache)
         {
-            _TaskCampaignBusiness = new TaskCampaignBusiness(_chariotContext);
+            _TaskCampaignBusiness = new TaskCampaignBusiness(_chariotContext, distributedCache);
             _logger = logger;
-        }
+         }
 
 
         [HttpGet]
-        public List<int> Get()
+        public String Get()
         {
-        
-              var d=   _TaskCampaignBusiness.Get();
+            //39C09A41-2488-499D-A32A-01D986297E21
+            var Td = GetUserToken("sertecomcell@prospeccionclaro.com.ec", "00");
+           //var Td =_distributedCache.Get<List<object>>("StatusTask");
+                  var d= Td;
             //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             //{
             //    Date = DateTime.Now.AddDays(index),

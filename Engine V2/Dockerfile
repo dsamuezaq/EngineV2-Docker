@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
+    FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 WORKDIR /app
 EXPOSE 80
 
@@ -9,10 +9,10 @@ COPY ["Engine V2/Engine_V2.csproj", "Engine V2/"]
 RUN dotnet restore "Engine V2/Engine_V2.csproj"
 COPY . .
 WORKDIR "/src/Engine V2"
-RUN dotnet build "Engine_V2.csproj" -c Release -o /app/build
+RUN dotnet build "Engine_V2.csproj" -c debug -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Engine_V2.csproj" -c Release -o /app/publish
+RUN dotnet publish "Engine_V2.csproj" -c debug -o /app/publish
 
 FROM base AS final
 WORKDIR /app

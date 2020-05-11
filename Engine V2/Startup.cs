@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Chariot.Engine.DataObject;
+using Chariot.Framework.Complement;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,8 @@ namespace Engine_V2
 
             var conn = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ChariotContext>(options => options.UseSqlServer(conn));
+            var connRedis = Configuration.GetConnectionString("ConnectionRedis");
+            services.AddSingleton<RedisCache, RedisCache>();
             services.AddControllers();
        
     
@@ -43,11 +46,13 @@ namespace Engine_V2
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
+        
             app.UseRouting();
 
             app.UseAuthorization();

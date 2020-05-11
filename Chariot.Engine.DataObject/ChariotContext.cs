@@ -1,4 +1,5 @@
 ﻿using Chariot.Engine.DataObject.MardisCore;
+using Chariot.Engine.DataObject.MardisSecurity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 using System;
@@ -45,9 +46,14 @@ namespace Chariot.Engine.DataObject
             return conn;
         }
         /// <summary>
-        /// Tabla de Tareas
-        /// Creación :202004016
+        /// Table Tasks
+        /// Creation :202004016
         /// </summary>
         public DbSet<TaskCampaign> TaskCampaigns { get; set; }
+        /// <summary>
+        /// Table User system
+        /// Creation :20200510
+        /// </summary>
+        public DbSet<User> Users { get; set; }
     }
 }

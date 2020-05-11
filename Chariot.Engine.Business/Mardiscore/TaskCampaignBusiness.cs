@@ -1,4 +1,5 @@
 ﻿using Chariot.Engine.DataObject;
+using Chariot.Framework.Complement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,9 @@ namespace Chariot.Engine.Business.Mardiscore
 {
     public class TaskCampaignBusiness:ABusiness
     {
-        public TaskCampaignBusiness(ChariotContext _chariotContext) : base(_chariotContext) { 
+        public TaskCampaignBusiness(ChariotContext _chariotContext,
+                                     RedisCache distributedCache) : base(_chariotContext, distributedCache)
+        { 
         
         
         }

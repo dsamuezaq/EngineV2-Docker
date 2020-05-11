@@ -16,13 +16,13 @@ namespace Engine_V2.Controllers
     public class WeatherForecastController : AController<WeatherForecastController>
     {
 
-        private readonly TaskCampaignBusiness _TaskCampaignBusiness;
+  
 
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
-
+        private readonly TaskCampaignBusiness _TaskCampaignBusiness;
         private readonly ILogger<WeatherForecastController> _logger;
 
         public WeatherForecastController(    ILogger<WeatherForecastController> logger,
@@ -34,13 +34,14 @@ namespace Engine_V2.Controllers
          }
 
 
+   
         [HttpGet]
-        public String Get()
+        public object Get()
         {
             //39C09A41-2488-499D-A32A-01D986297E21
-            var Td = GetUserToken("sertecomcell@prospeccionclaro.com.ec", "00");
-           //var Td =_distributedCache.Get<List<object>>("StatusTask");
-                  var d= Td;
+           // var Td = GetUserToken("sertecomcell@prospeccionclaro.com.ec", "00");
+            //var Td =_distributedCache.Get<List<object>>("StatusTask");
+            var d = "";
             //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             //{
             //    Date = DateTime.Now.AddDays(index),

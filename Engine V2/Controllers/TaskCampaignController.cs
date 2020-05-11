@@ -2,45 +2,57 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Chariot.Engine.Business.Mardiscore;
+using Chariot.Engine.DataObject;
+using Chariot.Framework.Complement;
+using Chariot.Framework.SystemViewModel;
+using Engine_V2.Libraries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Engine_V2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskCampaignController : ControllerBase
+    public class TaskCampaignController : AController<TaskCampaignController>
     {
-        // GET: api/TaskCampaign
+        private readonly TaskCampaignBusiness _TaskCampaignBusiness;
+        private readonly ILogger<TaskCampaignController> _logger;
+        public TaskCampaignController(ILogger<TaskCampaignController> logger,
+                                            RedisCache distributedCache,
+                                            ChariotContext _chariotContext) : base(_chariotContext, distributedCache)
+    {
+        _TaskCampaignBusiness = new TaskCampaignBusiness(_chariotContext, distributedCache);
+        _logger = logger;
+    }
+
+
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("GetTasks")]
+        public ReplyViewModel GetTasks([FromBody] RequestViewModel _request)
+    {
+            if (Isvalidauthtoken(_request.token)) {
+                reply.status = "A-OK";
+                reply.messege = "Test";
+            }
+       
+    
+        return reply;
+    }
+        [HttpGet]
+        [Route("GetTa")]
+        public ReplyViewModel GetT()
         {
-            return new string[] { "value1", "value2" };
-        }
+           
 
-        // GET: api/TaskCampaign/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+                reply.messege = "Test";
+           
 
-        // POST: api/TaskCampaign
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
 
-        // PUT: api/TaskCampaign/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return reply;
         }
     }
+
 }

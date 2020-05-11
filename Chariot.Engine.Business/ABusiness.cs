@@ -11,11 +11,11 @@ namespace Chariot.Engine.Business
     public abstract class ABusiness
     {
         protected ChariotContext Context { get; }
-        protected  RedisCache _distributedCache;
+        protected  RedisCache _RedisCache;
         protected ABusiness(ChariotContext _chariotContext, RedisCache distributedCache)
         {
             Context = _chariotContext;
-            _distributedCache = distributedCache;
+            _RedisCache = distributedCache;
 
         }
 

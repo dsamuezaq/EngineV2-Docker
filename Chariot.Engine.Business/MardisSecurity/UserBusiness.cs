@@ -19,42 +19,56 @@ namespace Chariot.Engine.Business.MardisSecurity
 
             _userDao = new UserDao(_chariotContext);
         }
-        public string FindUserBycredentials(string user, string pass) {
-#if DEBUG
+        /// <summary>
+        /// Method for get Token API
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="pass"></param>
+        /// <returns></returns>
+        public UserTokenModel FindUserBycredentials(string user, string pass) {
+
             string _data = _userDao.GetUserbycredentials(user, pass);
+            UserTokenModel _resultData = new UserTokenModel();
             if (!_data.Equals("no found")) 
             {
-#endif
-                var UserToken = _distributedCache.Get<UserTokenModel>("UserToken:"+ _data);
-                if (UserToken != null)
-                {
-                    if (UserToken.DateToken > DateTime.Now) 
-                        return UserToken.token;
-                    else return SetUserToken(_data);
+                  return SetUserToken(_data);
 
-                }
-                else {
-          
-                    return SetUserToken(_data);
-                }
-              
-            
-            
             };
-
-            return "not found";
+            _resultData.message = "no found";
+            return _resultData;
 
         }
-        private string SetUserToken(string idUser) {
+        /// <summary>
+        /// Method for Set token in Redis Cache
+        /// </summary>
+        /// <param name="idUser"></param>
+        /// <returns></returns>
+        private UserTokenModel SetUserToken(string idUser) {
             string token = Guid.NewGuid().ToString();
+
             UserTokenModel _model = new UserTokenModel();
+            _model.Id = idUser.ToString();
             _model.token = token;
             _model.DateToken = DateTime.Now.AddDays(1);
-            _distributedCache.Set("UserToken:" + idUser, _model);
-            return token;
+            _model.message = "A-OK";
+            _RedisCache.Set("UserToken:" + token, _model);
+            return _model;
 
 
         }
-
+        /// <summary>
+        ///Method consume api for token 
+        /// </summary>
+        /// <param name="Token"></param>
+        /// <returns></returns>
+        public bool VerifyTokenUser(string Token)
+        {
+            UserTokenModel _data= _RedisCache.Get<UserTokenModel>("UserToken:" + Token);
+            if (_data != null) { 
+                if (_data.DateToken > DateTime.Now)
+                    return true;
+            }
+            return false;
+        }
     }
 }

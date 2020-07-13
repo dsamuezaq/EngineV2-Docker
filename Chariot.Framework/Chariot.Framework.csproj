@@ -159,9 +159,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\AppSettings.cs" />
     <Compile Include="MardisSecurityViewModel\UserTokenModel.cs" />
+    <Compile Include="MardisSecurityViewModel\UserViewModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemViewModel\LoginViewModel.cs" />
     <Compile Include="SystemViewModel\ReplyViewModel.cs" />
     <Compile Include="SystemViewModel\RequestViewModel.cs" />
   </ItemGroup>

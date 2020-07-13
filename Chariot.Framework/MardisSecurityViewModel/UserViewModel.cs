@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Chariot.Framework.MardisSecurityViewModel
 {
- public   class UserTokenModel
+   public class UserViewModel
     {
         public string Id { get; set; }
-        public string token { get; set; }
-        public DateTime DateToken { get; set; }
-        public string message { get; set; }
-        public UserViewModel _user  { get; set; }
-}
+        public string Email { get; set; }
+
+        public string name { get; set; }
+
+        public string type { get; set; }
+    }
 }

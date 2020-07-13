@@ -1,5 +1,6 @@
 ﻿using Chariot.Engine.DataAccess.MardisSecurity;
 using Chariot.Engine.DataObject;
+using Chariot.Engine.DataObject.MardisSecurity;
 using Chariot.Framework.Complement;
 using Chariot.Framework.MardisSecurityViewModel;
 using System;
@@ -27,11 +28,19 @@ namespace Chariot.Engine.Business.MardisSecurity
         /// <returns></returns>
         public UserTokenModel FindUserBycredentials(string user, string pass) {
 
-            string _data = _userDao.GetUserbycredentials(user, pass);
+            var _data = _userDao.GetUserbycredentials(user, pass);
             UserTokenModel _resultData = new UserTokenModel();
-            if (!_data.Equals("no found")) 
+            if (_data != null)
             {
-                  return SetUserToken(_data);
+
+                UserViewModel _user = new UserViewModel();
+                _user.Email = _data.Email;
+                _user.type = _data.IdProfile.ToString();
+                _user.name = _data.IdPerson.ToString();
+                _user.Id   = _data.Id.ToString();
+                _resultData.message = "Ok";
+                _resultData._user = _user;
+                return _resultData ;
 
             };
             _resultData.message = "no found";

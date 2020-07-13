@@ -5,26 +5,31 @@ using System.Threading.Tasks;
 using Chariot.Engine.Business.Mardiscore;
 using Chariot.Engine.DataObject;
 using Chariot.Framework.Complement;
+using Chariot.Framework.Helpers;
 using Chariot.Framework.SystemViewModel;
 using Engine_V2.Libraries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Engine_V2.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TaskCampaignController : AController<TaskCampaignController>
     {
         private readonly TaskCampaignBusiness _TaskCampaignBusiness;
         private readonly ILogger<TaskCampaignController> _logger;
-        public TaskCampaignController(ILogger<TaskCampaignController> logger,
-                                            RedisCache distributedCache,
-                                            ChariotContext _chariotContext) : base(_chariotContext, distributedCache)
-    {
+        public TaskCampaignController(ILogger<LoginController> logger,
+                                            RedisCache distributedCache
+                                            , IOptions<AppSettings> appSettings,
+                                            ChariotContext _chariotContext) : base(_chariotContext, distributedCache, appSettings)
+        {
         _TaskCampaignBusiness = new TaskCampaignBusiness(_chariotContext, distributedCache);
-        _logger = logger;
+
     }
 
 
@@ -43,6 +48,7 @@ namespace Engine_V2.Controllers
     }
         [HttpGet]
         [Route("GetTa")]
+     
         public ReplyViewModel GetT()
         {
            

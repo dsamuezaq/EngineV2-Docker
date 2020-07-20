@@ -14,6 +14,7 @@ namespace Chariot.Engine.DataAccess
     public class ADao
     {
         public ChariotContext Context { get; }
+        protected EntityState StateInsert = EntityState.Added;
         protected ADao(ChariotContext _chariotContext)
         {
             Context = _chariotContext;

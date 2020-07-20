@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Chariot.Engine.DataObject;
 using Chariot.Framework.Complement;
 using Chariot.Framework.Helpers;
@@ -71,8 +72,16 @@ namespace Engine_V2
                     ValidateAudience = false
                 };
             });
+            //// Init mapper systems
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new Mappers());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            //services.AddAutoMapper();
+            services.AddSingleton(mapper);
 
-        }
+       }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

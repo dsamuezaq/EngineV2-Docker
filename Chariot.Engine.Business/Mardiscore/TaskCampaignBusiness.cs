@@ -1,4 +1,5 @@
-﻿using Chariot.Engine.DataObject;
+﻿using AutoMapper;
+using Chariot.Engine.DataObject;
 using Chariot.Framework.Complement;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,8 @@ namespace Chariot.Engine.Business.Mardiscore
     public class TaskCampaignBusiness:ABusiness
     {
         public TaskCampaignBusiness(ChariotContext _chariotContext,
-                                     RedisCache distributedCache) : base(_chariotContext, distributedCache)
+                                     RedisCache distributedCache,
+                                     IMapper mapper) : base(_chariotContext, distributedCache, mapper)
         { 
         
         

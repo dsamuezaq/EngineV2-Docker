@@ -36,6 +36,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.0.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Extensions.Microsoft.DependencyInjection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=e767ac9c89543656, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.Extensions.Microsoft.DependencyInjection.8.0.0\lib\netstandard2.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -155,19 +161,23 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Z.EntityFramework.Extensions.EFCore, Version=3.0.69.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Z.EntityFramework.Extensions.EFCore.3.0.69\lib\netstandard2.0\Z.EntityFramework.Extensions.EFCore.dll</HintPath>
+    <Reference Include="Z.EntityFramework.Extensions, Version=4.0.82.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Extensions.4.0.82\lib\net45\Z.EntityFramework.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Z.EntityFramework.Plus.EFCore, Version=3.0.49.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Z.EntityFramework.Plus.EFCore.3.0.49\lib\netstandard2.0\Z.EntityFramework.Plus.EFCore.dll</HintPath>
+    <Reference Include="Z.EntityFramework.Extensions.EFCore, Version=3.0.82.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Extensions.EFCore.3.0.82\lib\netstandard2.0\Z.EntityFramework.Extensions.EFCore.dll</HintPath>
     </Reference>
-    <Reference Include="Z.Expressions.Eval, Version=3.1.10.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Z.Expressions.Eval.3.1.10\lib\net45\Z.Expressions.Eval.dll</HintPath>
+    <Reference Include="Z.EntityFramework.Plus.EFCore, Version=3.0.54.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Plus.EFCore.3.0.54\lib\netstandard2.0\Z.EntityFramework.Plus.EFCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Z.Expressions.Eval, Version=4.0.4.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.Expressions.Eval.4.0.4\lib\net45\Z.Expressions.Eval.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADao.cs" />
     <Compile Include="IEntity.cs" />
+    <Compile Include="MardisCore\TrackingDao.cs" />
     <Compile Include="MardisSecurity\UserDao.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -180,6 +190,10 @@
     <ProjectReference Include="..\Chariot.Engine.DataObject\Chariot.Engine.DataObject.csproj">
       <Project>{0e982d2b-7a8e-42a5-b951-675ff23e786b}</Project>
       <Name>Chariot.Engine.DataObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chariot.Framework\Chariot.Framework.csproj">
+      <Project>{ea5c2abc-dd3c-48b2-b84e-653fd5500b08}</Project>
+      <Name>Chariot.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

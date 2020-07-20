@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chariot.Engine.DataObject.MardisCommon;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -36,7 +37,8 @@ namespace Chariot.Engine.DataObject.MardisSecurity
 
         public string InitialPage { get; set; }
 
+        [ForeignKey("IdAccount")]
+        public virtual Account Account { get; set; }
 
-    
     }
 }

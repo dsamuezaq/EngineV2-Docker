@@ -1,4 +1,5 @@
-﻿using Chariot.Engine.DataObject;
+﻿using AutoMapper;
+using Chariot.Engine.DataObject;
 using Chariot.Framework.Complement;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,12 @@ namespace Chariot.Engine.Business
     {
         protected ChariotContext Context { get; }
         protected  RedisCache _RedisCache;
-        protected ABusiness(ChariotContext _chariotContext, RedisCache distributedCache)
+        protected IMapper _mapper;
+        protected ABusiness(ChariotContext _chariotContext, RedisCache distributedCache, IMapper mapper)
         {
             Context = _chariotContext;
             _RedisCache = distributedCache;
+            _mapper = mapper;
 
         }
 

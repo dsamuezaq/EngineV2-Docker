@@ -16,5 +16,7 @@ namespace Chariot.Engine.DataObject.MardisCore
 
 
         public int IdCampaign { get; set; }
+
+
     }
 }

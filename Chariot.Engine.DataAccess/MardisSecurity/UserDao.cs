@@ -23,8 +23,17 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
         /// <returns></returns>
         public User GetUserbycredentials(string user, string pass)
         {
-            var _data = Context.Users.Where(x => x.Email == user && x.Password == pass).ToList();
-            return _data.Count() >0 ? _data.FirstOrDefault(): null;
+            try
+            {
+                var _data = Context.Users.Where(x => x.Email == user && x.Password == pass).ToList();
+                return _data.Count() > 0 ? _data.FirstOrDefault() : null;
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+     
         
         }
     }

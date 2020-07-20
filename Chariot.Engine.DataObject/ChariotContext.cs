@@ -1,4 +1,5 @@
-﻿using Chariot.Engine.DataObject.MardisCore;
+﻿using Chariot.Engine.DataObject.MardisCommon;
+using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Engine.DataObject.MardisSecurity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Chariot.Engine.DataObject
 {
-  public  class ChariotContext : DbContext
+    public class ChariotContext : DbContext
     {
         private readonly string _connectionString;
         protected SqlConnection Connection;
@@ -55,5 +56,27 @@ namespace Chariot.Engine.DataObject
         /// Creation :20200510
         /// </summary>
         public DbSet<User> Users { get; set; }
+        /// <summary>
+        /// Table Personal traking in APP mobil system
+        /// Creation :20200712
+        /// </summary>
+        public DbSet<PersonalTraker> PersonalTrakers { get; set; }
+
+        /// <summary>
+        /// Users app mobil 
+        /// Creation :20200712
+        /// </summary>
+        public DbSet<Pollster> Pollsters { get; set; }
+        /// <summary>
+        /// Account for project
+        /// Creation :20200712
+        /// </summary>
+        public DbSet<Account> Accounts { get; set; }
+
+        /// <summary>
+        ///  Campaigns for project
+        /// Creation :20200712
+        /// </summary>
+        public DbSet<Campaign> Campaigns { get; set; }
     }
-}
+    }

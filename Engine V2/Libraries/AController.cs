@@ -1,4 +1,5 @@
-﻿using Chariot.Engine.Business.MardisSecurity;
+﻿using AutoMapper;
+using Chariot.Engine.Business.MardisSecurity;
 using Chariot.Engine.DataObject;
 using Chariot.Framework.Complement;
 using Chariot.Framework.Helpers;
@@ -31,11 +32,13 @@ namespace Engine_V2.Libraries
 
         private readonly AppSettings _appSettings;
         private readonly IConfiguration configuration;
-        public AController(ChariotContext _chariotContext, RedisCache distributedCache, IOptions<AppSettings> appSettings)
+        IMapper _mapper;
+        public AController(ChariotContext _chariotContext, RedisCache distributedCache, IOptions<AppSettings> appSettings, IMapper mapper)
         {
+            //_mapper = mapper;
             Context = _chariotContext;
             _distributedCache = distributedCache;
-            _userBusiness = new UserBusiness(_chariotContext, distributedCache);
+            _userBusiness = new UserBusiness(_chariotContext, distributedCache, _mapper);
             _appSettings = appSettings.Value;
      
         }
@@ -53,7 +56,7 @@ namespace Engine_V2.Libraries
         public UserTokenModel auth(string user , string pass )
         {
             
-            var _reply = _userBusiness.FindUserBycredentials("sertecomcell@prospeccionclaro.com.ec", "00");
+            var _reply = _userBusiness.FindUserBycredentials(user, pass);
             return _reply;
         }
 
@@ -72,12 +75,18 @@ namespace Engine_V2.Libraries
             // 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var claims = new List<Claim>();
+
+
+            claims.Add(new Claim("IdUser", InfoUser._user.Id.ToString()));
+            claims.Add(new Claim("email", InfoUser._user.Email.ToString()));
+            claims.Add(new Claim("name", InfoUser._user.name.ToString()));
+            claims.Add(new Claim("idtype", InfoUser._user.Idtype.ToString()));
+            claims.Add(new Claim("idAccount", InfoUser._user.IdAccount.ToString()));
+            var userIdentity = new ClaimsIdentity(claims);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, InfoUser._user.Id.ToString())
-                }),
+                Subject = userIdentity,
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

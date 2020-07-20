@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Authorization;
 using Chariot.Framework.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
+using AutoMapper;
 
 namespace Engine_V2.Controllers
 {
@@ -39,50 +40,63 @@ namespace Engine_V2.Controllers
         public LoginController(ILogger<LoginController> logger,
                                             RedisCache distributedCache
                                             , IOptions<AppSettings> appSettings,
-                                            ChariotContext _chariotContext) : base(_chariotContext, distributedCache, appSettings)
+                                            ChariotContext _chariotContext, IMapper mapper) : base(_chariotContext, distributedCache, appSettings, mapper)
         {
-            _TaskCampaignBusiness = new TaskCampaignBusiness(_chariotContext, distributedCache);
+            _TaskCampaignBusiness = new TaskCampaignBusiness(_chariotContext, distributedCache, mapper);
             _logger = logger;
         }
         #endregion
 
         #region APIs
         #region autenticacion by bd
-            /// <summary>
-            /// // POST: api/Login/Authenticate
-            /// </summary>
-            /// <param name="userLogin"></param>
-            /// <returns>token valid</returns>
-            [HttpPost]
-            [AllowAnonymous]
-            [Route("Authenticate")]
+
+        /// <summary>
+        /// // POST: api/Login/Authenticate
+        /// </summary>
+        /// <param name="userLogin"></param>
+        /// <returns>token valid</returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("Authenticate")]
         public async Task<IActionResult> Authenticate(LoginViewModel userLogin)
+        {
+            if (ModelState.IsValid)
             {
-                //if (ModelState.IsValid)
-                //{
-                    userLogin.Email= "sertecomcell@prospeccionclaro.com.ec";
-                    userLogin.Password = "00";
-                    var passwordHasher = new PasswordHasher<AppUser>();
-                    var user = new AppUser();
-                    var hashedPassword = passwordHasher.HashPassword(user, password);
-            var _userInfo =  auth(userLogin.Email, userLogin.Password);
-               
-                    if (_userInfo != null)
-                    {
-                        _userInfo.token = generateJwtToken(_userInfo);
-                           return Ok(_userInfo);
-                    
-                    }
-                    else
-                    {
-                        return Unauthorized();
-                    }
-
-                //}
-         
-
+                var _userInfo = auth(userLogin.Email, userLogin.Password);
+                if (_userInfo != null)
+                {
+                 
+                    return Ok(generateJwtToken(_userInfo));
+                }
+                else
+                {
+                    return Unauthorized();
+                }
 
             }
+            return Unauthorized();
+
+        }
+        [HttpPost]
+        [Authorize]
+        [Route("Register")]
+        public async Task<IActionResult> Register( string password)
+        {
+             byte[] passwordHash, passwordSalt;
+             CreatePasswordHash(password, out passwordHash, out passwordSalt);
+             return Ok(passwordHash);
+        }
+
+        #endregion
+        #region Methods
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
 
         #endregion
 

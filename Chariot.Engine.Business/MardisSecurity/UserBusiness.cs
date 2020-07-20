@@ -1,4 +1,5 @@
-﻿using Chariot.Engine.DataAccess.MardisSecurity;
+﻿using AutoMapper;
+using Chariot.Engine.DataAccess.MardisSecurity;
 using Chariot.Engine.DataObject;
 using Chariot.Engine.DataObject.MardisSecurity;
 using Chariot.Framework.Complement;
@@ -15,7 +16,8 @@ namespace Chariot.Engine.Business.MardisSecurity
     {
         protected UserDao _userDao;
         public UserBusiness(ChariotContext _chariotContext,
-                            RedisCache distributedCache) : base(_chariotContext, distributedCache)
+                                     RedisCache distributedCache
+                                     , IMapper mapper) : base(_chariotContext, distributedCache, mapper)
         {
 
             _userDao = new UserDao(_chariotContext);
@@ -35,9 +37,11 @@ namespace Chariot.Engine.Business.MardisSecurity
 
                 UserViewModel _user = new UserViewModel();
                 _user.Email = _data.Email;
-                _user.type = _data.IdProfile.ToString();
+                _user.Idtype = _data.IdProfile.ToString();
+                _user.IdAccount = _data.IdAccount.ToString();
                 _user.name = _data.IdPerson.ToString();
                 _user.Id   = _data.Id.ToString();
+                _resultData.DateToken = DateTime.Now;
                 _resultData.message = "Ok";
                 _resultData._user = _user;
                 return _resultData ;
@@ -56,7 +60,7 @@ namespace Chariot.Engine.Business.MardisSecurity
             string token = Guid.NewGuid().ToString();
 
             UserTokenModel _model = new UserTokenModel();
-            _model.Id = idUser.ToString();
+           // _model.Id = idUser.ToString();
             _model.token = token;
             _model.DateToken = DateTime.Now.AddDays(1);
             _model.message = "A-OK";

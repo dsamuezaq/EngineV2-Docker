@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Chariot.Engine.Business.Mardiscore;
 using Chariot.Engine.DataObject;
 using Chariot.Framework.Complement;
@@ -26,9 +27,9 @@ namespace Engine_V2.Controllers
         public TaskCampaignController(ILogger<LoginController> logger,
                                             RedisCache distributedCache
                                             , IOptions<AppSettings> appSettings,
-                                            ChariotContext _chariotContext) : base(_chariotContext, distributedCache, appSettings)
+                                            ChariotContext _chariotContext,  IMapper mapper) : base(_chariotContext, distributedCache, appSettings, mapper)
         {
-        _TaskCampaignBusiness = new TaskCampaignBusiness(_chariotContext, distributedCache);
+        _TaskCampaignBusiness = new TaskCampaignBusiness(_chariotContext, distributedCache, mapper);
 
     }
 
@@ -52,11 +53,8 @@ namespace Engine_V2.Controllers
         public ReplyViewModel GetT()
         {
            
-
                 reply.messege = "Test";
-           
-
-
+         
             return reply;
         }
     }

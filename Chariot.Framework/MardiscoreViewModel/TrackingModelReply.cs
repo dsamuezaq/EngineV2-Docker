@@ -8,6 +8,7 @@ namespace Chariot.Framework.MardiscoreViewModel
 {
    public class TrackingModelReply
     {
+        public int Idpollster { set; get; }
         public string first_name { set; get; }
         public string last_name { set; get; }
         public double latitud { set; get; }

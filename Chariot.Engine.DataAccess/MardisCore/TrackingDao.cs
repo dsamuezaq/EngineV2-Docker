@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Z.EntityFramework.Extensions;
 
 namespace Chariot.Engine.DataAccess.MardisCore
 {
@@ -41,7 +42,36 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 return false;
             }
         }
+        /// <summary>
+        /// Save data mobil from tracking
+        /// </summary>
+        /// <param name="_table">Data table Tracking</param>
+        /// <returns></returns>
+        public bool SaveTrackingBranch(List<TrackingBranch> _table)
+        {
+            try
+            {
+                //var Table = Context.TrackingBranches;
+                //Table.AddRange(_table);
+                //Context.BulkInsert(Table);
+                using (var transaction = Context.Database.BeginTransaction())
+                {
+                    EntityFrameworkManager.ContextFactory = context => new CurrentContext();
+                    Context.BulkInsert(_table);
 
+                    transaction.Commit();
+                }
+                //Context.Entry(_table).State = StateInsert;
+                //   Context.SaveChanges();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+
+                return false;
+            }
+        }
         /// <summary>
         /// Save data mobil from tracking
         /// </summary>

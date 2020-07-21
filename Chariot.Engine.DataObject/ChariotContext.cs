@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Chariot.Engine.DataObject
 {
     public class ChariotContext : DbContext
@@ -23,6 +24,7 @@ namespace Chariot.Engine.DataObject
                   : base(options)
         {
             _connectionString = options.FindExtension<SqlServerOptionsExtension>().ConnectionString;
+  
             //extension.ConnectionString = connectionString;
         }
         public SqlConnection GetOpenConnection(bool mars = false)
@@ -78,5 +80,11 @@ namespace Chariot.Engine.DataObject
         /// Creation :20200712
         /// </summary>
         public DbSet<Campaign> Campaigns { get; set; }
+
+        /// <summary>
+        /// Table History Tracking
+        /// Creation :20200722
+        /// </summary>
+        public DbSet<TrackingBranch> TrackingBranches { get; set; }
     }
     }

@@ -49,12 +49,23 @@ namespace Engine_V2.Controllers
         }
         [HttpPost]
         [Route("SaveBranchTracking")]
-        public ReplyViewModel SaveBranchTracking([FromBody] List<TrackingBranchViewModel>_request)
+        public async Task<IActionResult> SaveBranchTracking([FromBody] List<TrackingBranchViewModel>_request)
         {
-            _TrackingBusiness.SaveTrackingBranch(_request);
-            reply.messege = "Success Save Data";
-            reply.status = "Ok";
-            return reply;
+            try
+            {
+                _TrackingBusiness.SaveTrackingBranch(_request);
+                reply.messege = "Success Save Data";
+                reply.status = "Ok";
+                return Ok(reply); ;
+            }
+            catch (Exception e)
+            {
+
+                reply.error = e.Message;
+                reply.status = "Error";
+                return Ok(reply);
+            }
+        
         }
 
         [HttpPost]

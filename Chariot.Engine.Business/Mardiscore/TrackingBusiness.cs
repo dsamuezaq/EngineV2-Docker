@@ -39,18 +39,38 @@ namespace Chariot.Engine.Business.Mardiscore
         {
 
             DateTime d = DateTime.Now;
-            _data.AsParallel()
-                  .ForAll(s =>
-                  {
-                      s.Idcampaign = _trackingDao.GetPollsterIdByIdDevice(s.campaign);
-                      s.idpollster= _trackingDao.GetPollsterIdByIdDevice(s.IdDevice);
-                      s.datetime_tracking = d;
-                  
-                  });
-            List<TrackingBranch> mapperTrackingBranch = _mapper.Map<List<TrackingBranch>>(_data);
-        
-          
-          //  _trackingDao.SaveTrackingbyIdDevice(mapperTracking);
+            List<TrackingBranch> mapperTrackingBranch= new List<TrackingBranch> ();
+            //_data.AsParallel()
+            //      .ForAll(s =>
+            //      {
+            //          s.Idcampaign = _trackingDao.GetPollsterIdByIdDevice(s.campaign);
+            //          s.idpollster = _trackingDao.GetPollsterIdByIdDevice(s.IdDevice);
+            //          s.datetime_tracking = d;
+
+            //      });
+
+            foreach (var  item in _data) {
+
+                item.Idcampaign =_trackingDao.GetCampaignIdByDescripcion(item.campaign);
+                item.idpollster = _trackingDao.GetPollsterIdByIdDevice(item.IdDevice);
+                item.datetime_tracking = d;
+                mapperTrackingBranch.Add(new TrackingBranch
+                {
+                    GeoLength = item.GeoLength,
+                    Geolatitude = item.Geolatitude,
+                    datetime_tracking = item.datetime_tracking,
+                    CodeBranch = item.CodeBranch,
+                    NameBranch = item.NameBranch,
+                    StreetBranch = item.StreetBranch,
+                    StatusBranch = item.StatusBranch,
+                    RouteBranch = item.RouteBranch,
+                    IdPollster = item.idpollster,
+                    Idcampaign = item.Idcampaign
+                        
+                });
+            }
+            
+             _trackingDao.SaveTrackingBranch(mapperTrackingBranch);
             return null;
         }
         public ReplyViewModel GetTracking(GetTrackingViewModel _data)
@@ -64,7 +84,8 @@ namespace Chariot.Engine.Business.Mardiscore
                                                                 longitud=x.GeoLength,
                                                                 first_name=_trackingDao.GetPollsterNameById(x.IdPollster),
                                                                 last_name="",
-                                                                bateria=50
+                                                                bateria=50,
+                                                                Idpollster=x.IdPollster
                                                               }).ToList();
 
             reply.messege = "success";

@@ -168,6 +168,7 @@
     <Compile Include="Helpers\AppSettings.cs" />
     <Compile Include="Helpers\Mappers.cs" />
     <Compile Include="MardiscoreViewModel\GetTrackingViewModel.cs" />
+    <Compile Include="MardiscoreViewModel\TrackingBranchViewModel.cs" />
     <Compile Include="MardiscoreViewModel\TrackingModelReply.cs" />
     <Compile Include="MardiscoreViewModel\TrackingViewModel.cs" />
     <Compile Include="MardisSecurityViewModel\UserTokenModel.cs" />

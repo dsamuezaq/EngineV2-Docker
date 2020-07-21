@@ -22,9 +22,11 @@ namespace Engine_V2.Controllers
     [ApiController]
     public class TrackingController : AController<TaskCampaignController>
     {
+
+        #region Variable
         private readonly TrackingBusiness _TrackingBusiness;
         private readonly ILogger<TaskCampaignController> _logger;
-        private readonly IMapper _mapper;
+       // private readonly IMapper _mapper;
         public TrackingController(ILogger<LoginController> logger,
                                            RedisCache distributedCache
                                            , IOptions<AppSettings> appSettings,
@@ -33,7 +35,9 @@ namespace Engine_V2.Controllers
             _TrackingBusiness = new TrackingBusiness(_chariotContext,distributedCache, mapper);
 
         }
+        #endregion
 
+        #region APIs
         [HttpPost]
         [Route("SaveStatusPerson")]
         public ReplyViewModel SaveStatusPerson([FromBody] TrackingViewModel _request)
@@ -43,7 +47,15 @@ namespace Engine_V2.Controllers
             reply.status = "Ok";
             return reply;
         }
-
+        [HttpPost]
+        [Route("SaveBranchTracking")]
+        public ReplyViewModel SaveBranchTracking([FromBody] List<TrackingBranchViewModel>_request)
+        {
+            _TrackingBusiness.SaveTrackingBranch(_request);
+            reply.messege = "Success Save Data";
+            reply.status = "Ok";
+            return reply;
+        }
 
         [HttpPost]
         [Route("TrackingPersonalByCampaign")]
@@ -62,6 +74,8 @@ namespace Engine_V2.Controllers
             }
           
         }
+        #endregion
+
     }
 
 }

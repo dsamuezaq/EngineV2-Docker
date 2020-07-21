@@ -209,6 +209,7 @@
     <Compile Include="MardisCore\Campaign.cs" />
     <Compile Include="MardisCore\PersonalTraker.cs" />
     <Compile Include="MardisCore\TaskCampaign.cs" />
+    <Compile Include="MardisCore\TrackingBranch.cs" />
     <Compile Include="MardisSecurity\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

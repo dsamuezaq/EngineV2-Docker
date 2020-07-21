@@ -24,6 +24,7 @@ namespace Chariot.Engine.Business.Mardiscore
             _trackingDao = new TrackingDao(_chariotContext);
         }
 
+        #region Method Public
         public ReplyViewModel SaveTracking(TrackingViewModel _data) {
 
             DateTime d = DateTime.Now;
@@ -34,11 +35,29 @@ namespace Chariot.Engine.Business.Mardiscore
             _trackingDao.SaveTrackingbyIdDevice(mapperTracking);
             return null;
         }
+        public ReplyViewModel SaveTrackingBranch(List<TrackingBranchViewModel> _data)
+        {
 
+            DateTime d = DateTime.Now;
+            _data.AsParallel()
+                  .ForAll(s =>
+                  {
+                      s.Idcampaign = _trackingDao.GetPollsterIdByIdDevice(s.campaign);
+                      s.idpollster= _trackingDao.GetPollsterIdByIdDevice(s.IdDevice);
+                      s.datetime_tracking = d;
+                  
+                  });
+            List<TrackingBranch> mapperTrackingBranch = _mapper.Map<List<TrackingBranch>>(_data);
+        
+          
+          //  _trackingDao.SaveTrackingbyIdDevice(mapperTracking);
+            return null;
+        }
         public ReplyViewModel GetTracking(GetTrackingViewModel _data)
         {
             ReplyViewModel reply = new ReplyViewModel();
                var _dataTable = _trackingDao.GetTrackingbyIdCampaign(_data.Idcampaing, _data.DateTracking);
+
             List<TrackingModelReply> _Reply = 
                 _dataTable.Select(x => new TrackingModelReply {
                                                                 latitud=x.Geolatitude,
@@ -53,7 +72,10 @@ namespace Chariot.Engine.Business.Mardiscore
             reply.status = "Ok";
             return reply;
         }
+        #endregion
+        #region Method Private
+        #endregion
 
-   
+
     }
 }

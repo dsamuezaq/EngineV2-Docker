@@ -32,6 +32,7 @@ namespace Chariot.Framework.Helpers
             //CreateMap<PollsterRegisterViewModel, Pollster>();
             //CreateMap<viewEjercicio, Ejercicio>();
             CreateMap<TrackingViewModel, PersonalTraker>();
+            CreateMap<List<TrackingBranchViewModel>, List<TrackingBranch>>();
         }
     }
 }

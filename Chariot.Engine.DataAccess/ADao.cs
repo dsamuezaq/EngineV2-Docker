@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using EntityState = Microsoft.EntityFrameworkCore.EntityState;
+using Z.EntityFramework.Extensions;
 
 namespace Chariot.Engine.DataAccess
 {
@@ -18,6 +19,7 @@ namespace Chariot.Engine.DataAccess
         protected ADao(ChariotContext _chariotContext)
         {
             Context = _chariotContext;
+            EntityFrameworkManager.ContextFactory = context => _chariotContext;
         }
         public T InsertOrUpdate<T>(T entity) where T : class, IEntity
         {

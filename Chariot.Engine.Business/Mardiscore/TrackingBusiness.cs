@@ -35,19 +35,11 @@ namespace Chariot.Engine.Business.Mardiscore
             _trackingDao.SaveTrackingbyIdDevice(mapperTracking);
             return null;
         }
-        public ReplyViewModel SaveTrackingBranch(List<TrackingBranchViewModel> _data)
+        public bool SaveTrackingBranch(List<TrackingBranchViewModel> _data)
         {
 
             DateTime d = DateTime.Now;
             List<TrackingBranch> mapperTrackingBranch= new List<TrackingBranch> ();
-            //_data.AsParallel()
-            //      .ForAll(s =>
-            //      {
-            //          s.Idcampaign = _trackingDao.GetPollsterIdByIdDevice(s.campaign);
-            //          s.idpollster = _trackingDao.GetPollsterIdByIdDevice(s.IdDevice);
-            //          s.datetime_tracking = d;
-
-            //      });
 
             foreach (var  item in _data) {
 
@@ -70,8 +62,58 @@ namespace Chariot.Engine.Business.Mardiscore
                 });
             }
             
-             _trackingDao.SaveTrackingBranch(mapperTrackingBranch);
-            return null;
+            var Status=_trackingDao.SaveTrackingBranch(mapperTrackingBranch);
+
+            return Status;
+        }
+
+        public bool SaveTrackingBranchStatus(StatusBranchTrackingViewModel _data)
+        {
+
+            DateTime d = DateTime.Now;
+            TrackingBranch mapperTrackingBranch = new TrackingBranch();
+
+            mapperTrackingBranch.IdPollster = _trackingDao.GetPollsterIdByIdDevice(_data.IdDevice);
+            mapperTrackingBranch.Idcampaign = _trackingDao.GetCampaignIdByDescripcion(_data.campaign);
+            mapperTrackingBranch.AggregateUri = _data.AggregateUri;
+            mapperTrackingBranch.StatusBranch =_data.Status;
+            mapperTrackingBranch.timeTask =_data.TimeTask;
+
+            var Status = _trackingDao.SaveTrackingBranch(mapperTrackingBranch);
+
+            return Status;
+        }
+
+        public ReplyViewModel GetBranches(GetBranchViewModel _data)
+        {
+          
+      
+            ReplyViewModel reply = new ReplyViewModel();
+            reply.messege = "Don't demand data";
+            reply.status = "Fail";
+            var _dataTable = _trackingDao.GetBranchesbyIdPollster(_data.Idcampaign, _data.DateTracking,_data.Idpollster);
+            if (_dataTable.Count() > 0) {
+                List<BranchesModelReply> _Reply =
+                 _dataTable.Select(x => new BranchesModelReply
+                 {
+                     GeoLength = x.GeoLength,
+                     Geolatitude = x.Geolatitude,
+                     TimeTask = x.timeTask,
+                     CodeBranch = x.CodeBranch,
+                     NameBranch = x.NameBranch,
+                     StreetBranch = x.StreetBranch,
+                     StatusBranch = x.StatusBranch,
+                     RouteBranch = x.RouteBranch,
+                     Status = x.AggregateUri == null ? "Pendiente" : "Finalizado"
+
+                 }).ToList();
+
+                reply.messege = "success";
+                reply.data = _Reply;
+                reply.status = "Ok";
+            }
+         
+            return reply;
         }
         public ReplyViewModel GetTracking(GetTrackingViewModel _data)
         {

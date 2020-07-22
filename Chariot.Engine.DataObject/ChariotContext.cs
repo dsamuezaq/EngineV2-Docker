@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Z.EntityFramework.Extensions;
 
 namespace Chariot.Engine.DataObject
 {
@@ -24,11 +24,13 @@ namespace Chariot.Engine.DataObject
                   : base(options)
         {
             _connectionString = options.FindExtension<SqlServerOptionsExtension>().ConnectionString;
-  
+
+          
             //extension.ConnectionString = connectionString;
         }
         public SqlConnection GetOpenConnection(bool mars = false)
         {
+       
             var cs = _connectionString;
             if (mars)
             {

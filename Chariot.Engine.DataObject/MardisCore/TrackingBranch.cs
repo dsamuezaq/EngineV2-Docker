@@ -16,7 +16,7 @@ namespace Chariot.Engine.DataObject.MardisCore
         public int Id {get;set;}
         public double? GeoLength { get; set; }
         public double? Geolatitude { get; set; }
-        public DateTime? datetime_tracking { get; set; }
+        public DateTime datetime_tracking { get; set; }
         public double? timeTask { get; set; }
         public string CodeBranch { get; set; }
         public string NameBranch { get; set; }

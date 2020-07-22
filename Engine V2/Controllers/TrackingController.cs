@@ -53,9 +53,14 @@ namespace Engine_V2.Controllers
         {
             try
             {
-                _TrackingBusiness.SaveTrackingBranch(_request);
-                reply.messege = "Success Save Data";
-                reply.status = "Ok";
+                reply.messege = "Could not save the information";
+                reply.status = "Fail";
+                if (_TrackingBusiness.SaveTrackingBranch(_request))
+                  {
+                    reply.messege = "Success Save Data";
+                    reply.status = "Ok";
+                  }
+           
                 return Ok(reply); ;
             }
             catch (Exception e)
@@ -67,7 +72,52 @@ namespace Engine_V2.Controllers
             }
         
         }
+        [HttpPost]
+        [Route("SaveStatusBranchTracking")]
+        public async Task<IActionResult> SaveStatusBranchTracking([FromBody] StatusBranchTrackingViewModel _request)
+        {
+            try
+            {
+                reply.messege = "Could not save the information";
+                reply.status = "Fail";
+                if (_TrackingBusiness.SaveTrackingBranch(_request))
+                {
+                    reply.messege = "Success Save Data";
+                    reply.status = "Ok";
+                }
 
+                return Ok(reply); ;
+            }
+            catch (Exception e)
+            {
+
+                reply.error = e.Message;
+                reply.status = "Error";
+                return Ok(reply);
+            }
+
+        }
+
+
+        [HttpPost]
+        [Route("BranchesByPollster")]
+        public async Task<IActionResult> BranchesByPollster([FromBody]  GetBranchViewModel _request)
+        {
+            try
+            {
+                reply = _TrackingBusiness.GetBranches(_request);
+                return Ok(reply);
+
+            }
+            catch (Exception e)
+            {
+
+                reply.error = e.Message;
+                reply.status = "Error";
+                return Ok(reply);
+            }
+
+        }
         [HttpPost]
         [Route("TrackingPersonalByCampaign")]
         public async Task<IActionResult> TrackingPersonalByCampaign([FromBody] GetTrackingViewModel _request)

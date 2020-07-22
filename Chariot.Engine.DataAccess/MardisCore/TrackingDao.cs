@@ -3,6 +3,7 @@ using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Framework.MardiscoreViewModel;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,19 +52,31 @@ namespace Chariot.Engine.DataAccess.MardisCore
         {
             try
             {
-                //var Table = Context.TrackingBranches;
-                //Table.AddRange(_table);
-                //Context.BulkInsert(Table);
-                using (var transaction = Context.Database.BeginTransaction())
-                {
-                    EntityFrameworkManager.ContextFactory = context => new CurrentContext();
-                    Context.BulkInsert(_table);
+                Context.TrackingBranches.Where(x => x.IdPollster==_table.FirstOrDefault().IdPollster
+                                                && x.datetime_tracking.Date == _table.First().datetime_tracking.Date).DeleteFromQuery();
+                Context.BulkInsert(_table);
+                return true;
+            }
+            catch (Exception e)
+            {
 
-                    transaction.Commit();
-                }
-                //Context.Entry(_table).State = StateInsert;
-                //   Context.SaveChanges();
+                return false;
+            }
+        }
 
+
+        /// <summary>
+        /// Save data mobil from tracking
+        /// </summary>
+        /// <param name="_table">Data table Tracking</param>
+        /// <returns></returns>
+        public bool UpdateTrackingBranch(List<TrackingBranch> _table)
+        {
+            try
+            {
+                Context.TrackingBranches.Where(x => x.IdPollster == _table.FirstOrDefault().IdPollster
+                                                && x.datetime_tracking.Date == _table.First().datetime_tracking.Date).DeleteFromQuery();
+                Context.BulkInsert(_table);
                 return true;
             }
             catch (Exception e)
@@ -92,6 +105,11 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 return 0;
             }
         }
+        /// <summary>
+        /// Get data Campaign
+        /// </summary>
+        /// <param name="NameCampaign">Name Campaign</param>
+        /// <returns>Id pollster</returns>
         public int GetCampaignIdByDescripcion(string NameCampaign)
         {
             try
@@ -112,11 +130,11 @@ namespace Chariot.Engine.DataAccess.MardisCore
         /// <param name="idcampaign"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public List<PersonalTraker> GetTrackingbyIdCampaign(int idcampaign , DateTime date)
+        public List<TrackingBranch> GetBranchesbyIdPollster(int idcampaign , DateTime date, int idpollster)
         {
             try
             {
-                var DataTable = Context.PersonalTrakers.Where(x=>x.Idcampaign==idcampaign && x.LastDate.Date == date.Date);
+                var DataTable = Context.TrackingBranches.Where(x => x.Idcampaign == idcampaign && x.IdPollster == idpollster && x.datetime_tracking.Date == date.Date);
                 return DataTable.Count() > 0 ? DataTable.ToList():null;
             }
             catch (Exception e)
@@ -125,7 +143,27 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 return null;
             }
         }
+        /// <summary>
+        /// Get data tracking by campaign of  supervisor
+        /// </summary>
+        /// <param name="idcampaign"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public List<PersonalTraker> GetTrackingbyIdCampaign(int idcampaign, DateTime date)
+        {
+            try
+            {
+          
 
+                var DataTable = Context.PersonalTrakers.Where(x => x.Idcampaign == idcampaign && x.LastDate.Date == date.Date);
+                return DataTable.Count() > 0 ? DataTable.ToList() : null;
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -135,6 +173,10 @@ namespace Chariot.Engine.DataAccess.MardisCore
         {
             try
             {
+               /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
+         
+
+
                 var _dataTable = Context.Pollsters.Where(x => x.Id.Equals(idpollster));
                 return _dataTable.Count() > 0 ? _dataTable.First().Name : "Sin Identificar";
             }

@@ -1,4 +1,5 @@
 ﻿using Chariot.Engine.DataObject;
+using Chariot.Engine.DataObject.Helpers;
 using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Framework.MardiscoreViewModel;
 using System;
@@ -19,23 +20,23 @@ namespace Chariot.Engine.DataAccess.MardisCore
 
         }
 
-       /// <summary>
-       /// Save data mobil from tracking
-       /// </summary>
-       /// <param name="_table">Data table Tracking</param>
-       /// <returns></returns>
+        /// <summary>
+        /// Save data mobil from tracking
+        /// </summary>
+        /// <param name="_table">Data table Tracking</param>
+        /// <returns></returns>
         public bool SaveTrackingbyIdDevice(PersonalTraker _table)
         {
             try
             {
-               var Table=  Context.PersonalTrakers;
+                var Table = Context.PersonalTrakers;
                 Table.Add(_table);
                 //Context.BulkInsert(Table);
-                
+
                 //Context.Entry(_table).State = StateInsert;
                 Context.SaveChanges();
 
-                 return true;
+                return true;
             }
             catch (Exception e)
             {
@@ -52,7 +53,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
         {
             try
             {
-                Context.TrackingBranches.Where(x => x.IdPollster==_table.FirstOrDefault().IdPollster
+                Context.TrackingBranches.Where(x => x.IdPollster == _table.FirstOrDefault().IdPollster
                                                 && x.datetime_tracking.Date == _table.First().datetime_tracking.Date).DeleteFromQuery();
                 Context.BulkInsert(_table);
                 return true;
@@ -70,13 +71,14 @@ namespace Chariot.Engine.DataAccess.MardisCore
         /// </summary>
         /// <param name="_table">Data table Tracking</param>
         /// <returns></returns>
-        public bool UpdateTrackingBranch(List<TrackingBranch> _table)
+        public bool UpdateTrackingBranch(TrackingBranch _table)
         {
             try
             {
-                Context.TrackingBranches.Where(x => x.IdPollster == _table.FirstOrDefault().IdPollster
-                                                && x.datetime_tracking.Date == _table.First().datetime_tracking.Date).DeleteFromQuery();
-                Context.BulkInsert(_table);
+
+                var _update = Context.TrackingBranches;
+                _update.Add(_table);
+                Context.BulkUpdate(_update);
                 return true;
             }
             catch (Exception e)
@@ -95,14 +97,33 @@ namespace Chariot.Engine.DataAccess.MardisCore
             try
             {
 
-              
-               var _dataTable=   Context.Pollsters.Where(x => x.IMEI.Equals(IdDevice));
-               return _dataTable.Count()>0?_dataTable.First().Id:0;
+
+                var _dataTable = Context.Pollsters.Where(x => x.IMEI.Equals(IdDevice));
+                return _dataTable.Count() > 0 ? _dataTable.First().Id : 0;
             }
             catch (Exception e)
             {
 
                 return 0;
+            }
+        }
+        /// <summary>
+        /// Save data mobil from tracking
+        /// </summary>
+        /// <param name="IdDevice">Data table Tracking</param>
+        /// <returns>Id pollster</returns>
+        public TrackingBranch GetBranchByCode(string Code, int idcampaign, DateTime date)
+        {
+            try
+            {
+
+                var _dataTable = Context.TrackingBranches.Where(x => x.CodeBranch.Equals(Code) && x.Idcampaign == idcampaign && x.datetime_tracking.Date == date.Date);
+                return _dataTable.Count() > 0 ? _dataTable.First() : null;
+            }
+            catch (Exception e)
+            {
+
+                return null;
             }
         }
         /// <summary>
@@ -114,7 +135,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
         {
             try
             {
-                var _dataTable = Context.Campaigns.Where(x => x.Name== NameCampaign);
+                var _dataTable = Context.Campaigns.Where(x => x.Name == NameCampaign);
                 return _dataTable.Count() > 0 ? _dataTable.First().Id : 0;
             }
             catch (Exception e)
@@ -130,12 +151,12 @@ namespace Chariot.Engine.DataAccess.MardisCore
         /// <param name="idcampaign"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public List<TrackingBranch> GetBranchesbyIdPollster(int idcampaign , DateTime date, int idpollster)
+        public List<TrackingBranch> GetBranchesbyIdPollster(int idcampaign, DateTime date, int idpollster)
         {
             try
             {
                 var DataTable = Context.TrackingBranches.Where(x => x.Idcampaign == idcampaign && x.IdPollster == idpollster && x.datetime_tracking.Date == date.Date);
-                return DataTable.Count() > 0 ? DataTable.ToList():null;
+                return DataTable.Count() > 0 ? DataTable.ToList() : null;
             }
             catch (Exception e)
             {
@@ -153,10 +174,19 @@ namespace Chariot.Engine.DataAccess.MardisCore
         {
             try
             {
-          
 
-                var DataTable = Context.PersonalTrakers.Where(x => x.Idcampaign == idcampaign && x.LastDate.Date == date.Date);
-                return DataTable.Count() > 0 ? DataTable.ToList() : null;
+                List<PersonalTraker> _result = new List<PersonalTraker>();
+                var Pollters = Context.PersonalTrakers.Where(x => x.Idcampaign == idcampaign && x.LastDate.Date == date.Date).Select(s => s.IdPollster).Distinct();
+
+
+                foreach (var item in Pollters) {
+                    var max = Context.PersonalTrakers.Where(x => x.Idcampaign == idcampaign && x.LastDate.Date == date.Date && x.IdPollster == item).Max(x => x.LastDate);
+                    var DataTable = Context.PersonalTrakers.Where(x => x.Idcampaign == idcampaign && x.LastDate == max && x.IdPollster == item).FirstOrDefault();
+                    _result.Add(DataTable);
+                }
+
+
+                return _result.Count() > 0 ? _result.ToList() : null;
             }
             catch (Exception e)
             {
@@ -173,9 +203,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
         {
             try
             {
-               /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
-         
-
+                /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
 
                 var _dataTable = Context.Pollsters.Where(x => x.Id.Equals(idpollster));
                 return _dataTable.Count() > 0 ? _dataTable.First().Name : "Sin Identificar";
@@ -186,6 +214,188 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 return "Sin Identificar";
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idpollster">Data table Tracking</param>
+        /// <returns>Name pollster</returns>
+        public string GetPercentageDone(int idpollster, int campaign, DateTime date)
+        {
+            try
+            {
+                /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
 
+
+                var Done = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.IdPollster == idpollster && x.datetime_tracking.Date == date.Date & x.AggregateUri != null).Count();
+                var All = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.IdPollster == idpollster && x.datetime_tracking.Date == date.Date).Count();
+                var percentage = (Done * 100) / All;
+                string Bateria = "Sin Ruta";
+                if (percentage < 33.33)
+                    Bateria = "Retraso";
+                if (percentage > 33.33 && percentage < (33.33 * 2))
+                    Bateria = "Medio";
+                if (percentage > (33.33 * 2))
+                    Bateria = "Normal";
+
+                return Bateria;
+            }
+            catch (Exception e)
+            {
+
+                return "Sin Ruta";
+            }
+        }
+        #region Dashboard
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idpollster">Data table Tracking</param>
+        /// <returns>Name pollster</returns>
+        public int GetTotal_business(int campaign, DateTime date)
+        {
+            try
+            {
+                /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
+
+
+
+                var All = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.datetime_tracking.Date == date.Date);
+
+
+                return All.Count() > 0 ? All.Count() : 0;
+            }
+            catch (Exception e)
+            {
+
+                return 0;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idpollster">Data table Tracking</param>
+        /// <returns>Name pollster</returns>
+        public int GetFull_business(int campaign, DateTime date)
+        {
+            try
+            {
+                /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
+
+
+
+                var All = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.datetime_tracking.Date == date.Date && x.AggregateUri != null);
+
+
+                return All.Count() > 0 ? All.Count() : 0;
+            }
+            catch (Exception e)
+            {
+
+                return 0;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idpollster">Data table Tracking</param>
+        /// <returns>Name pollster</returns>
+        public int GetIncomplete_business(int campaign, DateTime date)
+        {
+            try
+            {
+                /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
+
+
+
+                var All = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.datetime_tracking.Date == date.Date && x.AggregateUri == null);
+
+
+                return All.Count() > 0 ? All.Count() : 0;
+            }
+            catch (Exception e)
+            {
+
+                return 0;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idpollster">Data table Tracking</param>
+        /// <returns>Name pollster</returns>
+        public int GetTotal_pollsters(int campaign, DateTime date)
+        {
+            try
+            {
+                /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
+                var All = Context.PersonalTrakers.Where(x => x.Idcampaign == campaign && x.LastDate.Date == date.Date);
+                return All.Count() > 0 ? All.Select(s => s.IdPollster).Distinct().Count() : 0;
+            }
+            catch (Exception e)
+            {
+
+                return 0;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idpollster">Data table Tracking</param>
+        /// <returns>Name pollster</returns>
+        public int GetActive_pollsters(int campaign, DateTime date)
+        {
+            try
+            {
+                var POLLTERS= Context.PersonalTrakers.Where(x => x.Idcampaign == campaign && x.LastDate.Date == date.Date);
+                var numPollter = POLLTERS.Select(s => s.IdPollster.ToString()).Distinct().ToArray();
+                var All = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.datetime_tracking.Date == date.Date && numPollter.Contains(x.IdPollster.ToString()));
+                return All.Count() > 0 ? All.Select(s=>s.IdPollster).Distinct().Count() : 0;
+            }
+            catch (Exception e)
+            {
+
+                return 0;
+            }
+        }
+
+        public StatusPollster GetPollsterStatus(int campaign, DateTime date)
+        {
+            try
+            {
+                StatusPollster statusPollster = new StatusPollster();
+
+                 var All = from b in Context.TrackingBranches
+                              join t in Context.PersonalTrakers on b.IdPollster equals t.IdPollster
+                              where t.Idcampaign == campaign && t.LastDate.Date == date.Date
+                              select t.IdPollster; 
+                /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
+                foreach(var item in All.Distinct())
+                {
+                    string status = GetPercentageDone(item, campaign, date);
+                    switch (status)
+                    {
+                        case "Retraso":
+                            statusPollster.Delay = statusPollster.Delay+1;
+                        break;
+                        case "Medio":
+                            statusPollster.Medium = statusPollster.Medium + 1;
+                            break;
+                        case "Normal":
+                            statusPollster.Regular = statusPollster.Regular + 1;
+                            break;
+                    
+                    }
+
+                }             
+                
+                return statusPollster;
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+        }
+        #endregion
     }
 }

@@ -14,6 +14,8 @@ namespace Chariot.Framework.MardiscoreViewModel
         public double latitud { set; get; }
         public double longitud { set; get; }
         public int bateria { set; get; }
+        public string estado { set; get; }
+        
 
     }
 }

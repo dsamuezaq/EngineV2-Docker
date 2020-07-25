@@ -42,9 +42,14 @@ namespace Engine_V2.Controllers
         [Route("SaveStatusPerson")]
         public ReplyViewModel SaveStatusPerson([FromBody] TrackingViewModel _request)
         {
-            _TrackingBusiness.SaveTracking(_request);
-            reply.messege = "Success Save Data";
-            reply.status = "Ok";
+            reply.messege = "No puedo guardar la ubicación del encuestador";
+            reply.status = "Fail";
+            if (_TrackingBusiness.SaveTracking(_request)) 
+            {
+                reply.messege = "Success Save Data";
+                reply.status = "Ok";
+            }
+           
             return reply;
         }
         [HttpPost]
@@ -80,7 +85,7 @@ namespace Engine_V2.Controllers
             {
                 reply.messege = "Could not save the information";
                 reply.status = "Fail";
-                if (_TrackingBusiness.SaveTrackingBranch(_request))
+                if (_TrackingBusiness.SaveTrackingBranchStatus(_request))
                 {
                     reply.messege = "Success Save Data";
                     reply.status = "Ok";
@@ -134,6 +139,24 @@ namespace Engine_V2.Controllers
                 return Ok(reply);
             }
           
+        }
+
+        [HttpPost]
+        [Route("TrackingDashboard")]
+        public async Task<IActionResult> TrackingDashboard([FromBody] GetTrackingViewModel _request)
+        {
+            try
+            {
+                reply = _TrackingBusiness.GetDashboard(_request);
+                return Ok(reply);
+            }
+            catch (Exception e)
+            {
+                reply.error = e.Message;
+                reply.status = "Error";
+                return Ok(reply);
+            }
+
         }
         #endregion
 

@@ -24,6 +24,7 @@ namespace Chariot.Engine.DataObject.MardisCore
         public string Namecampaign { set; get; }
         public int IdPollster { set; get; }
 
+        public int battery_level { set; get; }
         [ForeignKey("Idcampaign")]
         public virtual Campaign Campaign { get; set; }
         [ForeignKey("IdPollster")]

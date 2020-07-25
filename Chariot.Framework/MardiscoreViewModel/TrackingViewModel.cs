@@ -15,5 +15,6 @@ namespace Chariot.Framework.MardiscoreViewModel
         public string NameAccount { set; get; }
         public string Namecampaign { set; get; }
         public string IdDevice  { set; get; }
+        public int battery_level { set; get; }
     }
 }

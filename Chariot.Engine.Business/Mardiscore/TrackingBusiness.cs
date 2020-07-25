@@ -25,15 +25,15 @@ namespace Chariot.Engine.Business.Mardiscore
         }
 
         #region Method Public
-        public ReplyViewModel SaveTracking(TrackingViewModel _data) {
+        public bool SaveTracking(TrackingViewModel _data) {
 
             DateTime d = DateTime.Now;
             PersonalTraker mapperTracking = _mapper.Map<PersonalTraker>(_data);
             mapperTracking.IdPollster = _trackingDao.GetPollsterIdByIdDevice(_data.IdDevice);
             mapperTracking.Idcampaign = _trackingDao.GetCampaignIdByDescripcion(_data.Namecampaign);
             mapperTracking.LastDate = d;
-            _trackingDao.SaveTrackingbyIdDevice(mapperTracking);
-            return null;
+            
+            return _trackingDao.SaveTrackingbyIdDevice(mapperTracking); 
         }
         public bool SaveTrackingBranch(List<TrackingBranchViewModel> _data)
         {
@@ -72,14 +72,15 @@ namespace Chariot.Engine.Business.Mardiscore
 
             DateTime d = DateTime.Now;
             TrackingBranch mapperTrackingBranch = new TrackingBranch();
+            int idcampaign = _trackingDao.GetCampaignIdByDescripcion(_data.campaign);
+            TrackingBranch _table = _trackingDao.GetBranchByCode(_data.Code, idcampaign, d);
 
-            mapperTrackingBranch.IdPollster = _trackingDao.GetPollsterIdByIdDevice(_data.IdDevice);
-            mapperTrackingBranch.Idcampaign = _trackingDao.GetCampaignIdByDescripcion(_data.campaign);
-            mapperTrackingBranch.AggregateUri = _data.AggregateUri;
-            mapperTrackingBranch.StatusBranch =_data.Status;
-            mapperTrackingBranch.timeTask =_data.TimeTask;
 
-            var Status = _trackingDao.SaveTrackingBranch(mapperTrackingBranch);
+            _table.AggregateUri = _data.AggregateUri;
+            _table.StatusBranch =_data.Status;
+            _table.timeTask =_data.TimeTask;
+
+         var Status = _trackingDao.UpdateTrackingBranch(_table);
 
             return Status;
         }
@@ -118,7 +119,7 @@ namespace Chariot.Engine.Business.Mardiscore
         public ReplyViewModel GetTracking(GetTrackingViewModel _data)
         {
             ReplyViewModel reply = new ReplyViewModel();
-               var _dataTable = _trackingDao.GetTrackingbyIdCampaign(_data.Idcampaing, _data.DateTracking);
+               var _dataTable = _trackingDao.GetTrackingbyIdCampaign(_data.Idcampaign, _data.DateTracking);
 
             List<TrackingModelReply> _Reply = 
                 _dataTable.Select(x => new TrackingModelReply {
@@ -126,10 +127,30 @@ namespace Chariot.Engine.Business.Mardiscore
                                                                 longitud=x.GeoLength,
                                                                 first_name=_trackingDao.GetPollsterNameById(x.IdPollster),
                                                                 last_name="",
-                                                                bateria=50,
-                                                                Idpollster=x.IdPollster
+                                                                estado=_trackingDao.GetPercentageDone(x.IdPollster,x.Idcampaign, _data.DateTracking),
+                                                                Idpollster=x.IdPollster,
+                                                                bateria=x.battery_level==null?0: x.battery_level,
                                                               }).ToList();
 
+            reply.messege = "success";
+            reply.data = _Reply;
+            reply.status = "Ok";
+            return reply;
+        }
+
+        public ReplyViewModel GetDashboard(GetTrackingViewModel _data)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            TrackingDashboardModelReply _Reply = new TrackingDashboardModelReply();
+            var _statusPollter=_trackingDao.GetPollsterStatus(_data.Idcampaign, _data.DateTracking);
+            _Reply.Total_business = _trackingDao.GetTotal_business(_data.Idcampaign, _data.DateTracking);
+            _Reply.Full = _trackingDao.GetFull_business(_data.Idcampaign, _data.DateTracking);
+            _Reply.Incompletes = _trackingDao.GetIncomplete_business(_data.Idcampaign, _data.DateTracking);
+            _Reply.Total_pollsters = _trackingDao.GetTotal_pollsters(_data.Idcampaign, _data.DateTracking);
+            _Reply.Active_pollsters = _trackingDao.GetActive_pollsters(_data.Idcampaign, _data.DateTracking);
+            _Reply.Delay = _statusPollter.Delay;
+            _Reply.Medium = _statusPollter.Medium;
+            _Reply.Regular = _statusPollter.Regular;
             reply.messege = "success";
             reply.data = _Reply;
             reply.status = "Ok";

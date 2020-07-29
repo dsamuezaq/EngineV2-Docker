@@ -396,6 +396,29 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 return null;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idpollster">Data table Tracking</param>
+        /// <returns>Name pollster</returns>
+        public List<Campaign> GetCampaing(Guid User)
+        {
+            try
+            {
+                var _table = from c in Context.Campaigns
+                             join u in Context.UserCampaigns on c.Id equals u.idCanpaign
+                             where u.idUser.Equals(User)
+                             select c;
+                            
+                return _table.Count() > 0 ? _table.ToList() : null;
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+        }
         #endregion
     }
 }

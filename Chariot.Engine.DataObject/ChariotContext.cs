@@ -88,5 +88,11 @@ namespace Chariot.Engine.DataObject
         /// Creation :20200722
         /// </summary>
         public DbSet<TrackingBranch> TrackingBranches { get; set; }
+
+        /// <summary>
+        /// Table relacion usuario Campañia
+        /// Creation :20200729
+        /// </summary>
+        public DbSet<UserCampaign> UserCampaigns { get; set; }
     }
     }

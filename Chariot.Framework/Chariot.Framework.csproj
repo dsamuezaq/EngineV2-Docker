@@ -205,7 +205,9 @@
     <Compile Include="Helpers\AppSettings.cs" />
     <Compile Include="Helpers\Mappers.cs" />
     <Compile Include="MardiscoreViewModel\BranchesModelReply.cs" />
+    <Compile Include="MardiscoreViewModel\CampaignModelReply.cs" />
     <Compile Include="MardiscoreViewModel\GetBranchViewModel.cs" />
+    <Compile Include="MardiscoreViewModel\GetCampaignViewModel.cs" />
     <Compile Include="MardiscoreViewModel\GetTrackingViewModel.cs" />
     <Compile Include="MardiscoreViewModel\StatusBranchTrackingViewModel.cs" />
     <Compile Include="MardiscoreViewModel\TrackingBranchViewModel.cs" />

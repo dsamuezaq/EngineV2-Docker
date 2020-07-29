@@ -130,6 +130,7 @@ namespace Chariot.Engine.Business.Mardiscore
                                                                 estado=_trackingDao.GetPercentageDone(x.IdPollster,x.Idcampaign, _data.DateTracking),
                                                                 Idpollster=x.IdPollster,
                                                                 bateria=x.battery_level==null?0: x.battery_level,
+                                                                Ultima_conexion=x.LastDate
                                                               }).ToList();
 
             reply.messege = "success";
@@ -155,6 +156,33 @@ namespace Chariot.Engine.Business.Mardiscore
             reply.data = _Reply;
             reply.status = "Ok";
             return reply;
+        }
+
+        public ReplyViewModel GetCampaign(GetCampaignViewModel _data)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+                var _Reply = _trackingDao.GetCampaing(_data.Iduser).Select(x => new CampaignModelReply
+                {
+                    Id = x.Id
+                            ,
+                    Name = x.Name
+
+                }).ToList(); ;
+                reply.messege = "success";
+                reply.data = _Reply;
+                reply.status = "Ok";
+                return reply;
+            }
+            catch (Exception e)
+            {
+                reply.messege = "No existen datos con esa Campaña";
+                reply.data = e.Message;
+                reply.status = "Fallo la consulta";
+                return reply;
+               
+            }   
         }
         #endregion
         #region Method Private

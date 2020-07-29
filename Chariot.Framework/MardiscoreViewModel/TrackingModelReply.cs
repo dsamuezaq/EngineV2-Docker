@@ -15,7 +15,7 @@ namespace Chariot.Framework.MardiscoreViewModel
         public double longitud { set; get; }
         public int bateria { set; get; }
         public string estado { set; get; }
-        
+        public DateTime Ultima_conexion { set; get; }
 
     }
 }

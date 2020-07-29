@@ -158,6 +158,24 @@ namespace Engine_V2.Controllers
             }
 
         }
+
+        [HttpPost]
+        [Route("TrackingCampaign")]
+        public async Task<IActionResult> TrackingCampaign([FromBody] GetCampaignViewModel _request)
+        {
+            try
+            {
+                reply = _TrackingBusiness.GetCampaign(_request);
+                return Ok(reply);
+            }
+            catch (Exception e)
+            {
+                reply.error = e.Message;
+                reply.status = "Error";
+                return Ok(reply);
+            }
+
+        }
         #endregion
 
     }

@@ -14,6 +14,10 @@ namespace Chariot.Framework.MardiscoreViewModel
         public string AggregateUri { get; set; }
         public string Status { get; set; }
         public double TimeTask { get; set; }
-  
+
+        public string End { get; set; }
+        public string Start { get; set; }
+
+
     }
 }

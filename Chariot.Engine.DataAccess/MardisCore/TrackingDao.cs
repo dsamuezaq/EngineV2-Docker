@@ -51,11 +51,16 @@ namespace Chariot.Engine.DataAccess.MardisCore
         /// <returns></returns>
         public bool SaveTrackingBranch(List<TrackingBranch> _table)
         {
+            Context.TrackingBranches.Where(x => x.IdPollster == _table.FirstOrDefault().IdPollster
+                                                && x.datetime_tracking.Date == _table.First().datetime_tracking.Date).DeleteFromQuery();
             try
             {
-                Context.TrackingBranches.Where(x => x.IdPollster == _table.FirstOrDefault().IdPollster
-                                                && x.datetime_tracking.Date == _table.First().datetime_tracking.Date).DeleteFromQuery();
-                Context.BulkInsert(_table);
+                foreach (var item in _table) {
+                    item.AggregateUri = item.StatusBranch.ToUpper() == "S" || item.StatusBranch.ToUpper() == "PENTIENTE" ? item.AggregateUri : "Finalizado Ruta";
+                    Context.TrackingBranches.Add(item);
+                    Context.SaveChanges();
+                }
+                
                 return true;
             }
             catch (Exception e)
@@ -65,7 +70,30 @@ namespace Chariot.Engine.DataAccess.MardisCore
             }
         }
 
+        /// <summary>
+        /// Save data  mobil from new brach
+        /// </summary>
+        /// <param name="_table">Data table Tracking</param>
+        /// <returns></returns>
+        public bool SaveTrackingNewBranch(TrackingBranch _table)
+        {
+        
+            try
+            {
 
+                     
+                    Context.TrackingBranches.Add(_table);
+                    Context.SaveChanges();
+            
+
+                return true;
+            }
+            catch (Exception e)
+            {
+
+                return false;
+            }
+        }
         /// <summary>
         /// Save data mobil from tracking
         /// </summary>
@@ -76,9 +104,8 @@ namespace Chariot.Engine.DataAccess.MardisCore
             try
             {
 
-                var _update = Context.TrackingBranches;
-                _update.Add(_table);
-                Context.BulkUpdate(_update);
+                Context.TrackingBranches.Update(_table);
+                Context.SaveChanges();
                 return true;
             }
             catch (Exception e)
@@ -182,6 +209,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 foreach (var item in Pollters) {
                     var max = Context.PersonalTrakers.Where(x => x.Idcampaign == idcampaign && x.LastDate.Date == date.Date && x.IdPollster == item).Max(x => x.LastDate);
                     var DataTable = Context.PersonalTrakers.Where(x => x.Idcampaign == idcampaign && x.LastDate == max && x.IdPollster == item).FirstOrDefault();
+
                     _result.Add(DataTable);
                 }
 
@@ -194,6 +222,50 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 return null;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idpollster">Data table Tracking</param>
+        /// <returns>Name pollster</returns>
+        public DateTime? GetStartDate(int idpollster , int Idcampaign, DateTime DateTrack)
+        {
+            try
+            {
+                /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
+
+                DateTime? StartN = Context.TrackingBranches.Where(x => x.Idcampaign == Idcampaign && x.IdPollster == idpollster && x.datetime_tracking.Date == DateTrack.Date).Select(x=>x.datetime_tracking).Min();
+                DateTime Start = Convert.ToDateTime(StartN);
+                return Start.AddHours(-5);
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idpollster">Data table Tracking</param>
+        /// <returns>Name pollster</returns>
+        public DateTime? GetEndDate(int idpollster, int Idcampaign, DateTime DateTrack)
+        {
+            try
+            {
+                /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
+
+                var EndN = Context.TrackingBranches.Where(x => x.Idcampaign == Idcampaign && x.IdPollster == idpollster && x.datetime_tracking.Date == DateTrack.Date).Select(x => x.ModificationDate).Max();
+                DateTime End = Convert.ToDateTime(EndN);
+                return End.AddHours(-5); 
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -230,12 +302,16 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 var All = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.IdPollster == idpollster && x.datetime_tracking.Date == date.Date).Count();
                 var percentage = (Done * 100) / All;
                 string Bateria = "Sin Ruta";
-                if (percentage < 33.33)
-                    Bateria = "Retraso";
-                if (percentage > 33.33 && percentage < (33.33 * 2))
-                    Bateria = "Medio";
-                if (percentage > (33.33 * 2))
-                    Bateria = "Normal";
+                if (percentage < 20)
+                    Bateria = "0-20 %";
+                if (percentage > 19 && percentage < (40))
+                    Bateria = "21-40 %";
+                if (percentage > 39 && percentage < (60))
+                    Bateria = "41-60 %";
+                if (percentage > 59 && percentage < (80))
+                    Bateria = "61-80 %";
+                if (percentage > (80))
+                    Bateria = "81-100 %";
 
                 return Bateria;
             }

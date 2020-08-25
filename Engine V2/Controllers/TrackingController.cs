@@ -78,6 +78,31 @@ namespace Engine_V2.Controllers
         
         }
         [HttpPost]
+        [Route("SaveNewBranchTracking")]
+        public async Task<IActionResult> SaveNewBranchTracking([FromBody] TrackingNewBranchViewModel _request)
+        {
+            try
+            {
+                reply.messege = "Could not save the information";
+                reply.status = "Fail";
+                if (_TrackingBusiness.SaveTrackingNewBranch(_request))
+                {
+                    reply.messege = "Success Save Data";
+                    reply.status = "Ok";
+                }
+
+                return Ok(reply); ;
+            }
+            catch (Exception e)
+            {
+
+                reply.error = e.Message;
+                reply.status = "Error";
+                return Ok(reply);
+            }
+
+        }
+        [HttpPost]
         [Route("SaveStatusBranchTracking")]
         public async Task<IActionResult> SaveStatusBranchTracking([FromBody] StatusBranchTrackingViewModel _request)
         {
@@ -134,6 +159,7 @@ namespace Engine_V2.Controllers
             }
             catch (Exception e)
             {
+                reply.messege = "No exiten Mercaderistas conectados";
                 reply.error = e.Message;
                 reply.status = "Error";
                 return Ok(reply);

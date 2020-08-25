@@ -26,8 +26,9 @@ namespace Chariot.Engine.DataObject.MardisCore
         public string RouteBranch { get; set; }
         public int? IdPollster { get; set; }
         public int? Idcampaign { get; set; }
-
-
+        public DateTime? ModificationDate { get; set; }
+        public DateTime? Start { get; set; }
+        public DateTime? End { get; set; }
         [ForeignKey("Idcampaign")]
         public virtual Campaign Campaign { get; set; }
         [ForeignKey("IdPollster")]

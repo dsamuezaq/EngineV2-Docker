@@ -213,7 +213,9 @@
     <Compile Include="MardiscoreViewModel\TrackingBranchViewModel.cs" />
     <Compile Include="MardiscoreViewModel\TrackingDashboardModelReply.cs" />
     <Compile Include="MardiscoreViewModel\TrackingModelReply.cs" />
+    <Compile Include="MardiscoreViewModel\TrackingNewBranchViewModel.cs" />
     <Compile Include="MardiscoreViewModel\TrackingViewModel.cs" />
+    <Compile Include="MardisSecurityViewModel\Token.cs" />
     <Compile Include="MardisSecurityViewModel\UserTokenModel.cs" />
     <Compile Include="MardisSecurityViewModel\UserViewModel.cs" />
     <Compile Include="Program.cs" />

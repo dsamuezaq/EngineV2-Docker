@@ -17,5 +17,8 @@ namespace Chariot.Framework.MardiscoreViewModel
         public string estado { set; get; }
         public DateTime Ultima_conexion { set; get; }
 
+        public DateTime? Inicio { set; get; }
+        public DateTime? Fin { set; get; }
+
     }
 }

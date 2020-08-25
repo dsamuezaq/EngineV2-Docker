@@ -40,33 +40,85 @@ namespace Chariot.Engine.Business.Mardiscore
 
             DateTime d = DateTime.Now;
             List<TrackingBranch> mapperTrackingBranch= new List<TrackingBranch> ();
-
+            int Idcampaign = _trackingDao.GetCampaignIdByDescripcion(_data.First().campaign);
+            int idpollster = _trackingDao.GetPollsterIdByIdDevice(_data.First().IdDevice);
+          
             foreach (var  item in _data) {
-
-                item.Idcampaign =_trackingDao.GetCampaignIdByDescripcion(item.campaign);
-                item.idpollster = _trackingDao.GetPollsterIdByIdDevice(item.IdDevice);
-                item.datetime_tracking = d;
+                DateTime? _StartDate = null;
+                DateTime? _EndDate = null;
+                if (item.dateexec != null) {
+                    _StartDate =  DateTime.Parse(item.dateexec);
+                }
+                if (item.dateexecini != null)
+                {
+                    _EndDate = DateTime.Parse(item.dateexecini);
+                }
                 mapperTrackingBranch.Add(new TrackingBranch
                 {
                     GeoLength = item.GeoLength,
                     Geolatitude = item.Geolatitude,
-                    datetime_tracking = item.datetime_tracking,
+                    datetime_tracking = d,
                     CodeBranch = item.CodeBranch,
                     NameBranch = item.NameBranch,
                     StreetBranch = item.StreetBranch,
                     StatusBranch = item.StatusBranch,
                     RouteBranch = item.RouteBranch,
-                    IdPollster = item.idpollster,
-                    Idcampaign = item.Idcampaign
-                        
-                });
+                    IdPollster = idpollster,
+                    Idcampaign = Idcampaign,
+                    timeTask=item.timetaks
+                   ,ModificationDate= d
+                   ,Start= _StartDate,
+                    End= _EndDate
+
+
+                });;;
             }
             
             var Status=_trackingDao.SaveTrackingBranch(mapperTrackingBranch);
 
             return Status;
         }
+        public bool SaveTrackingNewBranch(TrackingNewBranchViewModel _data)
+        {
 
+            DateTime d = DateTime.Now;
+            TrackingBranch mapperTrackingBranch = new TrackingBranch();
+            int Idcampaign = _trackingDao.GetCampaignIdByDescripcion(_data.campaign);
+            int idpollster = _trackingDao.GetPollsterIdByIdDevice(_data.IdDevice);
+
+         
+                DateTime? _StartDate = null;
+                DateTime? _EndDate = null;
+                if (_data.Start != null)
+                {
+                    _StartDate = DateTime.ParseExact(_data.Start, "dd/MM/yy HH:mm", null);
+            }
+                if (_data.End != null)
+                {
+                    _EndDate = DateTime.ParseExact(_data.End, "dd/MM/yy HH:mm", null); 
+                }
+
+                     mapperTrackingBranch.GeoLength = _data.GeoLength;
+                     mapperTrackingBranch.Geolatitude = _data.Geolatitude;
+                     mapperTrackingBranch.datetime_tracking = d;
+                     mapperTrackingBranch.CodeBranch = _data.CodeBranch;
+                     mapperTrackingBranch.NameBranch = _data.NameBranch;
+                     mapperTrackingBranch.StreetBranch = _data.StreetBranch;
+                     mapperTrackingBranch.StatusBranch = _data.StatusBranch;
+                     mapperTrackingBranch.RouteBranch = _data.RouteBranch;
+                     mapperTrackingBranch.IdPollster = idpollster;
+                     mapperTrackingBranch.Idcampaign = Idcampaign;
+                     mapperTrackingBranch.timeTask = _data.timetaks;
+                     mapperTrackingBranch.ModificationDate = d;
+                     mapperTrackingBranch.Start = _StartDate;
+                     mapperTrackingBranch.End = _EndDate;
+                      mapperTrackingBranch.AggregateUri = _data.AggregateUri;
+
+
+            var Status = _trackingDao.SaveTrackingNewBranch(mapperTrackingBranch);
+
+            return Status;
+        }
         public bool SaveTrackingBranchStatus(StatusBranchTrackingViewModel _data)
         {
 
@@ -75,12 +127,25 @@ namespace Chariot.Engine.Business.Mardiscore
             int idcampaign = _trackingDao.GetCampaignIdByDescripcion(_data.campaign);
             TrackingBranch _table = _trackingDao.GetBranchByCode(_data.Code, idcampaign, d);
 
-
+            DateTime? _StartDate = null;
+            DateTime? _EndDate = null;
+            if (_data.Start != null)
+            {
+                _StartDate = DateTime.ParseExact(_data.Start, "dd/MM/yy HH:mm",null);
+            }
+            if (_data.End != null)
+            {
+                _EndDate = DateTime.ParseExact(_data.End, "dd/MM/yy HH:mm", null);
+            }
             _table.AggregateUri = _data.AggregateUri;
             _table.StatusBranch =_data.Status;
             _table.timeTask =_data.TimeTask;
+            _table.Start = _StartDate;
+            _table.End = _EndDate;
 
-         var Status = _trackingDao.UpdateTrackingBranch(_table);
+
+            _table.ModificationDate = d;
+            var Status = _trackingDao.UpdateTrackingBranch(_table);
 
             return Status;
         }
@@ -106,12 +171,22 @@ namespace Chariot.Engine.Business.Mardiscore
                      StatusBranch = x.StatusBranch,
                      RouteBranch = x.RouteBranch,
                      Status = x.AggregateUri == null ? "Pendiente" : "Finalizado"
-
+                     ,Start=x.Start
+                     ,End=x.End
+                     
                  }).ToList();
-
-                reply.messege = "success";
-                reply.data = _Reply;
-                reply.status = "Ok";
+                if (_data.Status == "" || _data.Status == null)
+                {
+                    reply.messege = "success";
+                    reply.data = _Reply.OrderByDescending(x => x.Status).OrderBy(t=>t.TimeTask);
+                    reply.status = "Ok";
+                }
+                else {
+                    reply.messege = "success";
+                    reply.data = _Reply.Where(x=>x.Status== _data.Status).OrderBy(t => t.TimeTask); ;
+                    reply.status = "Ok";
+                }
+              
             }
          
             return reply;
@@ -130,13 +205,30 @@ namespace Chariot.Engine.Business.Mardiscore
                                                                 estado=_trackingDao.GetPercentageDone(x.IdPollster,x.Idcampaign, _data.DateTracking),
                                                                 Idpollster=x.IdPollster,
                                                                 bateria=x.battery_level==null?0: x.battery_level,
-                                                                Ultima_conexion=x.LastDate
-                                                              }).ToList();
+                                                                Ultima_conexion=x.LastDate.AddHours(-5),
+                                                                Inicio=_trackingDao.GetStartDate(x.IdPollster, x.Idcampaign, _data.DateTracking),
+                                                                Fin = _trackingDao.GetEndDate(x.IdPollster, x.Idcampaign, _data.DateTracking)
+                }).ToList();
 
-            reply.messege = "success";
-            reply.data = _Reply;
-            reply.status = "Ok";
-            return reply;
+
+            if (_data.Status == "" || _data.Status==null)
+            {
+
+                reply.messege = "success";
+                reply.data = _Reply.OrderBy(u =>u.estado);
+                reply.status = "Ok";
+                return reply;
+            }
+            else {
+                reply.messege = "success";
+                reply.data = _Reply.Where(x=>x.estado==_data.Status);
+                reply.status = "Ok";
+                return reply;
+
+            }
+
+
+          
         }
 
         public ReplyViewModel GetDashboard(GetTrackingViewModel _data)
@@ -165,10 +257,8 @@ namespace Chariot.Engine.Business.Mardiscore
             {
                 var _Reply = _trackingDao.GetCampaing(_data.Iduser).Select(x => new CampaignModelReply
                 {
-                    Id = x.Id
-                            ,
-                    Name = x.Name
-
+                 Id = x.Id,
+                 Name = x.Name
                 }).ToList(); ;
                 reply.messege = "success";
                 reply.data = _Reply;

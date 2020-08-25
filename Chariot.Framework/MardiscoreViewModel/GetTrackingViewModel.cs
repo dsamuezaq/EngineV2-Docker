@@ -10,5 +10,7 @@ namespace Chariot.Framework.MardiscoreViewModel
     {
         public int Idcampaign { get; set; }
         public DateTime DateTracking { get; set; }
+
+        public string Status { get; set; }
     }
 }

@@ -27,6 +27,7 @@ using Chariot.Framework.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
+using Chariot.Framework.MardisSecurityViewModel;
 
 namespace Engine_V2.Controllers
 {
@@ -75,6 +76,37 @@ namespace Engine_V2.Controllers
 
             }
             return Unauthorized();
+
+        }
+        [AllowAnonymous]
+        [Route("Auth")]
+        public async Task<IActionResult> Auth(LoginViewModel userLogin)
+        {
+            if (ModelState.IsValid)
+            {
+                var _userInfo = auth(userLogin.Email, userLogin.Password);
+                if (_userInfo != null)
+                {
+                    Token token = new Token();
+                    token.token = generateJwtToken(_userInfo);
+                    return Ok(token);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+
+            }
+            return Unauthorized();
+
+        }
+        [AllowAnonymous]
+        [Route("Auth2")]
+        public async Task<IActionResult> Auth2()
+        {
+            Token token = new Token();
+             token.token = "das";
+              return Ok(token); 
 
         }
         [HttpPost]

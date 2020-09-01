@@ -20,5 +20,7 @@ namespace Chariot.Framework.MardiscoreViewModel
         public DateTime? Inicio { set; get; }
         public DateTime? Fin { set; get; }
 
+        public string Telefono { set; get; }
+
     }
 }

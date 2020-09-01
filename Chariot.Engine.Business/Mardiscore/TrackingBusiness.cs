@@ -207,7 +207,9 @@ namespace Chariot.Engine.Business.Mardiscore
                                                                 bateria=x.battery_level==null?0: x.battery_level,
                                                                 Ultima_conexion=x.LastDate.AddHours(-5),
                                                                 Inicio=_trackingDao.GetStartDate(x.IdPollster, x.Idcampaign, _data.DateTracking),
-                                                                Fin = _trackingDao.GetEndDate(x.IdPollster, x.Idcampaign, _data.DateTracking)
+                                                                Fin = _trackingDao.GetEndDate(x.IdPollster, x.Idcampaign, _data.DateTracking),
+                                                                Telefono=_trackingDao.GetPollsterPhoneById(x.IdPollster)
+
                 }).ToList();
 
 

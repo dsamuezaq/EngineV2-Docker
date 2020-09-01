@@ -286,6 +286,27 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 return "Sin Identificar";
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idpollster">Data table Tracking</param>
+        /// <returns>Name pollster</returns>
+        public string GetPollsterPhoneById(int idpollster)
+        {
+            try
+            {
+                /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
+
+                var _dataTable = Context.Pollsters.Where(x => x.Id.Equals(idpollster));
+                return _dataTable.Count() > 0 ? _dataTable.First().Phone : "Sin Identificar";
+            }
+            catch (Exception e)
+            {
+
+                return "Sin Identificar";
+            }
+        }
         /// <summary>
         /// 
         /// </summary>

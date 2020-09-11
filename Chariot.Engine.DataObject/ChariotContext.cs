@@ -1,5 +1,6 @@
 ﻿using Chariot.Engine.DataObject.MardisCommon;
 using Chariot.Engine.DataObject.MardisCore;
+using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Engine.DataObject.MardisSecurity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
@@ -94,5 +95,75 @@ namespace Chariot.Engine.DataObject
         /// Creation :20200729
         /// </summary>
         public DbSet<UserCampaign> UserCampaigns { get; set; }
+
+
+        /// <summary>
+        /// Table vendedores App industrial
+        /// Creation :20200812
+        /// </summary>
+        public DbSet<Salesman> Salesmans { get; set; }
+
+
+        /// <summary>
+        ///  Table rubros y items App industrial
+        /// Creation :20200812
+        /// </summary>
+        public DbSet<Items> Itemss { get; set; }
+
+
+        /// <summary>
+        ///  Table rubros y items App industrial
+        /// Creation :20200812
+        /// </summary>
+        public DbSet<Client> Clients { get; set; }
+
+        /// <summary>
+        ///  Table productos App industrial
+        /// Creation :20200812
+        /// </summary>
+        public DbSet<Product> ProductOrders { get; set; }
+
+
+        /// <summary>
+        ///  Table depostos App industrial
+        /// Creation :20200812
+        /// </summary>
+        public DbSet<Deposit> Deposits { get; set; }
+
+        /// <summary>
+        /// Tabla de Locales
+        ///      Creation :20200910
+        /// </summary>
+        public DbSet<Branch> Branches { get; set; }
+
+        public DbSet<Country> Countries { get; set; }
+
+        /// <summary>
+        /// Tabla de Provincias
+        /// </summary>
+        public DbSet<Province> Provinces { get; set; }
+
+
+        /// <summary>
+        /// Tabla de Distritos 
+        /// </summary>
+        public DbSet<District> Districts { get; set; }
+
+        /// <summary>
+        /// Tabla de Sectores
+        /// </summary>
+        public DbSet<Sector> Sectors { get; set; }
+
+
+        /// <summary>
+        /// Tabla de Parroquias
+        /// </summary>
+        public DbSet<Parish> Parishes { get; set; }
+
+        /// <summary>
+        /// Tabla de Personas
+        /// </summary>
+        public DbSet<Person> Persons { get; set; }
+
     }
-    }
+}

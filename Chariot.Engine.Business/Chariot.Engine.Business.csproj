@@ -213,6 +213,7 @@
     <Compile Include="ABusiness.cs" />
     <Compile Include="Mardiscore\TaskCampaignBusiness.cs" />
     <Compile Include="Mardiscore\TrackingBusiness.cs" />
+    <Compile Include="MardisOrders\OrdersBusiness.cs" />
     <Compile Include="MardisSecurity\UserBusiness.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -235,6 +236,7 @@
       <Name>Chariot.Framework</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Data.SqlClient.SNI.1.0.19235.1\build\net46\Microsoft.Data.SqlClient.SNI.targets" Condition="Exists('..\packages\Microsoft.Data.SqlClient.SNI.1.0.19235.1\build\net46\Microsoft.Data.SqlClient.SNI.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

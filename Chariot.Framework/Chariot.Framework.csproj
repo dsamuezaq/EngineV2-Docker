@@ -212,16 +212,23 @@
     <Compile Include="Helpers\NotificationsMessageHandler.cs" />
     <Compile Include="Helpers\WebSocketHandler.cs" />
     <Compile Include="MardiscoreViewModel\BranchesModelReply.cs" />
+    <Compile Include="MardiscoreViewModel\Branch\BranchRutaTaskViewModel.cs" />
     <Compile Include="MardiscoreViewModel\CampaignModelReply.cs" />
     <Compile Include="MardiscoreViewModel\GetBranchViewModel.cs" />
     <Compile Include="MardiscoreViewModel\GetCampaignViewModel.cs" />
     <Compile Include="MardiscoreViewModel\GetTrackingViewModel.cs" />
+    <Compile Include="MardiscoreViewModel\RegistroViewModel.cs" />
     <Compile Include="MardiscoreViewModel\StatusBranchTrackingViewModel.cs" />
     <Compile Include="MardiscoreViewModel\TrackingBranchViewModel.cs" />
     <Compile Include="MardiscoreViewModel\TrackingDashboardModelReply.cs" />
     <Compile Include="MardiscoreViewModel\TrackingModelReply.cs" />
     <Compile Include="MardiscoreViewModel\TrackingNewBranchViewModel.cs" />
     <Compile Include="MardiscoreViewModel\TrackingViewModel.cs" />
+    <Compile Include="MardiscoreViewModel\VendedoresViewModel.cs" />
+    <Compile Include="MardisOrdersViewModel\ArticulosViewModel.cs" />
+    <Compile Include="MardisOrdersViewModel\ClientViewModel.cs" />
+    <Compile Include="MardisOrdersViewModel\DepositosViewModel.cs" />
+    <Compile Include="MardisOrdersViewModel\RubrosViewModel.cs" />
     <Compile Include="MardisSecurityViewModel\Token.cs" />
     <Compile Include="MardisSecurityViewModel\UserTokenModel.cs" />
     <Compile Include="MardisSecurityViewModel\UserViewModel.cs" />
@@ -248,6 +255,7 @@
       <Name>Chariot.Engine.DataObject</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Data.SqlClient.SNI.1.0.19235.1\build\net46\Microsoft.Data.SqlClient.SNI.targets" Condition="Exists('..\packages\Microsoft.Data.SqlClient.SNI.1.0.19235.1\build\net46\Microsoft.Data.SqlClient.SNI.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

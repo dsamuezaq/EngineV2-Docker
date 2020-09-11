@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Chariot.Engine.DataObject.MardisCore;
+using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Framework.MardiscoreViewModel;
+using Chariot.Framework.MardisOrdersViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +35,13 @@ namespace Chariot.Framework.Helpers
             //CreateMap<viewEjercicio, Ejercicio>();
             CreateMap<TrackingViewModel, PersonalTraker>();
             CreateMap<TrackingBranchViewModel, TrackingBranch>();
+            CreateMap<Salesman, VendedoresViewModel>();
+
+            CreateMap<Items, RubrosViewModel>();
+            CreateMap<Client, ClientViewModel>();
+            CreateMap<Product, ArticulosViewModel>();
+            CreateMap<Deposit, DepositosViewModel>();
+            //.ForMember(x=>x.Id, opt =>opt.Ignore());
         }
     }
 }

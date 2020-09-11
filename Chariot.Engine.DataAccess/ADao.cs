@@ -21,28 +21,28 @@ namespace Chariot.Engine.DataAccess
             Context = _chariotContext;
             EntityFrameworkManager.ContextFactory = context => _chariotContext;
         }
-        public T InsertOrUpdate<T>(T entity) where T : class, IEntity
-        {
-            try
-            {
-                var stateRegister = Guid.Empty == entity.Id ? EntityState.Added : EntityState.Modified;
+        //public T InsertOrUpdate<T>(T entity) where T : class, IEntity
+        //{
+        //    try
+        //    {
+        //        var stateRegister = Guid.Empty == entity.Id ? EntityState.Added : EntityState.Modified;
 
-                if (Context.Entry(entity).State == EntityState.Detached && stateRegister == EntityState.Added)
-                {
-                    Context.Set<T>().Add(entity);
-                }
+        //        if (Context.Entry(entity).State == EntityState.Detached && stateRegister == EntityState.Added)
+        //        {
+        //            Context.Set<T>().Add(entity);
+        //        }
 
-                Context.Entry(entity).State = stateRegister;
+        //        Context.Entry(entity).State = stateRegister;
 
-                Context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                // throw new ExceptionMardis(ex.Message, ex);
-            }
+        //        Context.SaveChanges();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // throw new ExceptionMardis(ex.Message, ex);
+        //    }
 
-            return entity;
-        }
+        //    return entity;
+        //}
 
         public List<T> GetPaginatedList<T>(int pageIndex, int pageSize) where T : class, IEntity
         {
@@ -52,6 +52,24 @@ namespace Chariot.Engine.DataAccess
                 .ToList();
 
             return sortedList;
+        }
+
+
+        public List<T> SelectEntity<T>() where T : class
+        {
+
+            try
+            {
+                var _dataTable = Context.Set<T>()
+                         .ToList();
+                return _dataTable;
+            }
+            catch (Exception e)
+            {
+                return null;
+              
+            }
+     
         }
         public void Update<T>(T entity) where T : class
         {

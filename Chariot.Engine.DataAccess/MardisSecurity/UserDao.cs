@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Chariot.Engine.DataAccess.MardisSecurity
 {
-   public class UserDao: ADao
+   public class UserDao:  ADao
     {
        public UserDao(ChariotContext context)
      : base(context)

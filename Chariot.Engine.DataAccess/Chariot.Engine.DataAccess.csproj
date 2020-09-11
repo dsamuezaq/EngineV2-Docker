@@ -174,7 +174,9 @@
   <ItemGroup>
     <Compile Include="ADao.cs" />
     <Compile Include="IEntity.cs" />
+    <Compile Include="MardisCore\TaskCampaignDao.cs" />
     <Compile Include="MardisCore\TrackingDao.cs" />
+    <Compile Include="MardisOrders\OrdersDao.cs" />
     <Compile Include="MardisSecurity\UserDao.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -193,6 +195,7 @@
       <Name>Chariot.Framework</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

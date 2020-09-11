@@ -36,8 +36,8 @@ namespace Engine_V2.Controllers
 
 
         [HttpGet]
-        [Route("GetTasks")]
-        public ReplyViewModel GetTasks([FromBody] RequestViewModel _request)
+        [Route("Get")]
+        public ReplyViewModel Get([FromBody] RequestViewModel _request)
     {
             if (Isvalidauthtoken(_request.token)) {
                 reply.status = "A-OK";

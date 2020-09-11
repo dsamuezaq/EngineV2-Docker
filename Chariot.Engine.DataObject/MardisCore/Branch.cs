@@ -13,10 +13,10 @@ namespace Chariot.Engine.DataObject.MardisCore
     /// Tabla de Locales en el sistema
     /// </summary>
     [Table("Branch", Schema = "MardisCore")]
-    public class Branch 
+    public class Branch
     {
         [Key]
-        public int Id { get; set; } =0;
+        public int Id { get; set; } = 0;
 
         public int IdAccount { get; set; } = 0;
 
@@ -56,13 +56,14 @@ namespace Chariot.Engine.DataObject.MardisCore
 
         public string Reference { get; set; }
 
-        public int IdPersonOwner { get; set; } = 0;
-
+        public int IdPersonOwner { get; set; } 
+        [ForeignKey("IdPersonOwner")]
+        public virtual  Person PersonOwner { get; set; } = new Person();
         public string IsAdministratorOwner { get; set; }
 
-    
 
-        public string StatusRegister { get; set; } ="A";
+
+        public string StatusRegister { get; set; } = "A";
 
         public string TypeBusiness { get; set; }
         public string ESTADOAGGREGATE { get; set; }
@@ -80,19 +81,19 @@ namespace Chariot.Engine.DataObject.MardisCore
         //public Double? TimeLastTask { get; set; }
         public DateTime? routeDate { get; set; } = DateTime.Now;
         [ForeignKey("IdCountry")]
-        public Country Country { get; set; }
+        public virtual  Country Country { get; set; }
 
         [ForeignKey("IdDistrict")]
-        public District District { get; set; }
+        public virtual  District District { get; set; }
 
         [ForeignKey("IdParish")]
-        public Parish Parish { get; set; }
+        public virtual Parish Parish { get; set; }
         [ForeignKey("IdProvince")]
-        public Province Province { get; set; }
+        public virtual  Province Province { get; set; }
         [ForeignKey("IdSector")]
-        public Sector Sector { get; set; }
-        [ForeignKey("IdPersonOwner")]
-        public virtual Person PersonOwner { get; set; } = new Person();
+        public virtual  Sector Sector { get; set; }
+        
 
+    
     }
 }

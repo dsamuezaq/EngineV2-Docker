@@ -224,6 +224,9 @@
     <Compile Include="MardisOrders\IEntity.cs" />
     <Compile Include="MardisOrders\Items.cs" />
     <Compile Include="MardisOrders\Salesman.cs" />
+    <Compile Include="MardisSecurity\AuthorizationProfile.cs" />
+    <Compile Include="MardisSecurity\Menu.cs" />
+    <Compile Include="MardisSecurity\Profile.cs" />
     <Compile Include="MardisSecurity\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -94,5 +94,31 @@ namespace Engine_V2.Libraries
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        protected string generateJwtTokenEngine(UserTokenModel InfoUser)
+        {
+            // 
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var claims = new List<Claim>();
+
+
+            claims.Add(new Claim("IdUser", InfoUser._user.Id.ToString()));
+            claims.Add(new Claim("email", InfoUser._user.Email.ToString()));
+            claims.Add(new Claim("name", InfoUser._user.name.ToString()));
+            claims.Add(new Claim("idtype", "UserEngine"));
+            claims.Add(new Claim("idAccount", InfoUser._user.IdAccount.ToString()));
+            claims.Add(new Claim("idprofile", InfoUser._user.IdProfile.ToString()));
+            var userIdentity = new ClaimsIdentity(claims);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = userIdentity,
+                Expires = DateTime.UtcNow.AddHours(-5).AddDays(7),
+                NotBefore = DateTime.UtcNow.AddHours(-5),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
     }
 }

@@ -28,6 +28,7 @@ namespace Chariot.Engine.Business.Mardiscore
            
             try
             {
+                _taskCampaignDao.d();
                 var _data = _taskCampaignDao.GetBranchList(idaccount, iddevice);
                 var _model = _data.Select(x => new BranchRutaTaskViewModel
                 {
@@ -54,7 +55,7 @@ namespace Chariot.Engine.Business.Mardiscore
                     comment = x.CommentBranch == null ? "" : x.CommentBranch,
                     // actividad = x.Branch_Activities.Select(t => t.idproject).ToList(),
                     Province = x.Province.Name,
-                    District = x.District.Name,
+                    District =  x.District.Name,
                     //  FechaVisita = x.FechaVisita,
                     //Link = x.Ext_image,
                     //Isclient = x.Isclient,

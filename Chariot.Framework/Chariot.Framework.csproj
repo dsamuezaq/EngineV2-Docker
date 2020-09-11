@@ -229,6 +229,7 @@
     <Compile Include="MardisOrdersViewModel\ClientViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\DepositosViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\RubrosViewModel.cs" />
+    <Compile Include="MardisSecurityViewModel\GetMenuViewModel.cs" />
     <Compile Include="MardisSecurityViewModel\Token.cs" />
     <Compile Include="MardisSecurityViewModel\UserTokenModel.cs" />
     <Compile Include="MardisSecurityViewModel\UserViewModel.cs" />

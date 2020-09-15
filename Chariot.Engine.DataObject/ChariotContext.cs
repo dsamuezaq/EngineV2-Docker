@@ -165,21 +165,5 @@ namespace Chariot.Engine.DataObject
         /// </summary>
         public DbSet<Person> Persons { get; set; }
 
-
-        /// <summary>
-        /// Tabla de Profile
-        /// </summary>
-        public DbSet<Profile> Profiles { get; set; }
-
-        /// <summary>
-        /// Tabla de AuthorizationProfile
-        /// </summary>
-        public DbSet<AuthorizationProfile> AuthorizationProfiles { get; set; }
-
-        /// <summary>
-        /// Tabla de Menu
-        /// </summary>
-        public DbSet<Menu> Menus { get; set; }
-
     }
 }

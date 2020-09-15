@@ -109,52 +109,6 @@ namespace Engine_V2.Controllers
               return Ok(token); 
 
         }
-
-        [AllowAnonymous]
-        [Route("AuthEngineV2")]
-        public async Task<IActionResult> Auth3(LoginViewModel userLogin)
-        {
-            if (ModelState.IsValid)
-            {
-                var _userInfo = auth(userLogin.Email, userLogin.Password);
-                if (_userInfo != null)
-                {
-                    Token token = new Token();
-                    token.token = generateJwtTokenEngine(_userInfo);
-                    return Ok(token);
-                }
-                else
-                {
-                    return Unauthorized();
-                }
-
-            }
-            return Unauthorized();
-
-        }
-
-        [HttpPost]
-        [Authorize]
-        [Route("GetMenubyProfile")]
-        public async Task<IActionResult> GetMenubyProfile(string idprofile)
-        {
-            try
-            {
-            
-              
-
-                return Ok(_userBusiness.GetUserMenu(idprofile)); ;
-            }
-            catch (Exception e)
-            {
-
-                reply.error = e.Message;
-                reply.status = "Error";
-                return Ok(reply);
-            }
-            return Unauthorized();
-
-        }
         [HttpPost]
         [Authorize]
         [Route("Register")]

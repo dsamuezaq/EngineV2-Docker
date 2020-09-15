@@ -36,30 +36,5 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
      
         
         }
-
-        /// <summary>
-        /// Exist user
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="pass"></param>
-        /// <returns></returns>
-        public List<Menu> GetMenubyProfile(string idprofile)
-        {
-            try
-            {
-                var _data = from a in Context.AuthorizationProfiles
-                            join m in Context.Menus on a.IdMenu equals m.Id
-                            where a.IdProfile.ToString().Equals(idprofile)
-                            select m;
-                return _data.Count() > 0 ? _data.ToList() : null;
-            }
-            catch (Exception e)
-            {
-
-                return null;
-            }
-
-
-        }
     }
 }

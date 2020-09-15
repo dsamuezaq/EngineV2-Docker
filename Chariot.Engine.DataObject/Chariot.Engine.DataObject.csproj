@@ -219,14 +219,14 @@
     <Compile Include="MardisCore\TrackingBranch.cs" />
     <Compile Include="MardisCore\UserCampaign.cs" />
     <Compile Include="MardisOrders\Deposit.cs" />
+    <Compile Include="MardisOrders\Order.cs" />
+    <Compile Include="MardisOrders\OrderDetail.cs" />
+    <Compile Include="MardisOrders\pedidosItems.cs" />
     <Compile Include="MardisOrders\Product.cs" />
     <Compile Include="MardisOrders\Client.cs" />
     <Compile Include="MardisOrders\IEntity.cs" />
     <Compile Include="MardisOrders\Items.cs" />
     <Compile Include="MardisOrders\Salesman.cs" />
-    <Compile Include="MardisSecurity\AuthorizationProfile.cs" />
-    <Compile Include="MardisSecurity\Menu.cs" />
-    <Compile Include="MardisSecurity\Profile.cs" />
     <Compile Include="MardisSecurity\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

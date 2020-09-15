@@ -18,7 +18,6 @@ using Microsoft.Extensions.Options;
 
 namespace Engine_V2.Controllers
 {
-    
     [Route("api/[controller]")]
     [ApiController]
     public class BranchController : AController<BranchController>
@@ -47,6 +46,17 @@ namespace Engine_V2.Controllers
 
             return Ok(_taskCampaignBusiness.GetBranches(idaccount,iddevice));
         }
+
+        [HttpGet]
+        [Route("Campaign")]
+        public async Task<IActionResult> Campaign(int idaccounte)
+        {
+            reply.messege = "No puedo guardar la ubicación del encuestador";
+            reply.status = "Fail";
+
+            return Ok(_taskCampaignBusiness.GetCampanigAccount());
+        }
+
 
         #endregion
     }

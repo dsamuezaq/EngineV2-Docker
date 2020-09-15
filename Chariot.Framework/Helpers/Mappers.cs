@@ -41,6 +41,9 @@ namespace Chariot.Framework.Helpers
             CreateMap<Client, ClientViewModel>();
             CreateMap<Product, ArticulosViewModel>();
             CreateMap<Deposit, DepositosViewModel>();
+            CreateMap<OrdersViewModel, Order>()
+                 .ForMember(dest => dest.pedidosItems, opt => opt.MapFrom(src => src.pedidosItems));
+          //  .ForMember(x => x.pedidosItems, opt => opt.Ignore());
             //.ForMember(x=>x.Id, opt =>opt.Ignore());
         }
     }

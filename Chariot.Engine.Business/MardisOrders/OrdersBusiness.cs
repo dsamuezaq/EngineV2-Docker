@@ -64,5 +64,21 @@ namespace Chariot.Engine.Business.MardisOrders
             return mapperRubros;
 
         }
+
+        public bool SaveDataOrders(List<OrdersViewModel> PEDIDOS)
+        {
+            try
+            {
+                List<Order> mapperRubros = _mapper.Map<List<Order>>(PEDIDOS);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+           
+            return true;
+
+        }
     }
 }

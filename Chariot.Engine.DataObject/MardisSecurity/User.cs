@@ -37,10 +37,6 @@ namespace Chariot.Engine.DataObject.MardisSecurity
 
         public string InitialPage { get; set; }
 
-        [ForeignKey("IdPerson")]
-        public virtual Person Persons { get; set; }
-        [ForeignKey("IdProfile")]
-        public virtual Profile Profiles { get; set; }
         [ForeignKey("IdAccount")]
         public virtual Account Account { get; set; }
 

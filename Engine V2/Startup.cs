@@ -40,9 +40,7 @@ namespace Engine_V2
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var conn = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ChariotContext>(
-                
-                options => options.UseSqlServer(conn));
+            services.AddDbContext<ChariotContext>(options => options.UseSqlServer(conn));
             var connRedis = Configuration.GetConnectionString("ConnectionRedis");
             services.AddSingleton<RedisCache, RedisCache>();
 

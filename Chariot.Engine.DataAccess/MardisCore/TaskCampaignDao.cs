@@ -283,5 +283,21 @@ namespace Chariot.Engine.DataAccess.MardisCore
 
             return true;
         }
+        public object GetCampaing()
+        {
+            //   var consulta = Context.Campaigns.Include(t => t.Account).Where(c => c.StatusRegister == CStatusRegister.Active).ToList();
+
+            var consulta = from c in Context.Campaigns
+                           join a in Context.Accounts on c.IdAccount equals a.Id
+                           where c.StatusRegister == CStatusRegister.Active
+                           select new {
+                               c.Id,
+                               c.Name,
+                               c.IdAccount,
+                               c.Idform,
+                               AccountName= a.Name
+                           };
+            return consulta.ToList();
+        }
     }
 }

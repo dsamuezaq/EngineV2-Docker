@@ -18,7 +18,7 @@ namespace Chariot.Engine.DataObject.MardisCommon
         public Province()
         {
             this.Districts = new HashSet<District>();
-            //this.Branches = new HashSet<Branch>();
+            this.Branches = new HashSet<Branch>();
         }
 
         [Key]
@@ -30,6 +30,6 @@ namespace Chariot.Engine.DataObject.MardisCommon
         [ForeignKey("IdCountry")]
         public virtual Country Country { get; set; }
         public virtual ICollection<District> Districts { get; set; }
-        //public virtual ICollection<Branch> Branches { get; set; }
+        public virtual ICollection<Branch> Branches { get; set; }
     }
 }

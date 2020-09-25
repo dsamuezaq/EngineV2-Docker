@@ -1,5 +1,4 @@
-﻿using Chariot.Engine.DataObject.MardisCore;
-using Chariot.Engine.DataObject.MardisSecurity;
+﻿using Chariot.Engine.DataObject.MardisSecurity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,7 +16,7 @@ namespace Chariot.Engine.DataObject.MardisCommon
         public Person()
         {
             Users = new HashSet<User>();
-      //      Branches = new HashSet<Branch>();
+            //this.Branches = new HashSet<Branch>();
         }
 
         [Key]
@@ -37,7 +36,7 @@ namespace Chariot.Engine.DataObject.MardisCommon
 
         [ForeignKey("IdAccount")]
         public virtual Account Account { get; set; }
-       // public ICollection<Branch> Branches { get; set; }
+        //public virtual ICollection<Branch> Branches { get; set; }
         public ICollection<User> Users { get; set; }
     }
 }

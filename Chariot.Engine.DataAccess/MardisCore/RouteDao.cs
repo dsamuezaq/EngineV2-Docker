@@ -302,6 +302,78 @@ namespace Chariot.Engine.DataAccess.MardisCore
             }
 
         }
+        public bool AddRouteImei(string document, string rout, int idAccount)
+        {
+
+            try
+            {
+                var routes = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE.Trim() == rout.Trim() && x.IMEI_ID != null).Select(x => x.IMEI_ID).Distinct().ToList();
+
+                if (routes.Count() > 0)
+                {
+                    var route = routes.First();
+                    var actuallyRoute = (route.Length > 5 || route != null) ? route + '-' + document : document;
+                    var updatebranches = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE == rout).ToList();
+                    updatebranches.ForEach(a => a.IMEI_ID = actuallyRoute);
+                    Context.Branches.UpdateRange(updatebranches);
+                    Context.SaveChanges();
+
+
+                }
+                else
+                {
+                    var actuallyRoute = document;
+                    var updatebranches = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE == rout).ToList();
+                    updatebranches.ForEach(a => a.IMEI_ID = actuallyRoute);
+                    Context.Branches.UpdateRange(updatebranches);
+                    Context.SaveChanges();
+
+                }
+
+
+                return true;
+            }
+            catch (Exception e)
+            {
+
+                return false;
+            }
+
+
+
+
+        }
+
+        public bool UpdateRouteImei(string document, string routes, int idAccount)
+        {
+
+            try
+            {
+                var route = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE.Trim() == routes && x.IMEI_ID.Contains(document)).Select(x => x.IMEI_ID).Distinct();
+                if (route.Count() > 0)
+                {
+
+                    var actuallyRoute = route.First().Replace("-" + document, "");
+                    actuallyRoute = actuallyRoute.Replace(document + "-", "");
+                    actuallyRoute = actuallyRoute.Replace(document, "");
+                    var updatebranches = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE.Trim() == routes && x.IMEI_ID.Contains(document)).ToList();
+                    updatebranches.ForEach(a => a.IMEI_ID = actuallyRoute);
+                    Context.Branches.UpdateRange(updatebranches);
+                    Context.SaveChanges();
+
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+
+
+
+
+        }
 
 
     }

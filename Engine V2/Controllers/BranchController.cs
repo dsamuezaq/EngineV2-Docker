@@ -153,6 +153,37 @@ namespace Engine_V2.Controllers
 
             return Ok(_taskCampaignBusiness.ChangeStatusRoute(_data.IdAccount,_data.RouteCode));
         }
+
+        [Route("GetlistPollsterActivebyAccount")]
+        [Authorize]
+        public async Task<IActionResult> GetlistPollsterActivebyAccount(int account)
+        {
+
+            return Ok(_taskCampaignBusiness.GetPollsterActive(account));
+        }
+
+
+        [Route("SaveRoutePollsterbyImei")]
+        [Authorize]
+        public async Task<IActionResult> SaveEncuestador(GetEncuestadorSaveViewModel _model)
+        {
+
+
+            var model = _taskCampaignBusiness.SaveImei(_model.IdAccount, _model.Iddevice, _model.RouteCode);
+
+            return Ok(model);
+        }
+
+        [Route("DeleteRoutePollsterbyImei")]
+        [Authorize]
+        public async Task<IActionResult> deleteEcuestador(GetEncuestadorSaveViewModel _model)
+        {
+
+
+            var model = _taskCampaignBusiness.deleteRoute(_model.IdAccount, _model.Iddevice, _model.RouteCode);
+
+            return Ok(model);
+        }
         #endregion
     }
 }

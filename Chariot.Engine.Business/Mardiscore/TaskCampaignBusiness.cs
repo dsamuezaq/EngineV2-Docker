@@ -6,6 +6,7 @@ using Chariot.Framework.Complement;
 using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardiscoreViewModel.Branch;
 using Chariot.Framework.MardiscoreViewModel.Route;
+using Chariot.Framework.Resources;
 using Chariot.Framework.SystemViewModel;
 using OfficeOpenXml;
 using System;
@@ -35,7 +36,8 @@ namespace Chariot.Engine.Business.Mardiscore
 
         public object GetCampanigAccount()
         {
-            return _taskCampaignDao.GetCampaing();
+            // _taskCampaignDao.GetCampaing();
+            return null;
         }
         public List<BranchRutaTaskViewModel> GetBranches(int idaccount, string iddevice) {
 
@@ -133,6 +135,39 @@ namespace Chariot.Engine.Business.Mardiscore
                 reply.messege = "Listado de mercaderistas por cuenta";
                 reply.status = "Ok";
                 reply.data= _taskCampaignDao.GetPollsterList(Idaccount);
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No existen datos de encuestador en la cuenta";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+
+        }
+
+
+        public object GetPollsterActive(int Idaccount)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+
+                var _reply= _taskCampaignDao.GetPollsterList(Idaccount)
+                            .Where(x => x.Status == CStatusRegister.Active)
+                            .Select(x => new {
+                                x.Id,
+                                x.IMEI,
+                                x.Phone
+                            })
+                            .ToList();
+                reply.messege = "Listado de mercaderistas por cuenta";
+                reply.status = "Ok";
+                reply.data = _reply;
                 return reply;
             }
             catch (Exception e)
@@ -273,6 +308,84 @@ namespace Chariot.Engine.Business.Mardiscore
             _respose._route.Errores = resp;
             reply.data = _respose._route;
             return reply;
+
+        }
+        public object SaveImei(int idaccount, string id, string route)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+
+                var _reply = _routeDao.AddRouteImei(id, route, idaccount);
+                if (_reply) {
+
+                    reply.messege = "Guardado correctamente";
+                    reply.status = "Ok";
+                    // reply.data = _reply;
+                    return reply;
+                }
+                
+                else {
+
+                    reply.messege = "No se guardo correctamente";
+                    reply.status = "Fail";
+                    // reply.data = _reply;
+                    return reply;
+                } 
+             
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "Error en la base datos";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+      
+
+
+
+        }
+        public object deleteRoute(int idaccount, string imei, string route)
+        {
+
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+
+                var _reply = _routeDao.UpdateRouteImei(imei, route, idaccount);
+                if (_reply)
+                {
+
+                    reply.messege = "Guardado correctamente";
+                    reply.status = "Ok";
+                    // reply.data = _reply;
+                    return reply;
+                }
+
+                else
+                {
+
+                    reply.messege = "No se guardo correctamente";
+                    reply.status = "Fail";
+                    // reply.data = _reply;
+                    return reply;
+                }
+
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "Error en la base datos";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+  
+
 
         }
         #region Method

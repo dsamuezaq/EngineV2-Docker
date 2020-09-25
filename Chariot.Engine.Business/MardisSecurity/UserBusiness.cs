@@ -4,6 +4,7 @@ using Chariot.Engine.DataObject;
 using Chariot.Engine.DataObject.MardisSecurity;
 using Chariot.Framework.Complement;
 using Chariot.Framework.MardisSecurityViewModel;
+using Chariot.Framework.SystemViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,6 +84,38 @@ namespace Chariot.Engine.Business.MardisSecurity
                     return true;
             }
             return false;
+        }
+
+        /// <summary>
+        ///Method consume api for token 
+        /// </summary>
+        /// <param name="Token"></param>
+        /// <returns></returns>
+        public ReplyViewModel GetUserMenu(string idperfil)
+        {
+            var _data = _userDao.GetMenubyProfile(idperfil);
+            ReplyViewModel reply = new ReplyViewModel();
+            reply.messege = "No exiten datos";
+            reply.status = "Fail";
+
+            if (_data.Count() > 0)
+            {
+
+                List<GetMenuViewModel> result = _data.Select(x => new GetMenuViewModel
+                {
+                    Icon = x.Icon,
+                    Name = x.Name,
+                    UrlMenu = x.UrlMenu
+
+                }).ToList();
+                reply.messege = "success";
+                reply.data = result;
+                reply.status = "Ok";
+
+            }
+
+
+            return reply;
         }
     }
 }

@@ -283,7 +283,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
 
             return true;
         }
-        public object GetCampaing()
+        public object GetCampaing_data()
         {
             //   var consulta = Context.Campaigns.Include(t => t.Account).Where(c => c.StatusRegister == CStatusRegister.Active).ToList();
 

@@ -34,7 +34,10 @@ namespace Chariot.Engine.DataObject.MardisSecurity
         public DateTime? DateKey { get; set; }
 
         public int IdAccount { get; set; }
-
+        [ForeignKey("IdPerson")]
+        public virtual Person Persons { get; set; }
+        [ForeignKey("IdProfile")]
+        public virtual Profile Profiles { get; set; }
         public string InitialPage { get; set; }
 
         [ForeignKey("IdAccount")]

@@ -43,6 +43,8 @@ namespace Chariot.Engine.DataObject.MardisCore
         public string StatusRegister { get; set; } = "A";
         public string StatusAggregate { get; set; } = "A";
         public string logo { get; set; }
+        public string Idform { get; set; }
+
 
         [ForeignKey("IdAccount")]
         public virtual Account Account { get; set; }

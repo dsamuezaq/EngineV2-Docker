@@ -20,7 +20,7 @@ namespace Chariot.Engine.DataObject.MardisCommon
         public string Qsupport { get; set; }
         public DateTime? Fecha_Inicio { get; set; } = DateTime.Now;
 
-        public DateTime? Fecha_Fin { get; set; } = DateTime.Now;
+        public DateTime? Fecha_Fin { get; set; } = DateTime.Now.AddDays(100);
         public string Status { get; set; }
 
         public string Oficina { get; set; }

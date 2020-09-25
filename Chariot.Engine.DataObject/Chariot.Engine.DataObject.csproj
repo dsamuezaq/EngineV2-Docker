@@ -56,6 +56,9 @@
     <Reference Include="AutoMapper.Extensions.Microsoft.DependencyInjection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=e767ac9c89543656, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.Extensions.Microsoft.DependencyInjection.8.0.0\lib\netstandard2.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.2.0.4\lib\netstandard2.0\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -202,8 +205,12 @@
   <ItemGroup>
     <Compile Include="ChariotContext.cs" />
     <Compile Include="ChariotContextBulk.cs" />
+    <Compile Include="Helpers\RouteBranch.cs" />
     <Compile Include="Helpers\StatusPollster.cs" />
     <Compile Include="IEntity.cs" />
+    <Compile Include="MardisCore\StatusTask.cs" />
+    <Compile Include="MardisCore\StatusTaskAccount.cs" />
+    <Compile Include="MardisOrders\Inventory_detail.cs" />
     <Compile Include="MardisCommon\Account.cs" />
     <Compile Include="MardisCommon\Country.cs" />
     <Compile Include="MardisCommon\District.cs" />
@@ -219,6 +226,9 @@
     <Compile Include="MardisCore\TrackingBranch.cs" />
     <Compile Include="MardisCore\UserCampaign.cs" />
     <Compile Include="MardisOrders\Deposit.cs" />
+    <Compile Include="MardisOrders\Inventory.cs" />
+    <Compile Include="MardisOrders\Order.cs" />
+    <Compile Include="MardisOrders\OrderDetail.cs" />
     <Compile Include="MardisOrders\Product.cs" />
     <Compile Include="MardisOrders\Client.cs" />
     <Compile Include="MardisOrders\IEntity.cs" />
@@ -228,6 +238,8 @@
     <Compile Include="MardisSecurity\Menu.cs" />
     <Compile Include="MardisSecurity\Profile.cs" />
     <Compile Include="MardisSecurity\User.cs" />
+    <Compile Include="Procedure\keyAttribute.cs" />
+    <Compile Include="Procedure\SP_dato_tracking_encuestadores.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

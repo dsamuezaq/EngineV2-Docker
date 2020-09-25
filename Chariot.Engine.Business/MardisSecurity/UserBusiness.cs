@@ -43,13 +43,14 @@ namespace Chariot.Engine.Business.MardisSecurity
                 _user.IdAccount = _data.IdAccount.ToString();
                 _user.name = _data.IdPerson.ToString();
                 _user.Id   = _data.Id.ToString();
+                _user.RoleName = _userDao.GetRoleName(_data.IdProfile);
                 _resultData.DateToken = DateTime.Now;
                 _resultData.message = "Ok";
                 _resultData._user = _user;
                 return _resultData ;
 
             };
-            _resultData.message = "no found";
+            _resultData.message = "Usuario o contraseña incorrecto";
             return _resultData;
 
         }

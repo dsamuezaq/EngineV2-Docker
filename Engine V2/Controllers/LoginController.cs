@@ -117,7 +117,7 @@ namespace Engine_V2.Controllers
             if (ModelState.IsValid)
             {
                 var _userInfo = auth(userLogin.Email, userLogin.Password);
-                if (_userInfo != null)
+                if (_userInfo !=null  && _userInfo.message!= "Usuario o contraseña incorrecto")
                 {
                     Token token = new Token();
                     token.token = generateJwtTokenEngine(_userInfo);
@@ -125,11 +125,11 @@ namespace Engine_V2.Controllers
                 }
                 else
                 {
-                    return Unauthorized();
+                    return Unauthorized(_userInfo);
                 }
 
             }
-            return Unauthorized();
+            return BadRequest();
 
         }
 

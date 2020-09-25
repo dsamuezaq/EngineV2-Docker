@@ -16,7 +16,44 @@ namespace Chariot.Engine.DataAccess.MardisOrders
         }
 
 
- 
-  
+        public bool SaveDataPedido(List<Order> _data) {
+            try
+            {
+                foreach (var x in _data)
+                {
+                    Context.Orders.Add(x);
+                }
+                Context.SaveChanges();
+                //db.PEDIDOS.Add(pEDIDOS);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+          
+        }
+
+        public bool SaveDataInventarios(List<Inventory> _data)
+        {
+            try
+            {
+                foreach (var x in _data)
+                {
+                    Context.Inventories.Add(x);
+                }
+                Context.SaveChanges();
+                //db.PEDIDOS.Add(pEDIDOS);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
+        }
+
     }
 }

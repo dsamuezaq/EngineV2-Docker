@@ -9,6 +9,7 @@ using Chariot.Engine.DataObject;
 using Chariot.Framework.Complement;
 using Chariot.Framework.Helpers;
 using Chariot.Framework.MardiscoreViewModel;
+using Chariot.Framework.MardisOrdersViewModel;
 using Engine_V2.Libraries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,13 +37,14 @@ namespace Engine_V2.Controllers
         }
         #endregion
         #region APIs
+        #region Obtener data Pedidos
         [HttpGet]
         [Route("getVendedores")]
         public async Task<IActionResult> getVendedores()
         {
             reply.messege = "No puedo guardar la ubicación del encuestador";
             reply.status = "Fail";
-     
+
             return Ok(_ordersBusiness.GetVentas());
         }
 
@@ -116,7 +118,7 @@ namespace Engine_V2.Controllers
 
             dato = new RegistroViewModel();
             dato.tabla = "wsSysMobileDepositos";
-            dato.cantidadRegistros = _ordersBusiness.GetDepositos().Count(); 
+            dato.cantidadRegistros = _ordersBusiness.GetDepositos().Count();
             dato.paginas = 1;
             datos.Add(dato);
 
@@ -156,6 +158,31 @@ namespace Engine_V2.Controllers
 
             return Ok(datos);
         }
+        #endregion
+
+        #region Guardar data Pedidos
+        [HttpPost]
+        [Route("PEDIDOS")]
+        public async Task<IActionResult> PostPEDIDOS(List<OrdersViewModel> PEDIDOS)
+        {
+
+
+            return Ok(_ordersBusiness.SaveDataOrders(PEDIDOS));
+        }
+
+        #endregion
+
+        #region Guardar data Inventario
+        [HttpPost]
+        [Route("inventario")]
+        public async Task<IActionResult> Postinventario(List<InventaryViewModel> inventaries)
+        {
+ 
+
+            return Ok(_ordersBusiness.SaveDataInventary(inventaries));
+        }
+
+        #endregion
         #endregion
     }
 }

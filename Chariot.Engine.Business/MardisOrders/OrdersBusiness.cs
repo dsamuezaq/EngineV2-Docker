@@ -64,5 +64,35 @@ namespace Chariot.Engine.Business.MardisOrders
             return mapperRubros;
 
         }
+        public bool SaveDataOrders(List<OrdersViewModel> PEDIDOS)
+        {
+            try
+            {
+                List<Order> mapperOrders = _mapper.Map<List<Order>>(PEDIDOS);
+               return _ordersDao.SaveDataPedido(mapperOrders);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+           
+
+        }
+        public bool SaveDataInventary(List<InventaryViewModel> Inventaries)
+        {
+            try
+            {
+                List<Inventory> mapperinventaries = _mapper.Map<List<Inventory>>(Inventaries);
+                return _ordersDao.SaveDataInventarios(mapperinventaries);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+
+
+        }
     }
 }

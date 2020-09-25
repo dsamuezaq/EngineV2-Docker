@@ -1,7 +1,10 @@
-﻿using Chariot.Engine.DataObject;
+﻿
+using Chariot.Engine.DataObject;
 using Chariot.Engine.DataObject.Helpers;
 using Chariot.Engine.DataObject.MardisCore;
+using Chariot.Engine.DataObject.Procedure;
 using Chariot.Framework.MardiscoreViewModel;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -307,6 +310,28 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 return "Sin Identificar";
             }
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idpollster">Data table Tracking</param>
+        /// <returns>Name pollster</returns>
+        public List<SP_dato_tracking_encuestadores> GetSPTrackingByPollster(int campaign, DateTime date)
+        {
+            try
+            {
+                /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
+
+                var _dataTable = Context.Query<SP_dato_tracking_encuestadores>($@"EXEC dbo.sp_dato_tracking_encuestadores @fecha = '{date.Date}',  @idca = {campaign}   ");
+                return _dataTable.Count() > 0 ? _dataTable.ToList(): null;
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -494,28 +519,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="idpollster">Data table Tracking</param>
-        /// <returns>Name pollster</returns>
-        public List<Campaign> GetCampaing(Guid User)
-        {
-            try
-            {
-                var _table = from c in Context.Campaigns
-                             join u in Context.UserCampaigns on c.Id equals u.idCanpaign
-                             where u.idUser.Equals(User)
-                             select c;
-                            
-                return _table.Count() > 0 ? _table.ToList() : null;
-            }
-            catch (Exception e)
-            {
-
-                return null;
-            }
-        }
+     
         #endregion
     }
 }

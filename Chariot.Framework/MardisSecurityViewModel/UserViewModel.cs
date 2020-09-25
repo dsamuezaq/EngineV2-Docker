@@ -10,7 +10,7 @@ namespace Chariot.Framework.MardisSecurityViewModel
     {
         public string Id { get; set; }
         public string Email { get; set; }
-
+        public string RoleName { get; set; }
         public string name { get; set; }
         public string Idtype { get; set; }
         public string IdProfile { get; set; }

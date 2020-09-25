@@ -38,6 +38,7 @@ namespace Engine_V2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var conn = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ChariotContext>(
                 

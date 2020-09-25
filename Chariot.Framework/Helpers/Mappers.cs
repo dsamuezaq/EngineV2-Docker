@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Chariot.Engine.DataObject.MardisCommon;
 using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Framework.MardiscoreViewModel;
@@ -41,7 +42,15 @@ namespace Chariot.Framework.Helpers
             CreateMap<Client, ClientViewModel>();
             CreateMap<Product, ArticulosViewModel>();
             CreateMap<Deposit, DepositosViewModel>();
+
+            CreateMap<OrdersViewModel, Order>()
+          .ForMember(dest => dest.pedidosItems, opt => opt.MapFrom(src => src.pedidosItems));
+
+            CreateMap<InventaryViewModel, Inventory>()
+          .ForMember(dest => dest.inventariodetalles, opt => opt.MapFrom(src => src.inventariodetalles));
             //.ForMember(x=>x.Id, opt =>opt.Ignore());
+
+
         }
     }
 }

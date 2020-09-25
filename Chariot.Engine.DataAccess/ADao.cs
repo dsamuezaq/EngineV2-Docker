@@ -21,28 +21,28 @@ namespace Chariot.Engine.DataAccess
             Context = _chariotContext;
             EntityFrameworkManager.ContextFactory = context => _chariotContext;
         }
-        //public T InsertOrUpdate<T>(T entity) where T : class, IEntity
-        //{
-        //    try
-        //    {
-        //        var stateRegister = Guid.Empty == entity.Id ? EntityState.Added : EntityState.Modified;
+        public bool InsertUpdateOrDelete<T>(T entity,  string transaction) where T : class
+        {
+            
+                var stateRegister = transaction=="I" ? EntityState.Added : transaction == "U" ? EntityState.Modified : EntityState.Deleted; ;
 
-        //        if (Context.Entry(entity).State == EntityState.Detached && stateRegister == EntityState.Added)
-        //        {
-        //            Context.Set<T>().Add(entity);
-        //        }
+                if (stateRegister != EntityState.Deleted)
+                {
+                    Context.Set<T>().Add(entity);
+                    Context.Entry(entity).State = stateRegister;
+                }
+                else {
+                    Context.Set<T>().Remove(entity);
+                }
 
-        //        Context.Entry(entity).State = stateRegister;
+               
 
-        //        Context.SaveChanges();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // throw new ExceptionMardis(ex.Message, ex);
-        //    }
+                Context.SaveChanges();
+            
+        
 
-        //    return entity;
-        //}
+            return true;
+        }
 
         public List<T> GetPaginatedList<T>(int pageIndex, int pageSize) where T : class, IEntity
         {

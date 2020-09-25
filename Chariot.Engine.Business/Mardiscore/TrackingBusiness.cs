@@ -16,12 +16,14 @@ namespace Chariot.Engine.Business.Mardiscore
     public class TrackingBusiness : ABusiness
     {
         protected TrackingDao _trackingDao;
+        protected TaskCampaignDao _taskCampaignDao;
         public TrackingBusiness(ChariotContext _chariotContext,
                                      RedisCache distributedCache,
                                      IMapper mapper) : base(_chariotContext, distributedCache, mapper)
         {
 
             _trackingDao = new TrackingDao(_chariotContext);
+            _taskCampaignDao= new TaskCampaignDao(_chariotContext);
         }
 
         #region Method Public
@@ -194,23 +196,23 @@ namespace Chariot.Engine.Business.Mardiscore
         public ReplyViewModel GetTracking(GetTrackingViewModel _data)
         {
             ReplyViewModel reply = new ReplyViewModel();
-               var _dataTable = _trackingDao.GetTrackingbyIdCampaign(_data.Idcampaign, _data.DateTracking);
+            //   var _dataTable = _trackingDao.GetTrackingbyIdCampaign(_data.Idcampaign, _data.DateTracking);
+            var _Reply = _trackingDao.GetSPTrackingByPollster(_data.Idcampaign, _data.DateTracking);
+            //List<TrackingModelReply> _Reply = 
+            //    _dataTable.Select(x => new TrackingModelReply {
+            //                                                    latitud=x.Geolatitude,
+            //                                                    longitud=x.GeoLength,
+            //                                                    first_name=_trackingDao.GetPollsterNameById(x.IdPollster),
+            //                                                    last_name="",
+            //                                                    estado=_trackingDao.GetPercentageDone(x.IdPollster,x.Idcampaign, _data.DateTracking),
+            //                                                    Idpollster=x.IdPollster,
+            //                                                    bateria=x.battery_level==null?0: x.battery_level,
+            //                                                    Ultima_conexion=x.LastDate.AddHours(-5),
+            //                                                    Inicio=_trackingDao.GetStartDate(x.IdPollster, x.Idcampaign, _data.DateTracking),
+            //                                                    Fin = _trackingDao.GetEndDate(x.IdPollster, x.Idcampaign, _data.DateTracking),
+            //                                                    Telefono=_trackingDao.GetPollsterPhoneById(x.IdPollster)
 
-            List<TrackingModelReply> _Reply = 
-                _dataTable.Select(x => new TrackingModelReply {
-                                                                latitud=x.Geolatitude,
-                                                                longitud=x.GeoLength,
-                                                                first_name=_trackingDao.GetPollsterNameById(x.IdPollster),
-                                                                last_name="",
-                                                                estado=_trackingDao.GetPercentageDone(x.IdPollster,x.Idcampaign, _data.DateTracking),
-                                                                Idpollster=x.IdPollster,
-                                                                bateria=x.battery_level==null?0: x.battery_level,
-                                                                Ultima_conexion=x.LastDate.AddHours(-5),
-                                                                Inicio=_trackingDao.GetStartDate(x.IdPollster, x.Idcampaign, _data.DateTracking),
-                                                                Fin = _trackingDao.GetEndDate(x.IdPollster, x.Idcampaign, _data.DateTracking),
-                                                                Telefono=_trackingDao.GetPollsterPhoneById(x.IdPollster)
-
-                }).ToList();
+            //    }).ToList();
 
 
             if (_data.Status == "" || _data.Status==null)
@@ -257,7 +259,7 @@ namespace Chariot.Engine.Business.Mardiscore
             ReplyViewModel reply = new ReplyViewModel();
             try
             {
-                var _Reply = _trackingDao.GetCampaing(_data.Iduser).Select(x => new CampaignModelReply
+                var _Reply = _taskCampaignDao.GetCampaing(_data.Iduser).Select(x => new CampaignModelReply
                 {
                  Id = x.Id,
                  Name = x.Name

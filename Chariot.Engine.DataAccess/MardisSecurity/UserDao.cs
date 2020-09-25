@@ -36,7 +36,21 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
      
         
         }
+        public string GetRoleName(Guid Idrole)
+        {
+            try
+            {
+                var _data = Context.Profiles.Where(x => x.Id == Idrole).ToList();
+                return _data.Count() > 0 ? _data.FirstOrDefault().Name : "Sin Identificar";
+            }
+            catch (Exception e)
+            {
 
+                return null;
+            }
+
+
+        }
         /// <summary>
         /// Exist user
         /// </summary>

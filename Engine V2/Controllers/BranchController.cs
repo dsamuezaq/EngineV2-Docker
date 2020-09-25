@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,7 +10,10 @@ using Chariot.Engine.DataObject;
 using Chariot.Framework.Complement;
 using Chariot.Framework.Helpers;
 using Chariot.Framework.MardiscoreViewModel;
+using Chariot.Framework.MardiscoreViewModel.Route;
 using Engine_V2.Libraries;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -27,14 +31,15 @@ namespace Engine_V2.Controllers
         #region Variable
         private readonly TaskCampaignBusiness _taskCampaignBusiness;
         private readonly ILogger<TaskCampaignController> _logger;
+        private IHostingEnvironment _Env;
         // private readonly IMapper _mapper;
         public BranchController(ILogger<OrderController> logger,
                                            RedisCache distributedCache
                                            , IOptions<AppSettings> appSettings,
-                                           ChariotContext _chariotContext, IMapper mapper) : base(_chariotContext, distributedCache, appSettings, mapper)
+                                           ChariotContext _chariotContext, IMapper mapper, IHostingEnvironment envrnmt) : base(_chariotContext, distributedCache, appSettings, mapper)
         {
             _taskCampaignBusiness = new TaskCampaignBusiness(_chariotContext, distributedCache, mapper);
-
+            _Env = envrnmt;
         }
         #endregion
         #region APIs
@@ -42,12 +47,112 @@ namespace Engine_V2.Controllers
         [Route("RouteBranch")]
         public async Task<IActionResult> Get( int idaccount , string iddevice)
         {
-            reply.messege = "No puedo guardar la ubicación del encuestador";
-            reply.status = "Fail";
-
+         
             return Ok(_taskCampaignBusiness.GetBranches(idaccount,iddevice));
         }
+        [HttpGet]
+        [Route("Campaign")]
+        public async Task<IActionResult> Campaign(int idaccounte)
+        {
+           return Ok(_taskCampaignBusiness.GetCampanigAccount());
+        }
+        [HttpPost]
+        [Route("transactionPollster")]
+        [Authorize]
+        public async Task<IActionResult> transactionPollster(TransactionPollsterViewModel _data)
+        {
+       
 
+            return Ok(_taskCampaignBusiness.SavePollster(_data));
+        }
+        [HttpPost]
+        [Route("ListPollster")]
+        [Authorize]
+        public async Task<IActionResult> ListPollster(int account)
+        {
+
+            return Ok(_taskCampaignBusiness.GetPollster(account));
+        }
+
+
+        [HttpPost]
+        [Route("LoadTask")]
+        [Authorize]
+        public async Task<IActionResult> LoadTask(GetListbranchViewModel response)
+        {
+
+            return Ok(_taskCampaignBusiness.SaveRouteTask(response));
+        }
+        [HttpPost]
+        [Route("PrintErrorLoadTask")]
+        [Authorize]
+        public async Task<IActionResult> PrintErrorLoadTask(List<ListBranchExcelModel> response)
+        {
+            string sWebRootFolder = _Env.ContentRootPath;
+
+
+            var log = DateTime.Now;
+            string LogFile = log.ToString("yyyyMMddHHmmss");
+            string sFileName = @"Ruta4.xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            if (file.Exists)
+            {
+                file.Delete();
+                file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+   
+            }
+            else {
+         
+                file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+                
+            }
+             var  reply= _taskCampaignBusiness.PrintErrorTask(response, file);
+       
+            var streams = new MemoryStream(System.IO.File.ReadAllBytes(Path.Combine(sWebRootFolder, sFileName)));
+            reply.data = _taskCampaignBusiness.GetUrlAzureContainerbyStrem(streams, LogFile, ".xlsx");
+ 
+            return Ok(reply);
+        }
+        [HttpPost]
+        [Route("RouteCampaign")]
+        [Authorize]
+        public async Task<IActionResult> CampaignbyAccount(GetCampaignViewModel _data)
+        {
+
+            return Ok(_taskCampaignBusiness.GetCampaign(_data));
+        }
+
+        [HttpPost]
+        [Route("RouteStatus")]
+        [Authorize]
+        public async Task<IActionResult> RouteStatus(GetCampaignViewModel _data)
+        {
+
+            return Ok(_taskCampaignBusiness.GetStatusTask(_data));
+        }
+        [Route("RouteActive")]
+        [Authorize]
+        public async Task<IActionResult> RouteActive(GetCampaignViewModel _data)
+        {
+
+            return Ok(_taskCampaignBusiness.GetActiveRoute(_data));
+        }
+        [Route("GetEncuestadorbyRoute")]
+        [Authorize]
+        public async Task<IActionResult> GetEncuestador(GetEncuestadorViewModel _data)
+        {
+
+            return Ok(_taskCampaignBusiness.GetRoute(_data));
+        }
+        [Route("ChangeStatusRoute")]
+        [Authorize]
+        public async Task<IActionResult> ChangeStatus(GetEncuestadorViewModel _data)
+        {
+
+            return Ok(_taskCampaignBusiness.ChangeStatusRoute(_data.IdAccount,_data.RouteCode));
+        }
         #endregion
     }
 }

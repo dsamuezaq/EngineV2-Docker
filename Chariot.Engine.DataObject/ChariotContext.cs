@@ -2,6 +2,7 @@
 using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Engine.DataObject.MardisSecurity;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 using System;
@@ -12,6 +13,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Z.EntityFramework.Extensions;
+using Chariot.Engine.DataObject.Procedure;
+using Dapper;
 
 namespace Chariot.Engine.DataObject
 {
@@ -181,5 +184,42 @@ namespace Chariot.Engine.DataObject
         /// </summary>
         public DbSet<Menu> Menus { get; set; }
 
+        /// <summary>
+        /// Tabla de Menu
+        /// </summary>
+        public DbSet<Order> Orders { get; set; }
+
+        /// <summary>
+        /// Orders
+        /// </summary>
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+
+        /// <summary>
+        /// Tabla de Inventory
+        /// </summary>
+        public DbSet<Inventory> Inventories { get; set; }
+
+        /// <summary>
+        /// Inventory_detail
+        /// </summary>
+        public DbSet<Inventory_detail> Inventory_details { get; set; }
+
+        /// <summary>
+        /// Estados de tarea
+        /// </summary>
+        public DbSet<StatusTask> StatusTasks { get; set; }
+
+
+        /// <summary>
+        /// Estados de tarea
+        /// </summary>
+        public DbSet<StatusTaskAccount> StatusTaskAccounts { get; set; }
+
+   //     public DbSet<SP_dato_tracking_encuestadores> SP_dato_tracking { get; set; }
+
+        public IEnumerable<T> Query<T>(string query) where T : class
+        {
+            return connection.Query<T>(query);
+        }
     }
 }

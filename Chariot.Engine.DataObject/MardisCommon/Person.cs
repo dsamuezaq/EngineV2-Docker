@@ -31,7 +31,7 @@ namespace Chariot.Engine.DataObject.MardisCommon
         public string StatusRegister { get; set; } = "A";
         public string Phone { get; set; }
         public string Mobile { get; set; }
-        //public string mail { get; set; }
+        public string mail { get; set; }
 
 
 

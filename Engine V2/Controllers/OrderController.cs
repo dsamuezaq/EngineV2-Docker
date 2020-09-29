@@ -11,6 +11,7 @@ using Chariot.Framework.Helpers;
 using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardisOrdersViewModel;
 using Engine_V2.Libraries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -169,7 +170,15 @@ namespace Engine_V2.Controllers
 
             return Ok(_ordersBusiness.SaveDataOrders(PEDIDOS));
         }
+        [HttpPost]
+        [Route("ProductList")]
+        [Authorize]
+        public async Task<IActionResult> ProductList(int account)
+        {
 
+
+            return Ok(_ordersBusiness.GetProduct(account));
+        }
         #endregion
 
         #region Guardar data Inventario

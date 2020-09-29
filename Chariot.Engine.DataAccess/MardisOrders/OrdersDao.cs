@@ -54,6 +54,22 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
 
         }
+        public List<Product> GetProductByIdaccount(int account)
+        {
+            try
+            {
+                var _data = Context.ProductOrders.Where(x => x.Idaccount == account);
+
+                return _data.Count() > 0 ? _data.ToList() : null;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return null;
+            }
+          
+        }
 
     }
 }

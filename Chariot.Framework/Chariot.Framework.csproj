@@ -277,6 +277,7 @@
     <Compile Include="MardisOrdersViewModel\InventaryViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\OrderDetailViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\OrdersViewModel.cs" />
+    <Compile Include="MardisOrdersViewModel\ProductViewModelReply.cs" />
     <Compile Include="MardisOrdersViewModel\RubrosViewModel.cs" />
     <Compile Include="MardisSecurityViewModel\GetMenuViewModel.cs" />
     <Compile Include="MardisSecurityViewModel\Token.cs" />

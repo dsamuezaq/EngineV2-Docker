@@ -5,6 +5,7 @@ using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Framework.Complement;
 using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardisOrdersViewModel;
+using Chariot.Framework.SystemViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,5 +95,24 @@ namespace Chariot.Engine.Business.MardisOrders
 
 
         }
+        public ReplyViewModel GetProduct(int account)
+        {
+            var _data= _ordersDao.GetProductByIdaccount(account).Select(x => new ProductViewModelReply { 
+            Codigo=x.IdArticulo,
+            Cantidad=x.Precio2,
+            Exento=x.Exento==1?"Si":"No",
+            Impuesto_interno = x.ImpuestosInternos.ToString() == "1" ? "Si" : "No",
+            IVA= x.Iva.ToString() == "1" ? "Si" : "No",
+                Precio =x.Precio1,
+            Sku=x.Descripcion
+
+
+
+            });
+
+            return null;
+
+        }
+
     }
 }

@@ -29,5 +29,7 @@ namespace Chariot.Engine.DataObject.MardisOrders
         public decimal? Precio8 { get; set; }
         public decimal? Precio9 { get; set; }
         public decimal? Precio10 { get; set; }
+        public int? Idaccount { get; set; }
+        public string StatusRegister { get; set; }
     }
 }

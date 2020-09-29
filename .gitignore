@@ -338,3 +338,10 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/Chariot.Engine.Business/readme.txt
+/Chariot.Engine.DataAccess/MardisCore/RouteDao.cs
+/Chariot.Engine.DataObject/MardisCore/StatusTask.cs
+/Chariot.Framework/Helpers/AzureStorageUtil.cs
+/Chariot.Framework/MardiscoreViewModel/Route/GetListbranchViewModel.cs
+/Chariot.Framework/MardiscoreViewModel/Route/ListBranchExcelModel.cs
+/Chariot.Framework/MardiscoreViewModel/Route/ListParishModel.cs

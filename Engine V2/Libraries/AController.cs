@@ -108,7 +108,7 @@ namespace Engine_V2.Libraries
             claims.Add(new Claim("name", InfoUser._user.name.ToString()));
             claims.Add(new Claim("idtype", "UserEngine"));
             claims.Add(new Claim("idAccount", InfoUser._user.IdAccount.ToString()));
-            claims.Add(new Claim("idprofile", InfoUser._user.IdProfile.ToString()));
+            claims.Add(new Claim("idprofile", InfoUser._user.Idtype.ToString()));
             claims.Add(new Claim("rolename", InfoUser._user.RoleName.ToString()));
             var userIdentity = new ClaimsIdentity(claims);
             var tokenDescriptor = new SecurityTokenDescriptor

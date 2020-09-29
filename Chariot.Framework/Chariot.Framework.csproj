@@ -258,6 +258,7 @@
     <Compile Include="MardiscoreViewModel\GetCampaignViewModel.cs" />
     <Compile Include="MardiscoreViewModel\GetTrackingViewModel.cs" />
     <Compile Include="MardiscoreViewModel\RegistroViewModel.cs" />
+    <Compile Include="MardiscoreViewModel\Route\GetEncuestadorSaveViewModel.cs" />
     <Compile Include="MardiscoreViewModel\Route\GetEncuestadorViewModel.cs" />
     <Compile Include="MardiscoreViewModel\Route\GetListbranchViewModel.cs" />
     <Compile Include="MardiscoreViewModel\Route\ListBranchExcelModel.cs" />

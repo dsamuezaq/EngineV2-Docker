@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,6 +13,7 @@ using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardisOrdersViewModel;
 using Engine_V2.Libraries;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -27,14 +29,15 @@ namespace Engine_V2.Controllers
         #region Variable
         private readonly OrdersBusiness _ordersBusiness;
         private readonly ILogger<TaskCampaignController> _logger;
+        private IHostingEnvironment _Env;
         // private readonly IMapper _mapper;
         public OrderController(ILogger<OrderController> logger,
                                            RedisCache distributedCache
                                            , IOptions<AppSettings> appSettings,
-                                           ChariotContext _chariotContext, IMapper mapper) : base(_chariotContext, distributedCache, appSettings, mapper)
+                                           ChariotContext _chariotContext, IMapper mapper,IHostingEnvironment envrnmt) : base(_chariotContext, distributedCache, appSettings, mapper)
         {
             _ordersBusiness = new OrdersBusiness(_chariotContext, distributedCache, mapper);
-
+            _Env = envrnmt;
         }
         #endregion
         #region APIs
@@ -67,6 +70,15 @@ namespace Engine_V2.Controllers
             reply.status = "Fail";
 
             return Ok(_ordersBusiness.GetClientes());
+        }
+
+        [HttpPost]
+        [Route("SaveClientes")]
+        public async Task<IActionResult> SaveClientes(ClientViewModel _response)
+        {
+
+
+            return Ok(_ordersBusiness.SaveClientes(_response));
         }
         [HttpGet]
         [Route("getArticulos")]
@@ -178,6 +190,49 @@ namespace Engine_V2.Controllers
 
 
             return Ok(_ordersBusiness.GetProduct(account));
+        }
+        [HttpPost]
+        [Route("SaveExcelProduct")]
+        [Authorize]
+        public async Task<IActionResult> SaveExcelProduct(ExcelProductViewModelReply _response)
+        {
+
+
+            return Ok(_ordersBusiness.SaveProductexcel(_response));
+        }
+
+        [HttpPost]
+        [Route("PrintErrorProduct")]
+        [Authorize]
+        public async Task<IActionResult> PrintErrorProduct(List<ExcelProductViewModelReply> response)
+        {
+            string sWebRootFolder = _Env.ContentRootPath;
+
+
+            var log = DateTime.Now;
+            string LogFile = log.ToString("yyyyMMddHHmmss");
+            string sFileName = @"Ruta4.xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            if (file.Exists)
+            {
+                file.Delete();
+                file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+
+            }
+            else
+            {
+
+                file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+
+            }
+            var reply = _ordersBusiness.PrintErrorTask(response, file);
+
+            var streams = new MemoryStream(System.IO.File.ReadAllBytes(Path.Combine(sWebRootFolder, sFileName)));
+            reply.data = _ordersBusiness.GetUrlAzureContainerbyStrem(streams, LogFile, ".xlsx");
+
+            return Ok(reply);
         }
         #endregion
 

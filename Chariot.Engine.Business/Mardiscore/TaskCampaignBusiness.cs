@@ -36,8 +36,8 @@ namespace Chariot.Engine.Business.Mardiscore
 
         public object GetCampanigAccount()
         {
-            // _taskCampaignDao.GetCampaing();
-            return null;
+
+            return _taskCampaignDao.GetCampaing(); 
         }
         public List<BranchRutaTaskViewModel> GetBranches(int idaccount, string iddevice) {
 
@@ -741,12 +741,15 @@ namespace Chariot.Engine.Business.Mardiscore
             ReplyViewModel reply = new ReplyViewModel();
             try
             {
+                reply.messege = "success";
+          
+                reply.status = "Ok";
                 var _Reply = _taskCampaignDao.GetStatusTask(_data.IdAccount).Select(x => new CampaignModelReply
                 {
                     Id = x.Id,
                     Name = x.Name
                 }).ToList(); ;
-              
+                reply.data = _Reply;
                 return reply;
             }
             catch (Exception e)

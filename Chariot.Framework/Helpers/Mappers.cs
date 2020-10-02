@@ -42,7 +42,7 @@ namespace Chariot.Framework.Helpers
             CreateMap<Client, ClientViewModel>();
             CreateMap<Product, ArticulosViewModel>();
             CreateMap<Deposit, DepositosViewModel>();
-
+            CreateMap<ClientViewModel, Client>();
             CreateMap<OrdersViewModel, Order>()
           .ForMember(dest => dest.pedidosItems, opt => opt.MapFrom(src => src.pedidosItems));
 

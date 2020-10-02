@@ -8,7 +8,7 @@ namespace Chariot.Framework.MardisOrdersViewModel
 {
    public class ClientViewModel
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = 0;
         public string Codigo { get; set; }
         public string CodigoOpcional { get; set; }
         public string RazonSocial { get; set; }

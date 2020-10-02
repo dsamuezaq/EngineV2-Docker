@@ -43,7 +43,37 @@ namespace Chariot.Engine.DataAccess
 
             return true;
         }
+        public T InsertUpdateOrDeleteSelectAll<T>(T entity, string transaction) where T : class
+        {
+            try
+            {
+                var stateRegister = transaction == "I" ? EntityState.Added : transaction == "U" ? EntityState.Modified : EntityState.Deleted; ;
 
+                if (stateRegister != EntityState.Deleted)
+                {
+                    Context.Set<T>().Add(entity);
+                    Context.Entry(entity).State = stateRegister;
+                }
+                else
+                {
+                    Context.Set<T>().Remove(entity);
+                }
+
+
+
+                Context.SaveChanges();
+                return entity;
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }    
+          
+
+
+           
+        }
         public List<T> GetPaginatedList<T>(int pageIndex, int pageSize) where T : class, IEntity
         {
             var sortedList = Context.Set<T>()

@@ -2,6 +2,7 @@
 using Chariot.Engine.DataAccess.MardisCore;
 using Chariot.Engine.DataObject;
 using Chariot.Engine.DataObject.MardisCore;
+using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Framework.Complement;
 using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardiscoreViewModel.Branch;
@@ -108,7 +109,9 @@ namespace Chariot.Engine.Business.Mardiscore
             ReplyViewModel reply = new ReplyViewModel();
             try
             {
-       
+
+          
+
                 reply.messege = "Los datos fueron guardados correctamente";
                 reply.status = "Ok";
                 _taskCampaignDao.InsertUpdateOrDelete(_data.pollster, _data.transaction);
@@ -158,6 +161,54 @@ namespace Chariot.Engine.Business.Mardiscore
 
 
                 var _reply= _taskCampaignDao.GetPollsterList(Idaccount)
+                            .Where(x => x.Status == CStatusRegister.Active)
+                            .Select(x => new {
+                                x.Id,
+                                x.IMEI,
+                                x.Phone
+                            })
+                            .ToList();
+                reply.messege = "Listado de mercaderistas por cuenta";
+                reply.status = "Ok";
+                reply.data = _reply;
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No existen datos de encuestador en la cuenta";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+
+        }
+
+        public object GetPollsterActiveRoute(int idAccount, string route)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+                var imei = _taskCampaignDao.GetIMEIRoute(route, idAccount);
+                IList<string> encuestadores = new List<string>();
+                string[] separadas;
+
+                foreach (var person in imei)
+                {
+                    if (person != null)
+                    {
+                        string UniqueImei = person;
+                        separadas = UniqueImei.Split('-');
+                        for (int xi = 0; xi < separadas.Length; xi++)
+                        {
+
+                            encuestadores.Add(separadas[xi]);
+                        }
+                    }
+                }
+
+                var _reply = _taskCampaignDao.GetPollsterListRoute(idAccount,imei)
                             .Where(x => x.Status == CStatusRegister.Active)
                             .Select(x => new {
                                 x.Id,

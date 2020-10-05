@@ -8,6 +8,7 @@ namespace Chariot.Framework.MardisOrdersViewModel
 {
     public class ProductViewModelReply
     {
+        public int Id { get; set; } = 0;
         public string Codigo {get;set; }
         public string Sku { get; set; }
         public string IVA { get; set; } 
@@ -15,6 +16,7 @@ namespace Chariot.Framework.MardisOrdersViewModel
         public string Exento { get; set; }
         public Decimal? Cantidad { get; set; }
         public Decimal? Precio { get; set; }
+        public int Idaccount { get; set; }
 
     }
 }

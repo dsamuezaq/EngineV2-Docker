@@ -1,5 +1,6 @@
 ﻿using Chariot.Engine.DataObject;
 using Chariot.Engine.DataObject.MardisOrders;
+using Chariot.Framework.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +59,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
         {
             try
             {
-                var _data = Context.ProductOrders.Where(x => x.Idaccount == account);
+                var _data = Context.ProductOrders.Where(x => x.Idaccount == account && x.StatusRegister==CStatusRegister.Active);
 
                 return _data.Count() > 0 ? _data.ToList() : null;
             }
@@ -69,6 +70,29 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                 return null;
             }
           
+        }
+
+        public bool InactiveProductById(int Id)
+        {
+            try
+            {
+                var _data = Context.ProductOrders.Where(x => x.Id == Id);
+                if (_data.Count() > 0) {
+
+                    var _table = _data.First();
+                    _table.StatusRegister = CStatusRegister.Delete;
+                    return InsertUpdateOrDelete(_table, "U");
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return false;
+            }
+
         }
 
     }

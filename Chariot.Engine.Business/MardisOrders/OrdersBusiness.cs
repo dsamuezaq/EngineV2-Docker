@@ -5,6 +5,7 @@ using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Framework.Complement;
 using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardisOrdersViewModel;
+using Chariot.Framework.Resources;
 using Chariot.Framework.SystemViewModel;
 using OfficeOpenXml;
 using System;
@@ -52,13 +53,33 @@ namespace Chariot.Engine.Business.MardisOrders
             return mapperRubros;
 
         }
-        public int SaveClientes(ClientViewModel _response)
+        public List<ReplyViewModel> SaveClientes(List<ClientViewModel> _responselist)
         {
+            List<ReplyViewModel> _data = new List<ReplyViewModel> ();
+            foreach (ClientViewModel _response in _responselist) {
+                ReplyViewModel reply = new ReplyViewModel();
+                Client mapperCliente = _mapper.Map<Client>(_response);
+                var _insert = _ordersDao.InsertUpdateOrDeleteSelectAll(mapperCliente, "I");
 
-            Client mapperCliente = _mapper.Map<Client>(_response);
-          var _insert=  _ordersDao.InsertUpdateOrDeleteSelectAll(mapperCliente, "I");
-          
-            return _insert!=null ? _insert.Id : 0;
+
+                if (_insert != null)
+                {
+                    reply.data = _insert;
+                    reply.messege = "";
+                    reply.status = "Ok";
+
+                }
+                else {
+
+                    reply.data = _responselist;
+                    reply.messege = "";
+                    reply.status = "Error";
+                }
+                _data.Add(reply);
+
+
+            }
+            return _data;
 
         }
 
@@ -117,6 +138,7 @@ namespace Chariot.Engine.Business.MardisOrders
                 reply.status = "Ok";
                 var _data = _ordersDao.GetProductByIdaccount(account).Select(x => new ProductViewModelReply
                 {
+                    Id=x.Id,
                     Codigo = x.IdArticulo,
                     Cantidad = x.Precio2,
                     Exento = x.Exento == 1 ? "Si" : "No",
@@ -153,12 +175,14 @@ namespace Chariot.Engine.Business.MardisOrders
             {
                  reply.messege = "Producto guardado";
                  reply.status = "Ok";
+               
                 _table.IdArticulo = _response.Codigo;
                 _table.Descripcion = _response.Sku;
                 _table.IdRubro = "1";
                 _table.Iva = _response.IVA=="si"?1:0;
                 _table.ImpuestosInternos = _response.Impuesto_interno == "si" ? 1 : 0; 
                 _table.Exento = _response.Exento == "si" ? 1 : 0;
+                _table.StatusRegister = CStatusRegister.Active;
                 try
                 {
                     _table.Precio1 = Decimal.Parse(_response.Precio);
@@ -205,6 +229,71 @@ namespace Chariot.Engine.Business.MardisOrders
 
 
             return reply;
+
+        }
+
+
+        public ReplyViewModel SaveProduct(ProductViewModelReplyOnly _response)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+                Product _table = new Product();
+                _table.Id = _response.product.Id;
+                _table.Idaccount = _response.product.Idaccount;
+                _table.IdArticulo = _response.product.Codigo;
+                _table.Descripcion = _response.product.Sku;
+                _table.StatusRegister = CStatusRegister.Active;
+                _table.IdRubro = "1";
+                _table.Iva = _response.product.IVA == "si" ? 1 : 0;
+                _table.ImpuestosInternos = _response.product.Impuesto_interno == "si" ? 1 : 0;
+                _table.Exento = _response.product.Exento == "si" ? 1 : 0;
+
+                _table.Precio1 = _response.product.Precio;
+
+                _table.Precio2 = _response.product.Cantidad;
+                reply.messege = "Los datos fueron guardados correctamente";
+                reply.status = "Ok";
+                _ordersDao.InsertUpdateOrDelete(_table, _response.transaction);
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No se pudo guardar la información";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+        }
+
+
+        public ReplyViewModel UpdataProduct(int Idproduct)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+          
+                reply.messege = "Los datos fueron guardados correctamente";
+                reply.status = "Ok";
+              if(!_ordersDao.InactiveProductById(Idproduct)){
+                    reply.messege = "No se pudo guardar la información";
+                    reply.status = "Fail";
+                    reply.error = "No se pudo guardar la información";
+                }
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No se pudo guardar la información";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
 
         }
         public ReplyViewModel PrintErrorTask(List<ExcelProductViewModelReply> model, FileInfo file)

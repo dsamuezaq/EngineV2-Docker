@@ -162,6 +162,14 @@ namespace Engine_V2.Controllers
             return Ok(_taskCampaignBusiness.GetPollsterActive(account));
         }
 
+        [Route("GetlistPollsterActivebyAccountRoute")]
+        [Authorize]
+        public async Task<IActionResult> GetlistPollsterActivebyAccountRoute(GetEncuestadorViewModel _data)
+        {
+
+            return Ok(_taskCampaignBusiness.GetPollsterActiveRoute(_data.IdAccount, _data.RouteCode));
+        }
+        
 
         [Route("SaveRoutePollsterbyImei")]
         [Authorize]

@@ -74,7 +74,7 @@ namespace Engine_V2.Controllers
 
         [HttpPost]
         [Route("SaveClientes")]
-        public async Task<IActionResult> SaveClientes(ClientViewModel _response)
+        public async Task<IActionResult> SaveClientes(List<ClientViewModel> _response)
         {
 
 
@@ -200,7 +200,25 @@ namespace Engine_V2.Controllers
 
             return Ok(_ordersBusiness.SaveProductexcel(_response));
         }
+        [HttpPost]
+        [Route("transactionProduct")]
+        [Authorize]
+        public async Task<IActionResult> transactionProduct(ProductViewModelReplyOnly _response)
+        {
 
+
+            return Ok(_ordersBusiness.SaveProduct(_response));
+        }
+
+        [HttpPost]
+        [Route("DeleteProduct")]
+        [Authorize]
+        public async Task<IActionResult> DeleteProduct(int idproduct)
+        {
+
+
+            return Ok(_ordersBusiness.UpdataProduct(idproduct));
+        }
         [HttpPost]
         [Route("PrintErrorProduct")]
         [Authorize]

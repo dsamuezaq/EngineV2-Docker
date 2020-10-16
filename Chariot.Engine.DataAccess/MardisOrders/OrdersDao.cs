@@ -35,7 +35,21 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
           
         }
+        public int GetLastCode()
+        {
+            try
+            {
+               var a= Context.SequenceOrders.OrderByDescending(x=>x.Id).FirstOrDefault().Id;
+                //db.PEDIDOS.Add(pEDIDOS);
+                return a;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
 
+
+        }
         public bool SaveDataInventarios(List<Inventory> _data)
         {
             try

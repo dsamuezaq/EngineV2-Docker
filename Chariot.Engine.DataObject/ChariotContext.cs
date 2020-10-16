@@ -215,8 +215,10 @@ namespace Chariot.Engine.DataObject
         /// </summary>
         public DbSet<StatusTaskAccount> StatusTaskAccounts { get; set; }
 
-   //     public DbSet<SP_dato_tracking_encuestadores> SP_dato_tracking { get; set; }
+        //     public DbSet<SP_dato_tracking_encuestadores> SP_dato_tracking { get; set; }
 
+
+        public DbSet<SequenceOrder> SequenceOrders { get; set; }
         public IEnumerable<T> Query<T>(string query) where T : class
         {
             return connection.Query<T>(query);

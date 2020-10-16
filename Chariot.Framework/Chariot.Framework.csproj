@@ -289,6 +289,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedisViewModel\BancoBgViewModelReply.cs" />
+    <Compile Include="RedisViewModel\CaracteristicasModel.cs" />
+    <Compile Include="RedisViewModel\ServiceModel.cs" />
+    <Compile Include="RedisViewModel\tb_bancos_descripcion.cs" />
     <Compile Include="Resources\CStatusRegister.cs" />
     <Compile Include="SystemViewModel\LoginViewModel.cs" />
     <Compile Include="SystemViewModel\ReplyViewModel.cs" />

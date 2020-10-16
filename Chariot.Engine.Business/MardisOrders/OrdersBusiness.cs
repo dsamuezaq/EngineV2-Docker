@@ -128,6 +128,38 @@ namespace Chariot.Engine.Business.MardisOrders
 
 
         }
+
+        public object Getsequence(int idvendedor, string iddevice)
+        {
+            try
+            {
+                int lastcode = _ordersDao.GetLastCode();
+                List<SequenceOrder> Lnuevo = new List<SequenceOrder>();
+                for (int i = 1; i <= 50; i++)
+                {
+                    SequenceOrder nuevo = new SequenceOrder();
+                    nuevo.Idsaleman = idvendedor;
+                    nuevo.estado = "R";
+                    nuevo.Code = lastcode + i;
+                    nuevo.codeunico= (lastcode + i).ToString();
+                    nuevo.imei_id = iddevice;
+               
+                   var data = _ordersDao.InsertUpdateOrDeleteSelectAll(nuevo, "I");
+                    if(data!=null)
+                    Lnuevo.Add(data);
+                }
+                return Lnuevo;
+
+
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+
+
+        }
         public ReplyViewModel GetProduct(int account)
         {
             ReplyViewModel reply = new ReplyViewModel();

@@ -41,6 +41,15 @@ namespace Engine_V2.Controllers
 
             return Ok(_redisBusiness.DataBankBG());
         }
+
+        [HttpPost]
+        [Route("GetServiceType")]
+        public async Task<IActionResult> GetServiceType(string type)
+        {
+
+
+            return Ok(_redisBusiness.ServiciosGet(type));
+        }
         #endregion
     }
 }

@@ -252,6 +252,15 @@ namespace Engine_V2.Controllers
 
             return Ok(reply);
         }
+        [HttpPost]
+        [Route("SequeceOrder")]
+        public async Task<IActionResult> SequeceOrder(int idvendedor,string iddevice)
+        {
+
+
+            return Ok(_ordersBusiness.Getsequence(idvendedor, iddevice));
+        }
+
         #endregion
 
         #region Guardar data Inventario

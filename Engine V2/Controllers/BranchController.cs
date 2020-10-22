@@ -84,6 +84,15 @@ namespace Engine_V2.Controllers
             return Ok(_taskCampaignBusiness.SaveRouteTask(response));
         }
         [HttpPost]
+        [Route("POSTGuardarLocalesNuevoAPPPedido")]
+        [Authorize]
+        public async Task<IActionResult> LoadTPOSTGuardarLocalesNuevoAPPPedidoask(GetListbranchViewModel response)
+        {
+
+       
+            return Ok(_taskCampaignBusiness.GuardarlocalesNuevoAbaseLocalYexterna(response));
+        }
+        [HttpPost]
         [Route("PrintErrorLoadTask")]
         [Authorize]
         public async Task<IActionResult> PrintErrorLoadTask(List<ListBranchExcelModel> response)

@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
+using Chariot.Engine.Business.ClientRest;
 using Chariot.Engine.DataAccess.MardisCore;
 using Chariot.Engine.DataObject;
 using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Framework.Complement;
+using Chariot.Framework.MardisClientRestModel;
 using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardiscoreViewModel.Branch;
 using Chariot.Framework.MardiscoreViewModel.Route;
 using Chariot.Framework.Resources;
 using Chariot.Framework.SystemViewModel;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -23,7 +26,7 @@ namespace Chariot.Engine.Business.Mardiscore
 {
     public class TaskCampaignBusiness : ABusiness
     {
-
+        protected HelpersHttpClientBussiness _helpersHttpClientBussiness = new HelpersHttpClientBussiness();
         protected TaskCampaignDao _taskCampaignDao;
         protected RouteDao _routeDao;
         public TaskCampaignBusiness(ChariotContext _chariotContext,
@@ -439,7 +442,157 @@ namespace Chariot.Engine.Business.Mardiscore
 
 
         }
-        #region Method
+        public object GuardarlocalesNuevoAbaseLocalYexterna(GetListbranchViewModel _respose)
+        {
+
+            ReplyViewModel reply = new ReplyViewModel();
+
+
+            var item = _respose._route;
+            Branch BranchModel = new Branch();
+            BranchModel = _routeDao.GetBranchbyCode(item.Codigo_Encuesta, _respose.account);
+            var _data = _routeDao.GetIdUbicationByName(item.Provincia, item.Canton, item.Parroquia);
+            if (_data == null)
+            {
+                reply.status = "error";
+                reply.messege = "La informacion de Provicia o Cuidad o Parrioquia no existe en la Base de datos. Consulte los Catologos";
+                _respose._route.Errores = "La informacion de Provicia o Cuidad o Parrioquia no existe en la Base de datos. Consulte los Catologos";
+                reply.data = _respose._route;
+                return reply;
+            }
+            BranchModel.IdProvince = _data.idprovince;
+            BranchModel.IdDistrict = _data.Iddistrict;
+            BranchModel.IdParish = _data.Idparish;
+            var valcodigo = ValidoCodigo(item.Codigo_Encuesta, _respose.account, _data.Iddistrict, 1);
+            if (valcodigo != "")
+            {
+                reply.status = "error";
+                reply.messege = valcodigo;
+                _respose._route.Errores = valcodigo;
+                reply.data = _respose._route;
+
+                return reply;
+            }
+
+            BranchModel.routeDate = DateTime.Now;
+            if (BranchModel.Id == 0)
+            {
+                BranchModel.Code = item.Codigo_Encuesta;
+                BranchModel.ExternalCode = item.PT_indice;
+                BranchModel.PersonOwner.Code = item.Codigo_Encuesta;
+                BranchModel.IdAccount = _respose.account;
+                BranchModel.PersonOwner.IdAccount = _respose.account;
+                BranchModel.IdCountry = Guid.Parse("BE7CF5FF-296B-464D-82FA-EF0B4F48721B");// Pais ecuador
+                BranchModel.IsAdministratorOwner = "SI";
+                BranchModel.Zone = "-";
+                BranchModel.Neighborhood = "-";
+
+                BranchModel.NumberBranch = "-";
+                BranchModel.SecundaryStreet = "-";
+                BranchModel.StatusRegister = "A";
+                BranchModel.PersonOwner.SurName = "-";
+                BranchModel.PersonOwner.TypeDocument = "CI";
+                BranchModel.PersonOwner.StatusRegister = "A";
+                BranchModel.IdSector = _routeDao.GetSectorByName("CENTRO", BranchModel.IdDistrict);
+
+                //if (_branchMigrateDao.ValTypeBussiness(item.Tipo.ToUpper().TrimEnd().TrimStart(), Guid.Parse(campaign)))
+                //{
+                //    BranchModel.TypeBusiness = item.Tipo.ToUpper().TrimEnd().TrimStart();
+                //}
+                //else
+                //{
+                //    error = "Tipo de negocio no permitido";
+                //    break;
+                //}
+
+
+            }
+            BranchModel.PersonOwner.StatusRegister = "A";
+            BranchModel.StatusRegister = "A";
+            BranchModel.ESTADOAGGREGATE = "S";
+            BranchModel.state_period = "S";
+
+            BranchModel.ExternalCode = item.PT_indice;
+            BranchModel.TypeBusiness = item.Tipo.ToUpper().TrimEnd().TrimStart();
+            BranchModel.Name = item.local;
+            BranchModel.MainStreet = item.Dirección;
+            BranchModel.Reference = item.Referencia;
+            BranchModel.PersonOwner.Name = item.Nombres;
+            BranchModel.PersonOwner.SurName = item.Apellidos;
+            BranchModel.PersonOwner.mail = item.Mail;
+            BranchModel.PersonOwner.Document = item.Cédula;
+            BranchModel.PersonOwner.Mobile = item.Celular;
+            BranchModel.PersonOwner.Phone = item.Telefono;
+            BranchModel.Label = item.local;
+            var latitud = item.Latitud;
+            var lat = latitud.Contains("E") ? ExponecialToString(latitud) : latitud;
+            BranchModel.LatitudeBranch = lat.Length <= 10 ? lat : lat.Substring(0, 11);
+            var longitud = item.Longitud;
+            string len = longitud.Contains("E") ? ExponecialToString(longitud) : longitud;
+            BranchModel.LenghtBranch = len.Length <= 10 ? len : len.Substring(0, 11);
+            BranchModel.Cluster = item.CLUSTER;
+            BranchModel.RUTAAGGREGATE = item.RUTA;
+            BranchModel.IMEI_ID = item.IMEI;
+
+            BranchModel.CommentBranch = item.Estado;
+
+            var date = DateTime.Now;
+            if (_respose.option == 2)
+            {
+
+                try
+                {
+                    date = DateTime.ParseExact(item.Fecha, "dd-MM-yyyy", null);
+                }
+                catch (Exception e)
+                {
+
+                    reply.status = "error";
+                    reply.messege = "El campo fecha no tienen un format";
+                    _respose._route.Errores = "El campo fecha no tienen un format (dd-MM-yy)";
+                    reply.data = _respose._route;
+
+
+                    return reply;
+                    throw new Exception("Error al consultar Sectores");
+                }
+            }
+            Branch resp = _routeDao.GuardarlocalesCreadoAPPPedido(BranchModel, _respose.account, _respose.iduser, _respose.option, _respose.campaign, _respose.status, date);
+            if (resp != null)
+            {
+                List<PostCoberturaClienteGuardarViewModel> Post = new List<PostCoberturaClienteGuardarViewModel>();
+                Post.Add(new PostCoberturaClienteGuardarViewModel
+                {
+                    nU_ID = resp.Id,
+                    nU_CEDULA_RUC = int.Parse(resp.PersonOwner.Document),
+                    nU_NOMBRE= resp.PersonOwner.Name,
+                    nU_DIRECCION=resp.MainStreet,
+                    nU_TIPO_NEG=resp.TypeBusiness,
+                    nU_TELEFONO=int.Parse(resp.PersonOwner.Phone)
+
+
+                });
+             var json = JsonConvert.SerializeObject(Post);
+                var EstadoRespuestaCrearClienteIM = Task.Factory.StartNew(() =>
+                {
+                    return _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
+                });
+               
+
+                // _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
+                reply.status = "Ok";
+                reply.messege = "Local Guardado";
+                return reply;
+            };
+            reply.status = "error";
+            reply.messege = "Error base";
+            _respose._route.Errores = "Error base";
+            reply.data = _respose._route;
+            return reply;
+
+        }
+
+        #region funciones
         string ValidoCodigo(string code, int Idaccount, Guid Iddistrict, int fil)
         {
 
@@ -569,7 +722,6 @@ namespace Chariot.Engine.Business.Mardiscore
                     worksheet.Cells[1, 7].Style.Font.Bold = true;
 
 
-                    worksheet.Cells[1, 8].Value = "Apellidos";
                     worksheet.Cells[1, 8].Style.Font.Size = 12;
                     worksheet.Cells[1, 8].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                     worksheet.Cells[1, 8].Style.Fill.BackgroundColor.SetColor(colFromHex);

@@ -84,10 +84,15 @@ namespace Engine_V2.Controllers
         [Route("getArticulos")]
         public async Task<IActionResult> getArticulos()
         {
-            reply.messege = "No puedo guardar la ubicación del encuestador";
-            reply.status = "Fail";
-
+           
             return Ok(_ordersBusiness.GetArticulos());
+        }
+        [HttpGet]
+        [Route("GETObtenerProductoXCodigo")]
+        public async Task<IActionResult> GETObtenerProductoXCodigo(string CodigoProducto)
+        {
+
+            return Ok(_ordersBusiness.BSSObtenerProductoXCodigo(CodigoProducto));
         }
 
         [HttpGet]
@@ -273,6 +278,46 @@ namespace Engine_V2.Controllers
             return Ok(_ordersBusiness.SaveDataInventary(inventaries));
         }
 
+        #endregion
+        #region App Entregas
+        [HttpPost]
+        [Route("CoberturaCartera")]
+        //[Authorize]
+        public async Task<IActionResult> CoberturaCartera()
+        {
+
+
+            return Ok(_ordersBusiness.GetCartera());
+        }
+
+
+        [HttpPost]
+        [Route("deliveryRoute")]
+        [Authorize]
+        public async Task<IActionResult> deliveryRoute(string iddevice, int idaccount)
+        {
+
+
+            return Ok(await _ordersBusiness.GetRoute(iddevice, idaccount));
+        }
+
+        [Route("Invoicecustomer")]
+        [Authorize]
+        public async Task<IActionResult> Invoicecustomer(int idclient, int idaccount)
+        {
+
+
+            return Ok(await _ordersBusiness.GetInvoice(idclient, idaccount));
+        }
+        [HttpPost]
+        [Route("Invoicetruck")]
+        [Authorize]
+        public async Task<IActionResult> Invoicetruck(string iddevice, int idaccount)
+        {
+
+
+            return Ok(await _ordersBusiness.GetTruck(iddevice, idaccount));
+        }
         #endregion
         #endregion
     }

@@ -43,12 +43,35 @@ namespace Chariot.Engine.Business.Redis
                 //    Id = x.Id,
                 //    Name = x.Name
                 //}).ToList(); ;
-                reply.data = _model;
+                reply.data = _model.ToList().Select( s=>new BancoBGExternoReply
+                {
+
+                    IdBG = s.idbg,
+                    Nombrelocal = s.nombreLocal,
+                    Propietariolocal = s.propietario,
+                    Direccionlocal = s.direccion,
+                    Cedulapropietario = s.cedula,
+                    tiponegocio = s.tiponegocio.ToUpper(),
+                    provincia = s.provincia.ToUpper(),
+                    ciudad = s.ciudad.ToUpper(),
+                    parroquia = s.parroquia.ToUpper(),
+                    TipoEntidadBancaria = s.trmSupervi,
+                    Telefonolocal = s.telefono,
+                    latitud = s.latitud,
+                    longitud = s.longitud,
+                    Estadolocal = "Activo",
+                    HorarioLunesViernes = s.horarioLV
+                    ,
+                    HorarioDomingo = s.horarioSD
+                    ,
+                    HorarioSabado = s.horarioS
+
+                }).ToList();
                 return reply;
             }
             catch (Exception e)
             {
-                reply.messege = "No existen datos de campaña";
+                reply.messege = "No existen datos";
                 reply.data = e.Message;
                 reply.status = "Fallo la consulta";
                 return reply;

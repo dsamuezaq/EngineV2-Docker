@@ -1,4 +1,6 @@
 ﻿using Chariot.Engine.DataObject;
+using Chariot.Engine.DataObject.Helpers;
+using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Framework.Resources;
 using System;
@@ -108,6 +110,170 @@ namespace Chariot.Engine.DataAccess.MardisOrders
             }
 
         }
+  
+        public List<Product> DAOObtenerProductoXCodigo(string CodigoProducto)
+        {
+            try
+            {
+               var DatoProducto = Context.ProductOrders.Where(x => x.IdArticulo == CodigoProducto);
+               return DatoProducto.Count() > 0 ? DatoProducto.ToList(): null;
 
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return null;
+            }
+
+        }
+        #region APP entregas
+        public String GetPollsteruserCell(string Iddevice, int account)
+        {
+            try
+            {
+                var _data = Context.Pollsters.Where(x => x.IMEI == Iddevice && x.idaccount== account);
+                if (_data.Count() > 0)
+                {
+
+                    var _table = _data.First();
+
+                    return _table.UserCel;
+                }
+
+                return"";
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return "";
+            }
+
+        }
+
+        /// <summary>
+        /// Obtiene el registro de locales
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="idAccount"></param>
+        /// <returns></returns>
+        public List<DeliveryBranches> GetBranchbyListCode(List<string> code, int idAccount)
+        {
+
+            try
+            {
+
+                var consulta1 = from b in Context.Branches
+                                join p in Context.Persons on b.IdPersonOwner equals p.Id
+                                where code.Contains(b.Code)  && b.IdAccount == idAccount
+                                select new DeliveryBranches
+                                {
+                                    Id=b.Id,
+                                    Code = b.Code,
+                                    ExternalCode = b.ExternalCode,
+                                    Name = b.Name,
+                                    Neighborhood = b.Neighborhood,
+                                    MainStreet = b.MainStreet,
+                                    SecundaryStreet = b.SecundaryStreet,
+                                    NumberBranch = b.NumberBranch,
+                                    LatitudeBranch = b.LatitudeBranch,
+                                    LenghtBranch = b.LenghtBranch,
+                                    Reference = b.Reference,
+
+                                    TypeBusiness = b.TypeBusiness,
+                                    ClientName = p.Name,
+                                    TypeDocument = p.TypeDocument,
+                                    Document = p.Document,
+                                    Phone = p.Phone,
+                                    Mobile = p.Mobile
+
+
+                                };
+
+
+
+                var _model = consulta1.ToList();
+
+
+                if (_model.Count() > 0)
+                {
+                    return _model;
+
+                }
+                else
+                {
+                    return null;
+
+                }
+
+
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception("En locales");
+            }
+
+        }
+        public DeliveryBranches GetBranchbyCode(List<string> code, int idAccount)
+        {
+
+            try
+            {
+
+                var consulta1 = from b in Context.Branches
+                                join p in Context.Persons on b.IdPersonOwner equals p.Id
+                                where code.Contains(b.Code) && b.IdAccount == idAccount
+                                select new DeliveryBranches
+                                {
+                                    Code = b.Code,
+                                    ExternalCode = b.ExternalCode,
+                                    Name = b.Name,
+                                    Neighborhood = b.Neighborhood,
+                                    MainStreet = b.MainStreet,
+                                    SecundaryStreet = b.SecundaryStreet,
+                                    NumberBranch = b.NumberBranch,
+                                    LatitudeBranch = b.LatitudeBranch,
+                                    LenghtBranch = b.LenghtBranch,
+                                    Reference = b.Reference,
+
+                                    TypeBusiness = b.TypeBusiness,
+                                    ClientName = p.Name,
+                                    TypeDocument = p.TypeDocument,
+                                    Document = p.Document,
+                                    Phone = p.Phone,
+                                    Mobile = p.Mobile
+
+
+                                };
+
+
+
+                var _model = consulta1.ToList();
+
+
+                if (_model.Count() > 0)
+                {
+                    return _model.First();
+
+                }
+                else
+                {
+                    return null;
+
+                }
+
+
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception("En locales");
+            }
+
+        }
+        #endregion
+        
     }
 }

@@ -9,6 +9,7 @@ using Chariot.Engine.DataObject;
 using Chariot.Framework.Complement;
 using Chariot.Framework.Helpers;
 using Engine_V2.Libraries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -37,8 +38,6 @@ namespace Engine_V2.Controllers
         [Route("GetBankBG")]
         public async Task<IActionResult> GetBankBG()
         {
-
-
             return Ok(_redisBusiness.DataBankBG());
         }
 
@@ -49,6 +48,24 @@ namespace Engine_V2.Controllers
 
 
             return Ok(_redisBusiness.ServiciosGet(type));
+        }
+
+        [HttpPost]
+        [Route("POSTServiceDetailbyType")]
+        [Authorize]
+        public async Task<IActionResult> GetServiceDetailbyType(string type)
+        {
+
+
+            return Ok(_redisBusiness.ServiciosGet(type));
+        }
+
+        [HttpPost]
+        [Route("POSTListBankBG")]
+        [Authorize]
+        public async Task<IActionResult> POSTListBankBG()
+        {
+            return Ok(_redisBusiness.DataBankBG());
         }
         #endregion
     }

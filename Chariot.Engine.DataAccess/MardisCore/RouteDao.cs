@@ -302,6 +302,116 @@ namespace Chariot.Engine.DataAccess.MardisCore
             }
 
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="branchPerson"></param>
+        /// <param name="idAccount"></param>
+        /// <param name="iduser"></param>
+        /// <param name="option"></param>
+        /// <param name="campaign"></param>
+        /// <param name="statusStask"></param>
+        /// <param name="datestart"></param>
+        /// <returns></returns>
+        public Branch GuardarlocalesCreadoAPPPedido(Branch branchPerson, int idAccount, string iduser, int option, int campaign, int statusStask, DateTime datestart)
+        {
+            bool status = false;
+            Branch branch = null;
+            Person person = null;
+#pragma warning disable CS0219 // La variable 'task' está asignada pero su valor nunca se usa
+            TaskCampaign task = null;
+#pragma warning restore CS0219 // La variable 'task' está asignada pero su valor nunca se usa
+            try
+            {
+
+
+                //var rutas = branchPerson.Select(x => x.RUTAAGGREGATE).Distinct();
+
+
+
+
+                if (branchPerson.Id != 0)
+                {
+                    Context.Branches.Update(branchPerson);
+                    Context.SaveChanges();
+
+
+                }
+                //var _datainsert = branchPerson.Where(x => x.Id == Guid.Parse("00000000-0000-0000-0000-000000000000"));
+                if (branchPerson.Id == 0)
+                {
+                    Context.Branches.Add(branchPerson);
+                    Context.SaveChanges();
+
+
+                }
+
+                if (option.Equals(2))
+                {
+
+                    TaskCampaign _modelTask = new TaskCampaign();
+
+                    var IMEID = branchPerson.IMEI_ID.Split('-');
+                    if (IMEID.Length > 0)
+                    {
+                        if (IMEID[0] != "0")
+                        {
+                            try
+                            {
+                                var idpollster = Context.Pollsters.Where(x => x.IMEI == IMEID[0]
+                                                                     && (datestart >= x.Fecha_Inicio && datestart <= x.Fecha_Fin)
+                                                                     && x.idaccount.ToString().ToUpper() == idAccount.ToString().ToUpper()
+                                                                     && x.Status == CStatusRegister.Active
+                                                                     );
+                                _modelTask.idPollster = idpollster.FirstOrDefault().Id;
+                            }
+                            catch (Exception e)
+                            {
+                                return null;
+                                throw;
+                            }
+
+
+                        }
+
+                    }
+
+                    _modelTask.IdAccount = idAccount;
+                    _modelTask.IdBranch = branchPerson.Id;
+                    _modelTask.IdCampaign = campaign;
+                    _modelTask.IdMerchant = Guid.Parse(iduser);
+                    _modelTask.IdStatusTask = statusStask;
+                    _modelTask.Route = branchPerson.RUTAAGGREGATE;
+                    _modelTask.DateCreation = DateTime.Now;
+                    _modelTask.StartDate = datestart;
+                    _modelTask.DateModification = DateTime.Now;
+                    _modelTask.Code = branchPerson.Code;
+                    _modelTask.ExternalCode = branchPerson.Code;
+                    _modelTask.Description = "Tarea creada desde carga de rutas";
+                    _modelTask.StatusMigrate = "M";
+                    Context.TaskCampaigns.Add(_modelTask);
+                    Context.SaveChanges();
+
+
+                }
+
+                return branchPerson;
+
+
+            }
+            catch (Exception e)
+            {
+                return null;
+                throw;
+            }
+            finally
+            {
+                status = true;
+            }
+
+        }
         public bool AddRouteImei(string document, string rout, int idAccount)
         {
 

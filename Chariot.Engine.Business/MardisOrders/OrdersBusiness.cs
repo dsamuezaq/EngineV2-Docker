@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
+using Chariot.Engine.Business.ClientRest;
 using Chariot.Engine.DataAccess.MardisOrders;
 using Chariot.Engine.DataObject;
+using Chariot.Engine.DataObject.Helpers;
+using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Framework.Complement;
+using Chariot.Framework.MardisClientRestModel;
 using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardisOrdersViewModel;
 using Chariot.Framework.Resources;
@@ -14,6 +18,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Chariot.Engine.Business.MardisOrders
@@ -21,6 +26,7 @@ namespace Chariot.Engine.Business.MardisOrders
     public class OrdersBusiness : ABusiness
     {
         protected OrdersDao _ordersDao;
+        protected HelpersHttpClientBussiness _helpersHttpClientBussiness = new HelpersHttpClientBussiness();
         public OrdersBusiness(ChariotContext _chariotContext,
                                     RedisCache distributedCache,
                                     IMapper mapper) : base(_chariotContext, distributedCache, mapper)
@@ -32,8 +38,8 @@ namespace Chariot.Engine.Business.MardisOrders
 
         public List<VendedoresViewModel> GetVentas()
         {
-            
-            List<VendedoresViewModel> mapperVendedores = _mapper.Map< List <Salesman> , List <VendedoresViewModel>>(_ordersDao.SelectEntity<Salesman>());
+
+            List<VendedoresViewModel> mapperVendedores = _mapper.Map<List<Salesman>, List<VendedoresViewModel>>(_ordersDao.SelectEntity<Salesman>());
             return mapperVendedores;
 
 
@@ -42,7 +48,7 @@ namespace Chariot.Engine.Business.MardisOrders
         public List<RubrosViewModel> GetRubros()
         {
 
-            List<RubrosViewModel> mapperRubros = _mapper.Map< List<RubrosViewModel>>(_ordersDao.SelectEntity<Items>());
+            List<RubrosViewModel> mapperRubros = _mapper.Map<List<RubrosViewModel>>(_ordersDao.SelectEntity<Items>());
             return mapperRubros;
 
         }
@@ -55,7 +61,7 @@ namespace Chariot.Engine.Business.MardisOrders
         }
         public List<ReplyViewModel> SaveClientes(List<ClientViewModel> _responselist)
         {
-            List<ReplyViewModel> _data = new List<ReplyViewModel> ();
+            List<ReplyViewModel> _data = new List<ReplyViewModel>();
             foreach (ClientViewModel _response in _responselist) {
                 ReplyViewModel reply = new ReplyViewModel();
                 Client mapperCliente = _mapper.Map<Client>(_response);
@@ -85,12 +91,80 @@ namespace Chariot.Engine.Business.MardisOrders
 
         public List<ArticulosViewModel> GetArticulos()
         {
+            var ProductoCartera = Task.Factory.StartNew(() => {
+                return _helpersHttpClientBussiness.GetApi<GetCoberturaProductoViewModel>("CoberturaProducto/obtener");
+            });
 
             List<ArticulosViewModel> mapperRubros = _mapper.Map<List<ArticulosViewModel>>(_ordersDao.SelectEntity<Product>());
-            return mapperRubros;
+            ProductoCartera.Wait();
+
+            List<ArticulosViewModel> _reply = (from ext in ProductoCartera.Result.Result
+                                              join ar in mapperRubros on ext.codigoprod.Trim() equals ar.IdArticulo.Trim()
+                                              select new ArticulosViewModel {
+                                                  Id = ar.Id,
+                                                  IdArticulo = ar.IdArticulo,
+                                                  Descripcion = ar.Descripcion,
+                                                  IdRubro = ar.IdRubro,
+                                                  Iva = ar.Iva,
+                                                  ImpuestosInternos = ar.ImpuestosInternos,
+                                                  Exento = ar.Exento,
+                                                  Precio1 = ext.precioprod,
+                                                  Precio2 = ar.Precio2,
+                                                  Precio3 = ar.Precio3,
+                                                  Precio4 = ar.Precio4,
+                                                  Precio5 = ar.Precio5,
+                                                  Precio6 = ar.Precio6,
+                                                  Precio7 = ar.Precio7,
+                                                  Precio8 = ar.Precio8,
+                                                  Precio9 = ar.Precio9,
+                                                  Precio10 = ext.stock,
+                                              }).ToList();
+            return _reply;
 
         }
+        public ArticulosViewModel BSSObtenerProductoXCodigo(string CodigoProducto)
+        {
+            try
+            {
+                var ProductoCartera = Task.Factory.StartNew(() => {
+                    return _helpersHttpClientBussiness.GetApi<GetCoberturaProductoViewModel>("CoberturaProducto/obtener");
+                });
 
+                List<ArticulosViewModel> DatosProducto = _mapper.Map<List<ArticulosViewModel>>(_ordersDao.DAOObtenerProductoXCodigo(CodigoProducto));
+                ProductoCartera.Wait();
+
+                List<ArticulosViewModel> DatoProductoYCartera = (from _productoCartera in ProductoCartera.Result.Result
+                                                   join _datoProducto in DatosProducto on _productoCartera.codigoprod.Trim() equals _datoProducto.IdArticulo.Trim()
+                                                   select new ArticulosViewModel
+                                                   {
+                                                       Id = _datoProducto.Id,
+                                                       IdArticulo = _datoProducto.IdArticulo,
+                                                       Descripcion = _datoProducto.Descripcion,
+                                                       IdRubro = _datoProducto.IdRubro,
+                                                       Iva = _datoProducto.Iva,
+                                                       ImpuestosInternos = _datoProducto.ImpuestosInternos,
+                                                       Exento = _datoProducto.Exento,
+                                                       Precio1 = _productoCartera.precioprod,
+                                                       Precio2 = _datoProducto.Precio2,
+                                                       Precio3 = _datoProducto.Precio3,
+                                                       Precio4 = _datoProducto.Precio4,
+                                                       Precio5 = _datoProducto.Precio5,
+                                                       Precio6 = _datoProducto.Precio6,
+                                                       Precio7 = _datoProducto.Precio7,
+                                                       Precio8 = _datoProducto.Precio8,
+                                                       Precio9 = _datoProducto.Precio9,
+                                                       Precio10 = _productoCartera.stock,
+                                                   }).ToList();
+                return DatoProductoYCartera.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+           
+
+        }
         public List<DepositosViewModel> GetDepositos()
         {
 
@@ -103,14 +177,14 @@ namespace Chariot.Engine.Business.MardisOrders
             try
             {
                 List<Order> mapperOrders = _mapper.Map<List<Order>>(PEDIDOS);
-               return _ordersDao.SaveDataPedido(mapperOrders);
+                return _ordersDao.SaveDataPedido(mapperOrders);
             }
             catch (Exception e)
             {
                 return false;
             }
 
-           
+
 
         }
         public bool SaveDataInventary(List<InventaryViewModel> Inventaries)
@@ -141,12 +215,12 @@ namespace Chariot.Engine.Business.MardisOrders
                     nuevo.Idsaleman = idvendedor;
                     nuevo.estado = "R";
                     nuevo.Code = lastcode + i;
-                    nuevo.codeunico= (lastcode + i).ToString();
+                    nuevo.codeunico = (lastcode + i).ToString();
                     nuevo.imei_id = iddevice;
-               
-                   var data = _ordersDao.InsertUpdateOrDeleteSelectAll(nuevo, "I");
-                    if(data!=null)
-                    Lnuevo.Add(data);
+
+                    var data = _ordersDao.InsertUpdateOrDeleteSelectAll(nuevo, "I");
+                    if (data != null)
+                        Lnuevo.Add(data);
                 }
                 return Lnuevo;
 
@@ -163,14 +237,14 @@ namespace Chariot.Engine.Business.MardisOrders
         public ReplyViewModel GetProduct(int account)
         {
             ReplyViewModel reply = new ReplyViewModel();
-         
+
             try
             {
                 reply.messege = "";
                 reply.status = "Ok";
                 var _data = _ordersDao.GetProductByIdaccount(account).Select(x => new ProductViewModelReply
                 {
-                    Id=x.Id,
+                    Id = x.Id,
                     Codigo = x.IdArticulo,
                     Cantidad = x.Precio2,
                     Exento = x.Exento == 1 ? "Si" : "No",
@@ -189,9 +263,9 @@ namespace Chariot.Engine.Business.MardisOrders
             {
                 reply.messege = e.Message;
                 reply.status = "Error";
-             
+
             }
-           
+
 
             return reply;
 
@@ -205,14 +279,14 @@ namespace Chariot.Engine.Business.MardisOrders
             Product _table = new Product();
             try
             {
-                 reply.messege = "Producto guardado";
-                 reply.status = "Ok";
-               
+                reply.messege = "Producto guardado";
+                reply.status = "Ok";
+
                 _table.IdArticulo = _response.Codigo;
                 _table.Descripcion = _response.Sku;
                 _table.IdRubro = "1";
-                _table.Iva = _response.IVA=="si"?1:0;
-                _table.ImpuestosInternos = _response.Impuesto_interno == "si" ? 1 : 0; 
+                _table.Iva = _response.IVA == "si" ? 1 : 0;
+                _table.ImpuestosInternos = _response.Impuesto_interno == "si" ? 1 : 0;
                 _table.Exento = _response.Exento == "si" ? 1 : 0;
                 _table.StatusRegister = CStatusRegister.Active;
                 try
@@ -308,10 +382,10 @@ namespace Chariot.Engine.Business.MardisOrders
             try
             {
 
-          
+
                 reply.messege = "Los datos fueron guardados correctamente";
                 reply.status = "Ok";
-              if(!_ordersDao.InactiveProductById(Idproduct)){
+                if (!_ordersDao.InactiveProductById(Idproduct)) {
                     reply.messege = "No se pudo guardar la información";
                     reply.status = "Fail";
                     reply.error = "No se pudo guardar la información";
@@ -434,7 +508,7 @@ namespace Chariot.Engine.Business.MardisOrders
                         worksheet.Cells[rows, 6].Value = t.Cantidad;
                         worksheet.Cells[rows, 7].Value = t.Precio;
                         worksheet.Cells[rows, 8].Value = t.Error;
-           
+
 
 
                         rows++;
@@ -476,6 +550,211 @@ namespace Chariot.Engine.Business.MardisOrders
 
 
         }
+        #region App Entregas
+        public ReplyViewModel GetCartera()
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+                var _data = _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
+                var _data2 = _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
+                reply.messege = "Consulta exito api Externa";
+                reply.status = "Ok";
+                reply.data = _data2;
+
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No se pudo guardar la información";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+        }
+        public async Task<ReplyViewModel> GetRoute(string iddevice, int idaccount)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+                //  Task taskA = new Task(() => List<GetCoberturaCarteraViewModel> a= _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener"));
+                // Start the task.
+                //taskA.Start();
+                Task<List<GetCoberturaCarteraViewModel>> data;
+                var CarteraCob = Task.Factory.StartNew(() => {
+                    return _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
+                });
+
+                string usercel = _ordersDao.GetPollsteruserCell(iddevice, idaccount);
+             //   var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
+                // var _RouteUser = _FacturaEntrega.Where(x => x.camion.ToString() == usercel && x.viaje == 101901)
+
+               // var _RouteUser = _FacturaEntrega.ToList();
+
+                CarteraCob.Wait();
+                var _Cartera = CarteraCob.Result.Result;
+
+                //var clienteRoute = from f in _FacturaEntrega
+                //                   join c in _Cartera on f.factura equals c.f_FACTURA
+                //                   select c.codcli.ToString();
+                var clienteRoute = _Cartera.Select(x => x.codcli.ToString());
+
+                List<DeliveryBranches> detailBranch = _ordersDao.GetBranchbyListCode(clienteRoute.ToList(), idaccount);
+
+                detailBranch.AsParallel()
+                    .ForAll(
+                    s =>
+                    {
+
+                        s.Receivables = _Cartera
+                        .Where(x => x.codcli.ToString().Trim() == s.Code.Trim())
+                        .Select(c => new ReceivableModel {
+                            f_FACTURA = c.f_FACTURA,
+                            nrodocumento = c.nrodocumento,
+                            valor = c.valor
+                        }).ToList();
+
+                    }
+                    );
+
+                reply.messege = "Consulta exito api Externa e info cliente Mardis";
+                reply.status = "Ok";
+                reply.data = detailBranch;
+
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No existen datos  en la tabla";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+        }
+        public async Task<ReplyViewModel> GetInvoice(int iddevice, int idaccount)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+           
+                var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
+
+
+                var Listfact = _FacturaEntrega.Where(x => x.codvend.ToString() == "74").Select(x => x.factura ).Distinct().ToList();
+                List<InvoiceViewModel> _InvoiceViewModel = new List<InvoiceViewModel>();
+
+
+                foreach (var item in Listfact) {
+
+
+
+                    InvoiceViewModel data = new InvoiceViewModel();
+                    data = _FacturaEntrega.Where(x => x.factura == item &&  x.codvend.ToString() == "74").Select(x => new InvoiceViewModel {
+                        factura = x.factura,
+                        fecha = x.fecha,
+                        precio = x.precio,
+                        total=x.total,
+                        subtotal = x.subtotal,
+                        iva = x.iva,
+                        codvend = x.codvend,
+                        nombrevend = x.nombrevend
+                    }).FirstOrDefault();
+                    data.Invoice_details = _FacturaEntrega.Where(x => x.factura == item).Select(x => new Invoice_detailViewModel {
+                        cantidad=x.cantidad,
+                        codigoprod=x.codigoprod,
+                        nombreprod=x.nombreprod
+                    }).ToList();
+
+                    _InvoiceViewModel.Add(data);
+
+
+
+                }
+
+
+
+                reply.messege = "Consulta exito api Externa e info factura Mardis";
+                reply.status = "Ok";
+                reply.data = _InvoiceViewModel;
+
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No existen datos  en la tabla";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+        }
+
+        public async Task<ReplyViewModel> GetTruck(string iddevice, int idaccount)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+                var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
+
+
+                var Listfact = _FacturaEntrega.Where(x => x.codvend.ToString() == "74").Select(x => x.factura).Distinct().ToList();
+                List<TruckViewModel> _TruckViewModelViewModel = new List<TruckViewModel>();
+
+
+                foreach (var item in Listfact)
+                {
+
+
+
+                    TruckViewModel data = new TruckViewModel();
+                    data = _FacturaEntrega.Where(x => x.camion == item && x.codvend.ToString() == "74").Select(x => new TruckViewModel
+                    {
+                        truck_numbre=x.camion,
+                        truck_plate=x.placa
+                    }).FirstOrDefault();
+                    data.TruckDetails = _FacturaEntrega.Where(x => x.camion == item)
+                          .GroupBy(l => l.codigoprod)
+                        .Select(x => new TruckDetailViewModel
+                        {
+                            CodProduct = x.Key,
+                            NameProduct = x.First().nombreprod,
+                            stock = x.Sum(pc => pc.cantidad),
+
+
+                        }).ToList();
+
+                    _TruckViewModelViewModel.Add(data);
+
+
+
+                }
+
+
+
+                reply.messege = "Consulta exito api Externa e info factura Mardis";
+                reply.status = "Ok";
+                reply.data = _TruckViewModelViewModel;
+
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No existen datos  en la tabla";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+        }
+        #endregion
 
     }
 }

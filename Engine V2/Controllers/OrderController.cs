@@ -318,6 +318,15 @@ namespace Engine_V2.Controllers
 
             return Ok(await _ordersBusiness.GetTruck(iddevice, idaccount));
         }
+
+        [HttpPost]
+        [Route("POSTActualizarEstadoEntregaFacturaXFumero")]
+        [Authorize]
+        public async Task<IActionResult> POSTActualizarEstadoEntregaFacturaXFumero( int NumeroFactura)
+        {
+
+            return Ok(await _ordersBusiness.BSSActualizarEstadoEntregaFacturaXFumero(NumeroFactura));
+        }
         #endregion
         #endregion
     }

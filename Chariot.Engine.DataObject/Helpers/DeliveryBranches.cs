@@ -37,6 +37,7 @@ namespace Chariot.Engine.DataObject.Helpers
         public string Document { get; set; }
         public string Phone { get; set; }
         public string Mobile { get; set; }
+        public int camion { get; set; }
         public List<ReceivableModel> Receivables { get; set; }
 
 

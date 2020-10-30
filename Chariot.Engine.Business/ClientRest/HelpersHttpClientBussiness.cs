@@ -63,5 +63,30 @@ namespace Chariot.Engine.Business.ClientRest
             }
             return false;
         }
+        public async Task<bool> GettApiParam(string API)
+        {
+            using (var client = new HttpClient())
+            {
+                //  HttpContent c = new StringContent(strPayload, Encoding.UTF8, "application/json");
+              //  var stringContent = new StringContent(payload, Encoding.UTF8, "application/json");
+                client.BaseAddress = new Uri(BaseUrl);
+                //HTTP GET
+                var responseTask = client.GetAsync(API);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+
+                    var readTask = result.Content.ReadAsAsync<bool>();
+                    readTask.Wait();
+
+                    bool _data = readTask.Result;
+                    return _data;
+
+                }
+            }
+            return false;
+        }
     }
 }

@@ -238,6 +238,7 @@
     <Compile Include="MardisOrders\Items.cs" />
     <Compile Include="MardisOrders\Salesman.cs" />
     <Compile Include="MardisOrders\SequenceOrder.cs" />
+    <Compile Include="MardisOrders\Visitas.cs" />
     <Compile Include="MardisSecurity\AuthorizationProfile.cs" />
     <Compile Include="MardisSecurity\Menu.cs" />
     <Compile Include="MardisSecurity\Profile.cs" />

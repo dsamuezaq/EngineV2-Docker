@@ -37,6 +37,25 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
           
         }
+        public bool GuardarRegistroVisita(List<Visitas> DatosVisitaEntidad)
+        {
+            try
+            {
+                foreach (var vista in DatosVisitaEntidad)
+                {
+                    Context.RegistroVisitalocales.Add(vista);
+                }
+                Context.SaveChanges();
+                //db.PEDIDOS.Add(pEDIDOS);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
+        }
         public int GetLastCode()
         {
             try

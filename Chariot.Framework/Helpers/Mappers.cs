@@ -43,7 +43,9 @@ namespace Chariot.Framework.Helpers
             CreateMap<Product, ArticulosViewModel>();
             CreateMap<Deposit, DepositosViewModel>();
             CreateMap<ClientViewModel, Client>();
+            CreateMap<VisitasViewModel, Visitas>();
             CreateMap<OrdersViewModel, Order>()
+                  
           .ForMember(dest => dest.pedidosItems, opt => opt.MapFrom(src => src.pedidosItems));
 
             CreateMap<InventaryViewModel, Inventory>()

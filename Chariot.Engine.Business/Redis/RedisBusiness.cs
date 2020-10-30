@@ -21,8 +21,40 @@ namespace Chariot.Engine.Business.Redis
        
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_data"></param>
+        /// <returns>20200922</returns>
+        public ReplyViewModel DataBankBGVue()
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+                List<BancoBgViewModelReply> _model = new List<BancoBgViewModelReply>();
+                reply.messege = "success";
+                _model = _RedisCache.Get<List<BancoBgViewModelReply>>("_redisBancos");
+                reply.status = "Ok";
 
+                //var _Reply = _taskCampaignDao.GetStatusTask(_data.IdAccount).Select(x => new CampaignModelReply
+                //{
+                //    Id = x.Id,
+                //    Name = x.Name
+                //}).ToList(); ;
+                reply.data = _model.ToList();
+                return reply;
+            }
+            catch (Exception e)
+            {
+                reply.messege = "No existen datos";
+                reply.data = e.Message;
+                reply.status = "Fallo la consulta";
+                return reply;
 
+            }
+        }
+
+ 
         /// <summary>
         /// 
         /// </summary>

@@ -217,7 +217,10 @@ namespace Chariot.Engine.DataObject
 
         //     public DbSet<SP_dato_tracking_encuestadores> SP_dato_tracking { get; set; }
 
-
+        /// <summary>
+        /// Estados de tarea
+        /// </summary>
+        public DbSet<Visitas> RegistroVisitalocales { get; set; }
         public DbSet<SequenceOrder> SequenceOrders { get; set; }
         public IEnumerable<T> Query<T>(string query) where T : class
         {

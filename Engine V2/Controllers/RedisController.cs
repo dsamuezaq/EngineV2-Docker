@@ -38,7 +38,7 @@ namespace Engine_V2.Controllers
         [Route("GetBankBG")]
         public async Task<IActionResult> GetBankBG()
         {
-            return Ok(_redisBusiness.DataBankBG());
+            return Ok(_redisBusiness.DataBankBGVue());
         }
 
         [HttpPost]

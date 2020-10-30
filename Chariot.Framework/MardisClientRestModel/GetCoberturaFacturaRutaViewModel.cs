@@ -10,6 +10,7 @@ namespace Chariot.Framework.MardisClientRestModel
     {
         public int factura { get; set; }
         public int fecha { get; set; }
+        public int codigocliente { get; set; }
         public string codigoprod { get; set; }
         public string nombreprod { get; set; }
         public int cantidad { get; set; }
@@ -22,8 +23,9 @@ namespace Chariot.Framework.MardisClientRestModel
         public int viaje { get; set; }
         public int codvend { get; set; }
         public string nombrevend { get; set; }
-
-  
+        public int pedido { get; set; }
+        public string pedidomardis { get; set; }
+        public string estadoentrega { get; set; }
 
     }
 }

@@ -106,6 +106,24 @@ namespace Engine_V2.Controllers
         }
 
         [HttpGet]
+        [Route("GETListadoVisitas")]
+        public async Task<IActionResult> GETListadoVisitas()
+        {
+            reply.messege = "No puedo guardar la ubicación del encuestador";
+            reply.status = "Fail";
+
+            return Ok(_ordersBusiness.ListadoVisitasBSS());
+        }
+
+        [HttpPost]
+        [Route("GETGuardarVisitas")]
+        public async Task<IActionResult> GETGuardarVisitas(List<VisitasViewModel> DatosVisitas)
+        {
+         
+
+            return Ok(_ordersBusiness.GuardarVisitaBSS(DatosVisitas));
+        }
+        [HttpGet]
         [Route("getRegistros")]
         public async Task<IActionResult> getRegistros()
         {
@@ -302,7 +320,7 @@ namespace Engine_V2.Controllers
         }
 
         [Route("Invoicecustomer")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> Invoicecustomer(int idclient, int idaccount)
         {
 
@@ -311,7 +329,7 @@ namespace Engine_V2.Controllers
         }
         [HttpPost]
         [Route("Invoicetruck")]
-        [Authorize]
+      ///  [Authorize]
         public async Task<IActionResult> Invoicetruck(string iddevice, int idaccount)
         {
 
@@ -321,11 +339,20 @@ namespace Engine_V2.Controllers
 
         [HttpPost]
         [Route("POSTActualizarEstadoEntregaFacturaXFumero")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> POSTActualizarEstadoEntregaFacturaXFumero( int NumeroFactura)
         {
 
             return Ok(await _ordersBusiness.BSSActualizarEstadoEntregaFacturaXFumero(NumeroFactura));
+        }
+
+        [HttpPost]
+        [Route("POSTCrearPagoCarteraXFactura")]
+        //  [Authorize]
+        public async Task<IActionResult> POSTCrearPagoCarteraXFactura(CarteraPagoViewModel _datoCarteraPago)
+        {
+
+            return Ok(await _ordersBusiness.BSSActualizarPagosCarteraXFumero(_datoCarteraPago));
         }
         #endregion
         #endregion

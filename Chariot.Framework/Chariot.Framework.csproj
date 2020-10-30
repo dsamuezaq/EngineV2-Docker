@@ -277,6 +277,7 @@
     <Compile Include="MardiscoreViewModel\TrackingViewModel.cs" />
     <Compile Include="MardiscoreViewModel\VendedoresViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\ArticulosViewModel.cs" />
+    <Compile Include="MardisOrdersViewModel\CarteraPagoViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\ClientViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\DepositosViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\InventaryViewModel.cs" />
@@ -290,6 +291,7 @@
     <Compile Include="MardisOrdersViewModel\RubrosViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\TruckDetailViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\TruckViewModel.cs" />
+    <Compile Include="MardisOrdersViewModel\VisitasViewModel.cs" />
     <Compile Include="MardisSecurityViewModel\GetMenuViewModel.cs" />
     <Compile Include="MardisSecurityViewModel\Token.cs" />
     <Compile Include="MardisSecurityViewModel\UserTokenModel.cs" />

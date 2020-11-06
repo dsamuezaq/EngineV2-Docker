@@ -568,9 +568,8 @@ namespace Chariot.Engine.Business.Mardiscore
                     nU_NOMBRE= resp.PersonOwner.Name,
                     nU_DIRECCION=resp.MainStreet,
                     nU_TIPO_NEG=resp.TypeBusiness,
-                    nU_TELEFONO=int.Parse(resp.PersonOwner.Phone)
-
-
+                    nU_TELEFONO=int.Parse(resp.PersonOwner.Phone),
+                    nU_CODIGO_VEND= int.Parse(resp.Cluster)
                 });
              var json = JsonConvert.SerializeObject(Post);
                 var EstadoRespuestaCrearClienteIM = Task.Factory.StartNew(() =>

@@ -71,7 +71,10 @@ namespace Engine_V2.Controllers
                 }
                 else
                 {
-                    return Unauthorized();
+                    ReplyViewModel reply = new ReplyViewModel();
+                    reply.status = "No autorizado";
+                    reply.messege = "Usuario o contraseña corecta";
+                    return Ok(reply);
                 }
 
             }
@@ -93,7 +96,10 @@ namespace Engine_V2.Controllers
                 }
                 else
                 {
-                    return Unauthorized();
+                    ReplyViewModel reply = new ReplyViewModel();
+                    reply.status = "No autorizado";
+                    reply.messege = "Usuario o contraseña corecta";
+                    return Ok(reply);
                 }
 
             }
@@ -125,7 +131,12 @@ namespace Engine_V2.Controllers
                 }
                 else
                 {
-                    return Unauthorized(_userInfo);
+
+
+                    ReplyViewModel reply = new ReplyViewModel();
+                    reply.status = "No autorizado";
+                    reply.messege = "Usuario o contraseña incorecta";
+                    return Ok(reply);
                 }
 
             }

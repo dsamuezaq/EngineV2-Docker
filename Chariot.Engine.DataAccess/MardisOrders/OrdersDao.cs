@@ -292,7 +292,76 @@ namespace Chariot.Engine.DataAccess.MardisOrders
             }
 
         }
+
+        public Boolean GuardarfacturaEntregadas(String CodigoLocal, int NumeroFactura)
+        {
+
+            try
+            {
+                FacturasEntregadas _DatoDeFacturaEntregada = new FacturasEntregadas();
+                _DatoDeFacturaEntregada.cO_FACTURA = NumeroFactura;
+                _DatoDeFacturaEntregada.cO_CODCLI = CodigoLocal;
+
+                Context.FacturasEntregadas.Add(_DatoDeFacturaEntregada);
+                Context.SaveChanges();
+
+
+
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+                throw new Exception("En locales");
+            }
+
+        }
+
+        public Boolean GuardarPagoDeCartera(PagoCartera DatoPagoCartera)
+        {
+
+            try
+            {
+             
+                Context.PagoCarteras.Add(DatoPagoCartera);
+                Context.SaveChanges();
+
+
+
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+                throw new Exception("En locales");
+            }
+
+        }
+
+        public Boolean GuardarP(PagoCartera DatoPagoCartera)
+        {
+
+            try
+            {
+
+                Context.PagoCarteras.Add(DatoPagoCartera);
+                Context.SaveChanges();
+
+
+
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+                throw new Exception("En locales");
+            }
+
+        }
         #endregion
-        
+
     }
 }

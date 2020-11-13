@@ -221,7 +221,20 @@ namespace Chariot.Engine.DataObject
         /// Estados de tarea
         /// </summary>
         public DbSet<Visitas> RegistroVisitalocales { get; set; }
+        /// <summary>
+        /// Secuencial de ordenes
+        /// </summary>
         public DbSet<SequenceOrder> SequenceOrders { get; set; }
+
+        /// <summary>
+        /// Secuencial de ordenes
+        /// </summary>
+        public DbSet<PagoCartera> PagoCarteras { get; set; }
+        /// <summary>
+        /// Secuencial de ordenes
+        /// </summary>
+        public DbSet<FacturasEntregadas> FacturasEntregadas { get; set; }
+
         public IEnumerable<T> Query<T>(string query) where T : class
         {
             return connection.Query<T>(query);

@@ -605,7 +605,7 @@ namespace Chariot.Engine.Business.MardisOrders
             try
             {
                 // Task taskA = new Task(() => List < GetCoberturaCarteraViewModel > a = _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener"));
-                // Start the task.
+                //  Start the task.
                 //taskA.Start();
                 Task<List<GetCoberturaCarteraViewModel>> data;
                 var CarteraCob = Task.Factory.StartNew(() => {
@@ -618,22 +618,47 @@ namespace Chariot.Engine.Business.MardisOrders
 
                 // var _RouteUser = _FacturaEntrega.ToList();
 
+                List<int>  NumeroDeFaturasEntregadas=     _ordersDao.SelectEntity<FacturasEntregadas>().Select(s => s.cO_FACTURA).ToList();
 
-
+            
                 var clienteRoute = from f in _RouteUser
+                                   where !NumeroDeFaturasEntregadas.Contains(f.factura)
                                    select f.codigocliente.ToString();
                 // var clienteRoute = _Cartera.Select(x => x.codcli.ToString());
 
                 List<DeliveryBranches> detailBranch = _ordersDao.GetBranchbyListCode(clienteRoute.ToList(), idaccount);
 
+
+
                 CarteraCob.Wait();
                 var _Cartera = CarteraCob.Result.Result;
-                detailBranch.AsParallel()
+
+
+                if (clienteRoute.Count() > 0)
+                {
+                    var PagosDeCarteraPorFacturas = _ordersDao.SelectEntity<PagoCartera>().Where(x => clienteRoute.ToList().Contains(x.cO_CODCLI.ToString()));
+                    var _ca = _Cartera.Where(x => x.codcli.ToString() == "35264").ToList();
+                    var _CarteraConPagos = (from CA in _Cartera
+                                            join CP in PagosDeCarteraPorFacturas on CA.codcli equals CP.cO_CODCLI into AP
+                                            from LCP in AP.DefaultIfEmpty()
+                                            select new GetCoberturaCarteraViewModel
+                                            {
+                                                codcli = CA.codcli,
+                                                f_FACTURA = CA.f_FACTURA,
+                                                nrodocumento = CA.nrodocumento,
+                                                valor = CA.valor - (LCP?.cO_VALOR_COBRO ?? 0)
+
+
+                                            }).ToList();
+
+              
+                    detailBranch.AsParallel()
                     .ForAll(
                     s =>
                     {
                         s.camion = _RouteUser.Where(x => x.codigocliente.ToString() == s.Code).Select(x => x.camion).FirstOrDefault();
-                        s.Receivables = _Cartera
+                        s.factura = _RouteUser.Where(x => x.codigocliente.ToString() == s.Code).Select(x => x.factura).FirstOrDefault();
+                        s.Receivables = _CarteraConPagos
                         .Where(x => x.codcli.ToString().Trim() == s.Code.Trim())
                         .Select(c => new ReceivableModel
                         {
@@ -644,6 +669,29 @@ namespace Chariot.Engine.Business.MardisOrders
 
                     }
                     );
+
+
+                }
+                else
+                {
+                    detailBranch.AsParallel()
+                                        .ForAll(
+                                        s =>
+                                        {
+                                            s.camion = _RouteUser.Where(x => x.codigocliente.ToString() == s.Code).Select(x => x.camion).FirstOrDefault();
+                                            s.Receivables = _Cartera
+                                            .Where(x => x.codcli.ToString().Trim() == s.Code.Trim())
+                                            .Select(c => new ReceivableModel
+                                            {
+                                                f_FACTURA = c.f_FACTURA,
+                                                nrodocumento = c.nrodocumento,
+                                                valor = c.valor
+                                            }).ToList();
+
+                                        }
+                                        );
+
+                }
 
                 reply.messege = "Consulta exito api Externa e info cliente Mardis";
                 reply.status = "Ok";
@@ -674,12 +722,13 @@ namespace Chariot.Engine.Business.MardisOrders
                 var Listfact = _FacturaEntrega.Select(x => x.factura ).Distinct().ToList();
                 List<InvoiceViewModel> _InvoiceViewModel = new List<InvoiceViewModel>();
 
+                List<int> NumeroDeFaturasEntregadas = _ordersDao.SelectEntity<FacturasEntregadas>().Select(s => s.cO_FACTURA).ToList();
 
                 foreach (var item in Listfact)
                 {
 
 
-
+                    if (!NumeroDeFaturasEntregadas.Contains(item)) { 
                     InvoiceViewModel data = new InvoiceViewModel();
                     data = _FacturaEntrega.Where(x => x.factura == item).Select(x => new InvoiceViewModel
                     {
@@ -700,7 +749,7 @@ namespace Chariot.Engine.Business.MardisOrders
                     }).ToList();
 
                     _InvoiceViewModel.Add(data);
-
+                    }
 
 
                 }
@@ -768,7 +817,7 @@ namespace Chariot.Engine.Business.MardisOrders
                         truck_plate = x.placa
                     }).FirstOrDefault();
                     data.TruckDetails = _FacturaEntrega.Where(x => x.camion == Camion)
-                          .GroupBy(l => l.codigoprod)
+                        .GroupBy(l => l.codigoprod)
                         .Select(x => new TruckDetailViewModel
                         {
                             CodProduct = x.Key,
@@ -809,17 +858,20 @@ namespace Chariot.Engine.Business.MardisOrders
 
         }
 
-        public async Task<ReplyViewModel> BSSActualizarEstadoEntregaFacturaXFumero(int NumeroFactura)
+        public async Task<ReplyViewModel> BSSActualizarEstadoEntregaFacturaXFumero(int NumeroFactura, String CodigoLocal)
         {
             ReplyViewModel reply = new ReplyViewModel();
             try
             {
                 var s = NumeroFactura;
-              bool RespuestaActualizacionEstadoFactura= await  _helpersHttpClientBussiness.GettApiParam($"CoberturaFacturaRuta/actualizar?Factura={NumeroFactura}");
+                ///  bool RespuestaActualizacionEstadoFactura= await  _helpersHttpClientBussiness.GettApiParam($"CoberturaFacturaRuta/actualizar?Factura={NumeroFactura}");
                 //   var _data = _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
                 ///   var _data2 = _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
                 ///   if()
                 ///   
+              bool RespuestaActualizacionEstadoFactura= _ordersDao.GuardarfacturaEntregadas(CodigoLocal, NumeroFactura);
+            
+                
                 if (RespuestaActualizacionEstadoFactura)
                 {
                     reply.messege = "Actualizo el estado ";
@@ -851,24 +903,30 @@ namespace Chariot.Engine.Business.MardisOrders
             try
             {
 
-                var _PagosRealizadoCartera = await _helpersHttpClientBussiness.GetApi<CarteraPagoViewModel>("CoberturaCobroMardis/obtener");
-                List<CarteraPagoViewModel> _datoCarteraPagos = new List<CarteraPagoViewModel>();
-                _datoCarteraPago.cO_ID = _PagosRealizadoCartera.Max(s => s.cO_ID)+1;
-                _datoCarteraPago.cO_FECHA_COBRO = long.Parse(DateTime.Now.AddHours(-5).ToString("yyyyMMdd"));
+                //var _PagosRealizadoCartera = await _helpersHttpClientBussiness.GetApi<CarteraPagoViewModel>("CoberturaCobroMardis/obtener");
+                //List<CarteraPagoViewModel> _datoCarteraPagos = new List<CarteraPagoViewModel>();
+                //_datoCarteraPago.cO_ID = _PagosRealizadoCartera.Max(s => s.cO_ID)+1;
+                //_datoCarteraPago.cO_FECHA_COBRO = long.Parse(DateTime.Now.AddHours(-5).ToString("yyyyMMdd"));
 
-                _datoCarteraPagos.Add(_datoCarteraPago);
-                var json = JsonConvert.SerializeObject(_datoCarteraPagos);
-                var EstadoRespuestaPagosCartera = Task.Factory.StartNew(() =>
-                {
-                    return _helpersHttpClientBussiness.PostApi("CoberturaCobroMardis/agregarlista", json);
-                });
+                //_datoCarteraPagos.Add(_datoCarteraPago);
+                //var json = JsonConvert.SerializeObject(_datoCarteraPagos);
+                //var EstadoRespuestaPagosCartera = Task.Factory.StartNew(() =>
+                //{
+                //    return _helpersHttpClientBussiness.PostApi("CoberturaCobroMardis/agregarlista", json);
+                //});
 
+
+
+                PagoCartera TablaPagoDeCartera = _mapper.Map<PagoCartera>(_datoCarteraPago);
+                TablaPagoDeCartera.cO_FECHA_COBRO= _datoCarteraPago.cO_FECHA_COBRO = long.Parse(DateTime.Now.AddHours(-5).ToString("yyyyMMdd"));
+                bool GuardoPagoCartera = _ordersDao.GuardarPagoDeCartera(TablaPagoDeCartera);
                 //   var _data = _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
                 ///   var _data2 = _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
                 ///   if()
                 ///   
-                EstadoRespuestaPagosCartera.Wait();
-                if (EstadoRespuestaPagosCartera.Result.Result)
+                //EstadoRespuestaPagosCartera.Wait();
+                //EstadoRespuestaPagosCartera.Result.Result
+                if (GuardoPagoCartera)
                 {
                     reply.messege = "Actualizo el estado ";
                     reply.status = "Ok";

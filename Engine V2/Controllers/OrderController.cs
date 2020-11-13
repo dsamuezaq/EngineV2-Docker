@@ -311,14 +311,15 @@ namespace Engine_V2.Controllers
 
         [HttpPost]
         [Route("deliveryRoute")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> deliveryRoute(string iddevice, int idaccount)
         {
 
 
             return Ok(await _ordersBusiness.GetRoute(iddevice, idaccount));
         }
-
+        
+        
         [Route("Invoicecustomer")]
        // [Authorize]
         public async Task<IActionResult> Invoicecustomer(int idclient, int idaccount)
@@ -340,10 +341,10 @@ namespace Engine_V2.Controllers
         [HttpPost]
         [Route("POSTActualizarEstadoEntregaFacturaXFumero")]
       //  [Authorize]
-        public async Task<IActionResult> POSTActualizarEstadoEntregaFacturaXFumero( int NumeroFactura)
+        public async Task<IActionResult> POSTActualizarEstadoEntregaFacturaXFumero( int NumeroFactura, String CodigoLocal)
         {
 
-            return Ok(await _ordersBusiness.BSSActualizarEstadoEntregaFacturaXFumero(NumeroFactura));
+            return Ok(await _ordersBusiness.BSSActualizarEstadoEntregaFacturaXFumero(NumeroFactura, CodigoLocal));
         }
 
         [HttpPost]

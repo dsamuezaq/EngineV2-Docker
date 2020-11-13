@@ -50,7 +50,12 @@ namespace Chariot.Framework.Helpers
 
             CreateMap<InventaryViewModel, Inventory>()
           .ForMember(dest => dest.inventariodetalles, opt => opt.MapFrom(src => src.inventariodetalles));
+
             //.ForMember(x=>x.Id, opt =>opt.Ignore());
+
+            CreateMap< CarteraPagoViewModel, PagoCartera> ()
+            .ForMember(x => x.Id, opt => opt.Ignore())
+            .ForMember(x => x.cO_fecha, opt => opt.Ignore());
 
 
         }

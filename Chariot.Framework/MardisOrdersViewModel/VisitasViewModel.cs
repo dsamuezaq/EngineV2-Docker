@@ -17,5 +17,6 @@ namespace Chariot.Framework.MardisOrdersViewModel
         public string Linkfotoexterior { get; set; }
         public string Compro { get; set; }
         public string Observacion { get; set; }
+        public string estado { get; set; }
     }
 }

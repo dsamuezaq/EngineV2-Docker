@@ -110,6 +110,7 @@ namespace Engine_V2.Libraries
             claims.Add(new Claim("idAccount", InfoUser._user.IdAccount.ToString()));
             claims.Add(new Claim("idprofile", InfoUser._user.Idtype.ToString()));
             claims.Add(new Claim("rolename", InfoUser._user.RoleName.ToString()));
+            claims.Add(new Claim("idcamion", InfoUser._user.Init.ToString()));
             var userIdentity = new ClaimsIdentity(claims);
             var tokenDescriptor = new SecurityTokenDescriptor
             {

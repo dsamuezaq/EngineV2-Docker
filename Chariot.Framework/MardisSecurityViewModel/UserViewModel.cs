@@ -15,5 +15,7 @@ namespace Chariot.Framework.MardisSecurityViewModel
 
         public string Idtype { get; set; }
         public string IdAccount { get; set; }
+
+        public string Init { get; set; }
     }
 }

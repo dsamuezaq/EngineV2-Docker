@@ -312,11 +312,11 @@ namespace Engine_V2.Controllers
         [HttpPost]
         [Route("deliveryRoute")]
       //  [Authorize]
-        public async Task<IActionResult> deliveryRoute(string iddevice, int idaccount)
+        public async Task<IActionResult> deliveryRoute(string idcamion, int idaccount)
         {
 
 
-            return Ok(await _ordersBusiness.GetRoute(iddevice, idaccount));
+            return Ok(await _ordersBusiness.GetRoute(idcamion, idaccount));
         }
         
         

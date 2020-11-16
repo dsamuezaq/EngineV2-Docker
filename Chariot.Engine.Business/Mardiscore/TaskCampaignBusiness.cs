@@ -581,6 +581,7 @@ namespace Chariot.Engine.Business.Mardiscore
                 // _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
                 reply.status = "Ok";
                 reply.messege = "Local Guardado";
+                reply.data = resp.Id;
                 return reply;
             };
             reply.status = "error";

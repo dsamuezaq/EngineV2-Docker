@@ -599,7 +599,7 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
-        public async Task<ReplyViewModel> GetRoute(string iddevice, int idaccount)
+        public async Task<ReplyViewModel> GetRoute(string idcamion, int idaccount)
         {
             ReplyViewModel reply = new ReplyViewModel();
             try
@@ -612,9 +612,9 @@ namespace Chariot.Engine.Business.MardisOrders
                     return _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
                 });
 
-                string usercel = _ordersDao.GetPollsteruserCell(iddevice, idaccount);
+           //     string usercel = _ordersDao.GetPollsteruserCell(iddevice, idaccount);
                 var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
-                var _RouteUser = _FacturaEntrega;//.Where(x => x.camion.ToString() == usercel && x.viaje == 101901)
+                var _RouteUser = _FacturaEntrega.Where(x => x.camion.ToString() == idcamion);
 
                 // var _RouteUser = _FacturaEntrega.ToList();
 
@@ -637,7 +637,7 @@ namespace Chariot.Engine.Business.MardisOrders
                 if (clienteRoute.Count() > 0)
                 {
                     var PagosDeCarteraPorFacturas = _ordersDao.SelectEntity<PagoCartera>().Where(x => clienteRoute.ToList().Contains(x.cO_CODCLI.ToString()));
-                    var _ca = _Cartera.Where(x => x.codcli.ToString() == "35264").ToList();
+                    //var _ca = _Cartera.Where(x => x.codcli.ToString() == "35264").ToList();
                     var _CarteraConPagos = (from CA in _Cartera
                                             join CP in PagosDeCarteraPorFacturas on CA.codcli equals CP.cO_CODCLI into AP
                                             from LCP in AP.DefaultIfEmpty()
@@ -719,7 +719,7 @@ namespace Chariot.Engine.Business.MardisOrders
                 var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
 
 
-                var Listfact = _FacturaEntrega.Select(x => x.factura ).Distinct().ToList();
+                var Listfact = _FacturaEntrega.Where(x => x.codigocliente== iddevice).Select(x => x.factura ).Distinct().ToList();
                 List<InvoiceViewModel> _InvoiceViewModel = new List<InvoiceViewModel>();
 
                 List<int> NumeroDeFaturasEntregadas = _ordersDao.SelectEntity<FacturasEntregadas>().Select(s => s.cO_FACTURA).ToList();

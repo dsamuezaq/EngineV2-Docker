@@ -41,11 +41,13 @@ namespace Chariot.Engine.Business.MardisSecurity
                 _user.Idtype = _data.IdProfile.ToString();
                 _user.IdAccount = _data.IdAccount.ToString();
                 _user.name = _data.IdPerson.ToString();
-                _user.Id   = _data.Id.ToString();
+                _user.Id = _data.Id.ToString();
                 _user.RoleName = _userDao.GetRoleName(_data.IdProfile);
+                _user.Init = _data.InitialPage;
                 _resultData.DateToken = DateTime.Now;
                 _resultData.message = "Ok";
                 _resultData._user = _user;
+                
                 return _resultData ;
 
             };

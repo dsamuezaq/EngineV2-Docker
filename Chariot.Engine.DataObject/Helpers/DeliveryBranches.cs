@@ -40,6 +40,7 @@ namespace Chariot.Engine.DataObject.Helpers
         public int camion { get; set; }
 
         public int factura { get; set; }
+        public string estado { get; set; }
         public List<ReceivableModel> Receivables { get; set; }
 
 

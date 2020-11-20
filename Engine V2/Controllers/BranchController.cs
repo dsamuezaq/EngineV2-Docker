@@ -85,7 +85,7 @@ namespace Engine_V2.Controllers
         }
         [HttpPost]
         [Route("POSTGuardarLocalesNuevoAPPPedido")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> LoadTPOSTGuardarLocalesNuevoAPPPedidoask(GetListbranchViewModel response)
         {
 

@@ -563,9 +563,9 @@ namespace Chariot.Engine.Business.Mardiscore
                 List<PostCoberturaClienteGuardarViewModel> Post = new List<PostCoberturaClienteGuardarViewModel>();
                 Post.Add(new PostCoberturaClienteGuardarViewModel
                 {
-                    nU_ID = resp.Id,
+                    nU_ID = resp.Id-30000,
                     nU_CEDULA_RUC = int.Parse(resp.PersonOwner.Document),
-                    nU_NOMBRE= resp.PersonOwner.Name,
+                    nU_NOMBRE= resp.PersonOwner.Name +" "+resp.PersonOwner.SurName,
                     nU_DIRECCION=resp.MainStreet,
                     nU_TIPO_NEG=resp.TypeBusiness,
                     nU_TELEFONO=int.Parse(resp.PersonOwner.Phone),
@@ -576,8 +576,8 @@ namespace Chariot.Engine.Business.Mardiscore
                 {
                     return _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
                 });
-               
 
+                EstadoRespuestaCrearClienteIM.Wait();
                 // _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
                 reply.status = "Ok";
                 reply.messege = "Local Guardado";

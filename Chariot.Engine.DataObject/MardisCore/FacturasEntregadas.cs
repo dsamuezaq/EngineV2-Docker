@@ -15,5 +15,8 @@ namespace Chariot.Engine.DataObject.MardisCore
         public int Id { get; set; }
         public string cO_CODCLI  { get; set; }
         public int cO_FACTURA { get; set; }
-}
+        public string cO_estado { get; set; }
+
+        public string cO_observacion { get; set; }
+    }
 }

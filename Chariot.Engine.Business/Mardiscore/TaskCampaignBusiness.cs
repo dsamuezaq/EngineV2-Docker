@@ -534,7 +534,7 @@ namespace Chariot.Engine.Business.Mardiscore
             BranchModel.RUTAAGGREGATE = item.RUTA;
             BranchModel.IMEI_ID = item.IMEI;
 
-            BranchModel.CommentBranch = item.Estado;
+            BranchModel.CommentBranch = "nuevo";
 
             var date = DateTime.Now;
             if (_respose.option == 2)

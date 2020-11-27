@@ -7,6 +7,7 @@ using AutoMapper;
 using Chariot.Engine.Business.Mardiscore;
 using Chariot.Engine.Business.MardisOrders;
 using Chariot.Engine.DataObject;
+using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Framework.Complement;
 using Chariot.Framework.Helpers;
 using Chariot.Framework.MardiscoreViewModel;
@@ -205,6 +206,14 @@ namespace Engine_V2.Controllers
 
             return Ok(_ordersBusiness.SaveDataOrders(PEDIDOS));
         }
+
+        [HttpPost]
+        [Route("Devolucion")]
+        public async Task<IActionResult> PostDevolucion(List<Devolucion> Devolucion)
+        {
+
+            return Ok(_ordersBusiness.GuardarDevoluciones(Devolucion));
+        }
         [HttpPost]
         [Route("ProductList")]
         [Authorize]
@@ -341,10 +350,10 @@ namespace Engine_V2.Controllers
         [HttpPost]
         [Route("POSTActualizarEstadoEntregaFacturaXFumero")]
       //  [Authorize]
-        public async Task<IActionResult> POSTActualizarEstadoEntregaFacturaXFumero( int NumeroFactura, String CodigoLocal)
+        public async Task<IActionResult> POSTActualizarEstadoEntregaFacturaXFumero( int NumeroFactura, String CodigoLocal ,string cO_observacion , string cO_estado)
         {
 
-            return Ok(await _ordersBusiness.BSSActualizarEstadoEntregaFacturaXFumero(NumeroFactura, CodigoLocal));
+            return Ok(await _ordersBusiness.BSSActualizarEstadoEntregaFacturaXFumero(NumeroFactura, CodigoLocal, cO_observacion, cO_estado));
         }
 
         [HttpPost]

@@ -18,6 +18,7 @@ namespace Chariot.Framework.MardisOrdersViewModel
         public Nullable<decimal> transferido { get; set; }
         public Nullable<decimal> gpsX { get; set; }
         public Nullable<decimal> gpsY { get; set; }
+        public string p_PEDIDO_MARDIS { get; set; }
         public virtual ICollection<OrderDetail> pedidosItems { get; set; } = new List<OrderDetail>() ;
     }
 }

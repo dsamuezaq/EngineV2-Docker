@@ -37,6 +37,25 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
           
         }
+        public bool SaveDataDevolucion(List<Devolucion> _data)
+        {
+            try
+            {
+                foreach (var x in _data)
+                {
+                    Context.Devoluciones.Add(x);
+                }
+                Context.SaveChanges();
+                //db.PEDIDOS.Add(pEDIDOS);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
+        }
         public bool GuardarRegistroVisita(List<Visitas> DatosVisitaEntidad)
         {
             try
@@ -293,7 +312,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
         }
 
-        public Boolean GuardarfacturaEntregadas(String CodigoLocal, int NumeroFactura)
+        public Boolean GuardarfacturaEntregadas(String CodigoLocal, int NumeroFactura, string cO_observacion, string cO_estado)
         {
 
             try
@@ -301,6 +320,8 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                 FacturasEntregadas _DatoDeFacturaEntregada = new FacturasEntregadas();
                 _DatoDeFacturaEntregada.cO_FACTURA = NumeroFactura;
                 _DatoDeFacturaEntregada.cO_CODCLI = CodigoLocal;
+                _DatoDeFacturaEntregada.cO_observacion = cO_observacion;
+                _DatoDeFacturaEntregada.cO_estado = cO_estado;
 
                 Context.FacturasEntregadas.Add(_DatoDeFacturaEntregada);
                 Context.SaveChanges();

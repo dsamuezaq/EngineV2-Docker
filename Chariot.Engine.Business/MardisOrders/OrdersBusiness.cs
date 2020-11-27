@@ -211,6 +211,21 @@ namespace Chariot.Engine.Business.MardisOrders
 
 
         }
+        public bool GuardarDevoluciones(List<Devolucion> devoluciones)
+        {
+            try
+            {
+         
+                return _ordersDao.SaveDataDevolucion(devoluciones);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+
+
+        }
         public bool SaveDataInventary(List<InventaryViewModel> Inventaries)
         {
             try
@@ -886,7 +901,7 @@ namespace Chariot.Engine.Business.MardisOrders
 
         }
 
-        public async Task<ReplyViewModel> BSSActualizarEstadoEntregaFacturaXFumero(int NumeroFactura, String CodigoLocal)
+        public async Task<ReplyViewModel> BSSActualizarEstadoEntregaFacturaXFumero(int NumeroFactura, String CodigoLocal,string cO_observacion, string cO_estado)
         {
             ReplyViewModel reply = new ReplyViewModel();
             try
@@ -897,7 +912,7 @@ namespace Chariot.Engine.Business.MardisOrders
                 ///   var _data2 = _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
                 ///   if()
                 ///   
-                bool RespuestaActualizacionEstadoFactura= _ordersDao.GuardarfacturaEntregadas(CodigoLocal, NumeroFactura);
+                bool RespuestaActualizacionEstadoFactura= _ordersDao.GuardarfacturaEntregadas(CodigoLocal, NumeroFactura, cO_observacion, cO_estado);
             
                 
                 if (RespuestaActualizacionEstadoFactura && RespuestaActualizacionEstadoFacturaExter)

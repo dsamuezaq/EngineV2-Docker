@@ -16,8 +16,9 @@ namespace Chariot.Engine.DataObject.MardisOrders
         public string codcliente { get; set; }
         public string codvendedor { get; set; }
         public Nullable<System.DateTime> fechainventario { get; set; }
+        public string uri { get; set; }
+        
 
-     
         public virtual ICollection<Inventory_detail> inventariodetalles { get; set; }
     }
 }

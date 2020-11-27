@@ -906,16 +906,31 @@ namespace Chariot.Engine.Business.MardisOrders
             ReplyViewModel reply = new ReplyViewModel();
             try
             {
-                var s = NumeroFactura;
-                 bool RespuestaActualizacionEstadoFacturaExter= await  _helpersHttpClientBussiness.GettApiParam($"CoberturaFacturaRuta/actualizar?Factura={NumeroFactura}");
+
+                List<PostEstadoFactura> postEstadoFacturas = new List<PostEstadoFactura>();
+                PostEstadoFactura _PostEstadoFactura = new PostEstadoFactura();
+                _PostEstadoFactura.o_FACTURA = NumeroFactura;
+                _PostEstadoFactura.o_OBSERVACION = cO_observacion;
+                _PostEstadoFactura.o_ESTADO = cO_estado;
+                postEstadoFacturas.Add(_PostEstadoFactura);
+
+
+                var json = JsonConvert.SerializeObject(postEstadoFacturas);
+                var RespuestaActualizacionEstadoFacturaExter =  Task.Factory.StartNew(() =>
+                {
+                    return _helpersHttpClientBussiness.PostApi("CoberturaFacturaEstado/AgregarLista", json);
+                });
+
+              //  bool RespuestaActualizacionEstadoFacturaExter = await  _helpersHttpClientBussiness.GettApiParam($"CoberturaFacturaRuta/actualizar?Factura={NumeroFactura}");
                //    var _data = _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
                 ///   var _data2 = _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
                 ///   if()
                 ///   
+
                 bool RespuestaActualizacionEstadoFactura= _ordersDao.GuardarfacturaEntregadas(CodigoLocal, NumeroFactura, cO_observacion, cO_estado);
-            
-                
-                if (RespuestaActualizacionEstadoFactura && RespuestaActualizacionEstadoFacturaExter)
+                RespuestaActualizacionEstadoFacturaExter.Wait();
+
+                if (RespuestaActualizacionEstadoFactura && RespuestaActualizacionEstadoFacturaExter.Result.Result)
                 {
                     reply.messege = "Actualizo el estado ";
                     reply.status = "Ok";

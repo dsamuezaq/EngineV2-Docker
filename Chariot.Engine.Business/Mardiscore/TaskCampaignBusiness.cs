@@ -46,11 +46,17 @@ namespace Chariot.Engine.Business.Mardiscore
         public List<BranchRutaTaskViewModel> GetBranches(int idaccount, string iddevice) {
 
 
-           
+
             try
             {
-               
+
+                var clienteCupo = Task.Factory.StartNew(() => {
+                    return _helpersHttpClientBussiness.GetApi<GetCoberturaClienteCupo>("CoberturaClienteCupo/obtener");
+                });
+
                 var _data = _taskCampaignDao.GetBranchList(idaccount, iddevice);
+                clienteCupo.Wait();
+                var result = clienteCupo.Result.Result;
                 var _model = _data.Select(x => new BranchRutaTaskViewModel
                 {
                     Id = x.Id,
@@ -73,10 +79,11 @@ namespace Chariot.Engine.Business.Mardiscore
                     TypeBusiness = x.TypeBusiness,
                     Cedula = x.PersonOwner.Document,
                     ESTADOAGGREGATE = x.state_period == null ? "" : x.state_period,
-                    comment = x.CommentBranch == null ? "" : x.CommentBranch,
+                  //  comment = CupoCliente(x.Code),
+                   comment= CupoCliente(result, x.Code),
                     // actividad = x.Branch_Activities.Select(t => t.idproject).ToList(),
                     Province = x.Province.Name,
-                    District =  x.District.Name,
+                    District = x.District.Name,
                     //  FechaVisita = x.FechaVisita,
                     //Link = x.Ext_image,
                     //Isclient = x.Isclient,
@@ -90,22 +97,53 @@ namespace Chariot.Engine.Business.Mardiscore
                     //    numberContact = t.numberContact,
                     //    positionContact = t.positionContact
                     //}).ToList(),
-    
+
 
 
                 }
 
                          );
 
+         
                 return _model.ToList();
             }
             catch (Exception e)
             {
 
-              return null;
+                return null;
             }
            
 
+        }
+
+        private string CupoCliente(List<GetCoberturaClienteCupo> resultado, string cliente)
+        {
+            var data = resultado.Where(x => x.cU_ID.ToString() == cliente);
+            if (data.Count() > 0) {
+                return data.FirstOrDefault().cU_CUPO + "-" + data.FirstOrDefault().cU_DIAS_CREDITO;
+            }
+
+            return "No registra Informacion";
+        }
+
+        private string CupoClienteActual(string cliente)
+        {
+            cliente = "28257";
+            var clienteCupo = Task.Factory.StartNew(() => {
+                return _helpersHttpClientBussiness.GetApi<GetCoberturaClienteCupo>("CoberturaClienteCupo/obtenerxcodigo?codigo=" + cliente);
+            });
+
+
+            var cupo = clienteCupo.Result.Result;
+
+            if (cupo.Count() > 0)
+            {
+                return cupo.FirstOrDefault().cU_CUPO + "-" + cupo.FirstOrDefault().cU_DIAS_CREDITO;
+
+
+            }
+
+            return "No registra Informacion";
         }
         public ReplyViewModel SavePollster(TransactionPollsterViewModel _data)
         {
@@ -560,34 +598,47 @@ namespace Chariot.Engine.Business.Mardiscore
             Branch resp = _routeDao.GuardarlocalesCreadoAPPPedido(BranchModel, _respose.account, _respose.iduser, _respose.option, _respose.campaign, _respose.status, date);
             if (resp != null)
             {
-                List<PostCoberturaClienteGuardarViewModel> Post = new List<PostCoberturaClienteGuardarViewModel>();
-                Post.Add(new PostCoberturaClienteGuardarViewModel
+                try
                 {
-                    nU_ID = resp.Id-30000,
-                    nU_CEDULA_RUC = int.Parse(resp.PersonOwner.Document),
-                    nU_NOMBRE= resp.PersonOwner.Name +" "+resp.PersonOwner.SurName,
-                    nU_DIRECCION=resp.MainStreet,
-                    nU_TIPO_NEG=resp.TypeBusiness,
-                    nU_TELEFONO=int.Parse(resp.PersonOwner.Phone),
-                    nU_CODIGO_VEND= int.Parse(resp.Cluster)
-                });
-             var json = JsonConvert.SerializeObject(Post);
-                var EstadoRespuestaCrearClienteIM = Task.Factory.StartNew(() =>
-                {
-                    return _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
-                });
+                    List<PostCoberturaClienteGuardarViewModel> Post = new List<PostCoberturaClienteGuardarViewModel>();
+                    Post.Add(new PostCoberturaClienteGuardarViewModel
+                    {
+                        nU_ID = resp.Id,
+                        nU_CEDULA_RUC = Int64.Parse(resp.PersonOwner.Document),
+                        nU_NOMBRE = resp.PersonOwner.Name + " " + resp.PersonOwner.SurName,
+                        nU_DIRECCION = resp.MainStreet,
+                        nU_TIPO_NEG = resp.TypeBusiness,
+                        nU_TELEFONO = Int64.Parse(resp.PersonOwner.Phone),
+                        nU_CODIGO_VEND = Int64.Parse(resp.Cluster)
+                    });
+                    var json = JsonConvert.SerializeObject(Post);
+                    var EstadoRespuestaCrearClienteIM = Task.Factory.StartNew(() =>
+                    {
+                        return _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
+                    });
 
-                EstadoRespuestaCrearClienteIM.Wait();
-                // _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
-                reply.status = "Ok";
-                reply.messege = "Local Guardado";
-                reply.data = resp.Id;
-                return reply;
+                    EstadoRespuestaCrearClienteIM.Wait();
+                    // _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
+                    reply.status = "Ok";
+                    reply.messege = "Local Guardado";
+                    reply.data = resp.Id;
+                    return reply;
+                }
+                catch (Exception e)
+                {
+                    reply.status = "error";
+                    reply.messege = e.Message;
+                    _respose._route.Errores = "Error base Externo";
+                    reply.data = 999999999;
+                    throw;
+                }
+            
             };
             reply.status = "error";
-            reply.messege = "Error base";
-            _respose._route.Errores = "Error base";
+            reply.messege = "Error base mardis";
+            _respose._route.Errores = "Error base mardis";
             reply.data = _respose._route;
+
             return reply;
 
         }

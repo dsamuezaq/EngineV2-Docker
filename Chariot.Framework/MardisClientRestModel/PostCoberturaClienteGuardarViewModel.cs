@@ -11,11 +11,11 @@ namespace Chariot.Framework.MardisClientRestModel
 
         public int nU_ID {set ;get;}
         public string nU_NOMBRE { set; get; }
-        public int nU_CEDULA_RUC { set; get; }
+        public Int64 nU_CEDULA_RUC { set; get; }
         public string nU_DIRECCION { set; get; }
         public string nU_TIPO_NEG { set; get; } 
-        public int nU_TELEFONO { set; get; }
-        public int nU_CODIGO_VEND { set; get; } = 176;
+        public Int64 nU_TELEFONO { set; get; }
+        public Int64 nU_CODIGO_VEND { set; get; } = 176;
         public string nU_NOMBRE_VEND { set; get; } = "xxxxxx";
     }
 }

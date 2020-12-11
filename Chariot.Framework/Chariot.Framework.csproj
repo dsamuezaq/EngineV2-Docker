@@ -252,6 +252,7 @@
     <Compile Include="Helpers\NotificationsMessageHandler.cs" />
     <Compile Include="Helpers\WebSocketHandler.cs" />
     <Compile Include="MardisClientRestModel\GetCoberturaCarteraViewModel.cs" />
+    <Compile Include="MardisClientRestModel\GetCoberturaClienteCupo.cs" />
     <Compile Include="MardisClientRestModel\GetCoberturaFacturaRutaViewModel.cs" />
     <Compile Include="MardisClientRestModel\GetCoberturaProductoViewModel.cs" />
     <Compile Include="MardisClientRestModel\PostCoberturaClienteGuardarViewModel.cs" />

@@ -96,7 +96,7 @@ namespace Chariot.Engine.Business.MardisOrders
                 return _helpersHttpClientBussiness.GetApi<GetCoberturaProductoViewModel>("CoberturaProducto/obtener");
             });
 
-            List<ArticulosViewModel> mapperRubros = _mapper.Map<List<ArticulosViewModel>>(_ordersDao.SelectEntity<Product>());
+            List<ArticulosViewModel> mapperRubros = _mapper.Map<List<ArticulosViewModel>>(_ordersDao.SelectEntity<Product>().Where(x=>x.StatusRegister=="A"));
             ProductoCartera.Wait();
 
             List<ArticulosViewModel> _reply = (from ext in ProductoCartera.Result.Result

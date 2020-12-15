@@ -148,7 +148,25 @@ namespace Chariot.Engine.DataAccess.MardisOrders
             }
 
         }
-  
+        public bool GuardardevolucionFactura(List<DevolucionFactura> _data)
+        {
+            try
+            {
+                foreach (var x in _data)
+                {
+                    Context.DevolucionFacturas.Add(x);
+                }
+                Context.SaveChanges();
+                //db.PEDIDOS.Add(pEDIDOS);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
+        }
         public List<Product> DAOObtenerProductoXCodigo(string CodigoProducto)
         {
             try

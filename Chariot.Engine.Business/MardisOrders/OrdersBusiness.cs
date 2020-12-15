@@ -441,6 +441,73 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
+
+        public ReplyViewModel GuardarDevolucionFactura(List<DevolucionFactura> DevolucionFacturas)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+
+                reply.messege = "Los datos fueron guardados correctamente";
+                reply.status = "Ok";
+                reply.data = true;
+                if (!_ordersDao.GuardardevolucionFactura(DevolucionFacturas))
+                {
+                    reply.messege = "No se pudo guardar la información en base de datos Mardis";
+                    reply.status = "Fail";
+                    reply.error = "No se pudo guardar la información en base de datos Mardis";
+                    reply.data = false;
+                }
+                else {
+                    List<PostDevolucionFactura> Post = new List<PostDevolucionFactura>();
+                    Post = DevolucionFacturas.Select(x => new PostDevolucionFactura
+                    {
+                        d_DEVOLUCION = x.Id+1000,
+                        d_ORDEN = x.d_ORDEN,
+                        d_FECHA = x.d_FECHA,
+                        d_FACTURA = x.d_FACTURA,
+                        d_CLIENTE = x.d_CLIENTE,
+                        d_PRODUCTO = x.d_PRODUCTO,
+                        d_PRECIO = x.d_PRECIO,
+                        d_CANTIDAD = x.d_CANTIDAD,
+                        d_VENDEDOR = x.d_VENDEDOR,
+                        d_ESTADO = x.d_ESTADO,
+                        d_PEDIDO_MARDIS ="SE"+ (x.Id + 1000).ToString()
+                    }
+
+                        ).ToList();
+                    var json = JsonConvert.SerializeObject(Post);
+                    var EstadoRespuestaCrearDevoluciones = Task.Factory.StartNew(() =>
+                    {
+                        return _helpersHttpClientBussiness.PostApi("CoberturaDevolucion/AgregarLista", json);
+                    });
+
+                    EstadoRespuestaCrearDevoluciones.Wait();
+                    // _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
+
+                    if (!EstadoRespuestaCrearDevoluciones.Result.Result) {
+                        reply.messege = "No se pudo guardar la información en base de datos IM";
+                        reply.status = "Fail";
+                        reply.error = "No se pudo guardar la información en base de datos IM";
+                        reply.data = false;
+                    }
+                    
+
+                }
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No se pudo guardar la información";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                reply.data = false;
+                return reply;
+            }
+
+        }
         public ReplyViewModel PrintErrorTask(List<ExcelProductViewModelReply> model, FileInfo file)
         {
 
@@ -786,7 +853,7 @@ namespace Chariot.Engine.Business.MardisOrders
 
                     data.Invoice_details = _FacturaEntrega.Where(x => x.factura == item).Select(x => new Invoice_detailViewModel
                     {
-                        cantidad = x.cantidad,
+                        cantidad = DisminuirInventario(x.cantidad, item, x.codigoprod),
                         codigoprod = x.codigoprod,
                         nombreprod = x.nombreprod
                     }).ToList();
@@ -834,7 +901,17 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
+        int DisminuirInventario(int cantidad, int factura, string pedido) {
 
+            var cantidadDevuelta = Context.DevolucionFacturas.Where(x => x.d_FACTURA == factura && x.d_PRODUCTO == pedido).Select(x => x.d_CANTIDAD);
+
+            if (cantidadDevuelta.Count() > 0) {
+
+                cantidad = cantidad -  (int)cantidadDevuelta.Sum();
+
+            }
+            return cantidad<0?0:cantidad;
+        }
         public async Task<ReplyViewModel> GetTruck(string iddevice, int idaccount)
         {
             ReplyViewModel reply = new ReplyViewModel();

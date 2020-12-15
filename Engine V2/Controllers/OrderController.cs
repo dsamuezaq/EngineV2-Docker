@@ -364,6 +364,15 @@ namespace Engine_V2.Controllers
 
             return Ok(await _ordersBusiness.BSSActualizarPagosCarteraXFumero(_datoCarteraPago));
         }
+
+        [HttpPost]
+        [Route("CrearDevoluciones")]
+        //  [Authorize]
+        public async Task<IActionResult> CrearDevoluciones(List<DevolucionFactura> DevolucionFacturas)
+        {
+
+            return Ok( _ordersBusiness.GuardarDevolucionFactura(DevolucionFacturas));
+        }
         #endregion
         #endregion
     }

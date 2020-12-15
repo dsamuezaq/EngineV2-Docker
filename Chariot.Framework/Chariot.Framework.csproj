@@ -256,6 +256,7 @@
     <Compile Include="MardisClientRestModel\GetCoberturaFacturaRutaViewModel.cs" />
     <Compile Include="MardisClientRestModel\GetCoberturaProductoViewModel.cs" />
     <Compile Include="MardisClientRestModel\PostCoberturaClienteGuardarViewModel.cs" />
+    <Compile Include="MardisClientRestModel\PostDevolucionFactura.cs" />
     <Compile Include="MardisClientRestModel\PostEstadoFactura.cs" />
     <Compile Include="MardiscoreViewModel\BranchesModelReply.cs" />
     <Compile Include="MardiscoreViewModel\Branch\BranchRutaTaskViewModel.cs" />

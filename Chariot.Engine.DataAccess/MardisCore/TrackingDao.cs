@@ -142,12 +142,12 @@ namespace Chariot.Engine.DataAccess.MardisCore
         /// </summary>
         /// <param name="IdDevice">Data table Tracking</param>
         /// <returns>Id pollster</returns>
-        public TrackingBranch GetBranchByCode(string Code, int idcampaign, DateTime date)
+        public TrackingBranch GetBranchByCode(string Code, int idcampaign, DateTime date, string Imeid)
         {
             try
             {
-
-                var _dataTable = Context.TrackingBranches.Where(x => x.CodeBranch.Equals(Code) && x.Idcampaign == idcampaign && x.datetime_tracking.Date == date.Date);
+                int imei= GetPollsterIdByIdDevice(Imeid);
+                var _dataTable = Context.TrackingBranches.Where(x => x.CodeBranch.Equals(Code) && x.Idcampaign == idcampaign && x.datetime_tracking.Date == date.Date && x.IdPollster== imei);
                 return _dataTable.Count() > 0 ? _dataTable.First() : null;
             }
             catch (Exception e)

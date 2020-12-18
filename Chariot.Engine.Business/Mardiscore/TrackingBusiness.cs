@@ -127,7 +127,7 @@ namespace Chariot.Engine.Business.Mardiscore
             DateTime d = DateTime.Now;
             TrackingBranch mapperTrackingBranch = new TrackingBranch();
             int idcampaign = _trackingDao.GetCampaignIdByDescripcion(_data.campaign);
-            TrackingBranch _table = _trackingDao.GetBranchByCode(_data.Code, idcampaign, d);
+            TrackingBranch _table = _trackingDao.GetBranchByCode(_data.Code, idcampaign, d,_data.IdDevice);
 
             DateTime? _StartDate = null;
             DateTime? _EndDate = null;

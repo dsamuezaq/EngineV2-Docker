@@ -242,6 +242,11 @@ namespace Chariot.Engine.DataObject
         /// Secuencial de ordenes
         /// </summary>
         public DbSet<DevolucionFactura> DevolucionFacturas { get; set; }
+
+        /// <summary>
+        /// Secuencial de ordenes
+        /// </summary>
+        public DbSet<UserPollster> UserPollsters { get; set; }
         public IEnumerable<T> Query<T>(string query) where T : class
         {
             return connection.Query<T>(query);

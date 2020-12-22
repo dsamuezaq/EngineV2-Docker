@@ -211,6 +211,7 @@
     <Compile Include="Helpers\RouteBranch.cs" />
     <Compile Include="Helpers\StatusPollster.cs" />
     <Compile Include="IEntity.cs" />
+    <Compile Include="MardisCommon\UserPollster.cs" />
     <Compile Include="MardisCore\FacturasEntregadas.cs" />
     <Compile Include="MardisCore\PagoCartera.cs" />
     <Compile Include="MardisCore\StatusTask.cs" />

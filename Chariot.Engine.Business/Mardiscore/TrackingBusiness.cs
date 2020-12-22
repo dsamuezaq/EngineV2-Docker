@@ -49,11 +49,11 @@ namespace Chariot.Engine.Business.Mardiscore
                 DateTime? _StartDate = null;
                 DateTime? _EndDate = null;
                 if (item.dateexec != null) {
-                    _StartDate =  DateTime.Parse(item.dateexec);
+                    _StartDate =  DateTime.Parse(item.dateexecini);
                 }
                 if (item.dateexecini != null)
                 {
-                    _EndDate = DateTime.Parse(item.dateexecini);
+                    _EndDate = DateTime.Parse(item.dateexec);
                 }
                 mapperTrackingBranch.Add(new TrackingBranch
                 {
@@ -180,7 +180,7 @@ namespace Chariot.Engine.Business.Mardiscore
                 if (_data.Status == "" || _data.Status == null)
                 {
                     reply.messege = "success";
-                    reply.data = _Reply.OrderByDescending(x => x.Status).OrderBy(t=>t.TimeTask);
+                    reply.data = _Reply.OrderByDescending(c => c.Status).ThenByDescending(x=>x.End);
                     reply.status = "Ok";
                 }
                 else {
@@ -197,7 +197,7 @@ namespace Chariot.Engine.Business.Mardiscore
         {
             ReplyViewModel reply = new ReplyViewModel();
             //   var _dataTable = _trackingDao.GetTrackingbyIdCampaign(_data.Idcampaign, _data.DateTracking);
-            var _Reply = _trackingDao.GetSPTrackingByPollster(_data.Idcampaign, _data.DateTracking);
+            var _Reply = _trackingDao.GetSPTrackingByPollster(_data.Idcampaign, _data.DateTracking,_data.Iduser);
             //List<TrackingModelReply> _Reply = 
             //    _dataTable.Select(x => new TrackingModelReply {
             //                                                    latitud=x.Geolatitude,
@@ -239,12 +239,12 @@ namespace Chariot.Engine.Business.Mardiscore
         {
             ReplyViewModel reply = new ReplyViewModel();
             TrackingDashboardModelReply _Reply = new TrackingDashboardModelReply();
-            var _statusPollter=_trackingDao.GetPollsterStatus(_data.Idcampaign, _data.DateTracking);
-            _Reply.Total_business = _trackingDao.GetTotal_business(_data.Idcampaign, _data.DateTracking);
-            _Reply.Full = _trackingDao.GetFull_business(_data.Idcampaign, _data.DateTracking);
-            _Reply.Incompletes = _trackingDao.GetIncomplete_business(_data.Idcampaign, _data.DateTracking);
-            _Reply.Total_pollsters = _trackingDao.GetTotal_pollsters(_data.Idcampaign, _data.DateTracking);
-            _Reply.Active_pollsters = _trackingDao.GetActive_pollsters(_data.Idcampaign, _data.DateTracking);
+            var _statusPollter=_trackingDao.GetPollsterStatus(_data.Idcampaign, _data.DateTracking,_data.Iduser);
+            _Reply.Total_business = _trackingDao.GetTotal_business(_data.Idcampaign, _data.DateTracking, _data.Iduser);
+            _Reply.Full = _trackingDao.GetFull_business(_data.Idcampaign, _data.DateTracking, _data.Iduser);
+            _Reply.Incompletes = _trackingDao.GetIncomplete_business(_data.Idcampaign, _data.DateTracking, _data.Iduser);
+            _Reply.Total_pollsters = _trackingDao.GetTotal_pollsters(_data.Idcampaign, _data.DateTracking, _data.Iduser);
+            _Reply.Active_pollsters = _trackingDao.GetActive_pollsters(_data.Idcampaign, _data.DateTracking, _data.Iduser);
             _Reply.Delay = _statusPollter.Delay;
             _Reply.Medium = _statusPollter.Medium;
             _Reply.Regular = _statusPollter.Regular;

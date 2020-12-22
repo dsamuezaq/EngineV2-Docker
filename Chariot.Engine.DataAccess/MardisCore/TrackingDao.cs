@@ -317,13 +317,13 @@ namespace Chariot.Engine.DataAccess.MardisCore
         /// </summary>
         /// <param name="idpollster">Data table Tracking</param>
         /// <returns>Name pollster</returns>
-        public List<SP_dato_tracking_encuestadores> GetSPTrackingByPollster(int campaign, DateTime date)
+        public List<SP_dato_tracking_encuestadores> GetSPTrackingByPollster(int campaign, DateTime date, string Iduser)
         {
             try
             {
                 /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
 
-                var _dataTable = Context.Query<SP_dato_tracking_encuestadores>($@"EXEC dbo.sp_dato_tracking_encuestadores @fecha = '{date.Date}',  @idca = {campaign}   ");
+                var _dataTable = Context.Query<SP_dato_tracking_encuestadores>($@"EXEC dbo.sp_dato_tracking_encuestadores @fecha = '{date.Date.Date}',  @idca = {campaign}  ,  @iduser = '{Iduser}'");
                 return _dataTable.Count() > 0 ? _dataTable.ToList(): null;
             }
             catch (Exception e)
@@ -344,17 +344,19 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
 
 
-                var Done = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.IdPollster == idpollster && x.datetime_tracking.Date == date.Date & x.AggregateUri != null).Count();
+                var Done = Context.TrackingBranches
+                    .Where(x => x.Idcampaign == campaign && x.IdPollster == idpollster 
+                    && x.datetime_tracking.Date == date.Date & x.AggregateUri != null).Count();
                 var All = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.IdPollster == idpollster && x.datetime_tracking.Date == date.Date).Count();
                 var percentage = (Done * 100) / All;
                 string Bateria = "Sin Ruta";
-                if (percentage < 20)
+                if (percentage < 21)
                     Bateria = "0-20 %";
-                if (percentage > 19 && percentage < (40))
+                if (percentage > 20 && percentage < (41))
                     Bateria = "21-40 %";
-                if (percentage > 39 && percentage < (60))
+                if (percentage > 40 && percentage < (61))
                     Bateria = "41-60 %";
-                if (percentage > 59 && percentage < (80))
+                if (percentage > 60 && percentage < (81))
                     Bateria = "61-80 %";
                 if (percentage > (80))
                     Bateria = "81-100 %";
@@ -373,15 +375,19 @@ namespace Chariot.Engine.DataAccess.MardisCore
         /// </summary>
         /// <param name="idpollster">Data table Tracking</param>
         /// <returns>Name pollster</returns>
-        public int GetTotal_business(int campaign, DateTime date)
+        public int GetTotal_business(int campaign, DateTime date, string idUser)
         {
             try
             {
                 /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
 
+                var All = from t in Context.TrackingBranches
+                          join p in Context.UserPollsters on t.IdPollster equals p.IdPollster
+                          where t.Idcampaign == campaign && t.datetime_tracking.Date == date.Date && p.IdUser.ToString() == idUser
+                          select t;
 
 
-                var All = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.datetime_tracking.Date == date.Date);
+           //     var All = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.datetime _tracking.Date == date.Date);
 
 
                 return All.Count() > 0 ? All.Count() : 0;
@@ -397,15 +403,17 @@ namespace Chariot.Engine.DataAccess.MardisCore
         /// </summary>
         /// <param name="idpollster">Data table Tracking</param>
         /// <returns>Name pollster</returns>
-        public int GetFull_business(int campaign, DateTime date)
+        public int GetFull_business(int campaign, DateTime date, string idUser)
         {
             try
             {
                 /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
 
+                var All = from t in Context.TrackingBranches
+                          join p in Context.UserPollsters on t.IdPollster equals p.IdPollster
+                          where t.Idcampaign == campaign && t.datetime_tracking.Date == date.Date && p.IdUser.ToString() == idUser && t.AggregateUri != null
+                          select t;
 
-
-                var All = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.datetime_tracking.Date == date.Date && x.AggregateUri != null);
 
 
                 return All.Count() > 0 ? All.Count() : 0;
@@ -421,15 +429,20 @@ namespace Chariot.Engine.DataAccess.MardisCore
         /// </summary>
         /// <param name="idpollster">Data table Tracking</param>
         /// <returns>Name pollster</returns>
-        public int GetIncomplete_business(int campaign, DateTime date)
+        public int GetIncomplete_business(int campaign, DateTime date, string idUser)
         {
             try
             {
                 /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
 
 
+                var All = from t in Context.TrackingBranches
+                          join p in Context.UserPollsters on t.IdPollster equals p.IdPollster
+                          where t.Idcampaign == campaign && t.datetime_tracking.Date == date.Date && p.IdUser.ToString() == idUser && t.AggregateUri == null
+                          select t;
 
-                var All = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.datetime_tracking.Date == date.Date && x.AggregateUri == null);
+
+        
 
 
                 return All.Count() > 0 ? All.Count() : 0;
@@ -445,12 +458,16 @@ namespace Chariot.Engine.DataAccess.MardisCore
         /// </summary>
         /// <param name="idpollster">Data table Tracking</param>
         /// <returns>Name pollster</returns>
-        public int GetTotal_pollsters(int campaign, DateTime date)
+        public int GetTotal_pollsters(int campaign, DateTime date, string idUser)
         {
             try
             {
+                var All = from t in Context.PersonalTrakers
+                          join p in Context.UserPollsters on t.IdPollster equals p.IdPollster
+                          where t.Idcampaign == campaign && t.LastDate.Date == date.Date && p.IdUser.ToString() == idUser 
+                          select t;
                 /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
-                var All = Context.PersonalTrakers.Where(x => x.Idcampaign == campaign && x.LastDate.Date == date.Date);
+          
                 return All.Count() > 0 ? All.Select(s => s.IdPollster).Distinct().Count() : 0;
             }
             catch (Exception e)
@@ -464,11 +481,15 @@ namespace Chariot.Engine.DataAccess.MardisCore
         /// </summary>
         /// <param name="idpollster">Data table Tracking</param>
         /// <returns>Name pollster</returns>
-        public int GetActive_pollsters(int campaign, DateTime date)
+        public int GetActive_pollsters(int campaign, DateTime date, string idUser)
         {
             try
             {
-                var POLLTERS= Context.PersonalTrakers.Where(x => x.Idcampaign == campaign && x.LastDate.Date == date.Date);
+                var POLLTERS = from t in Context.PersonalTrakers
+                          join p in Context.UserPollsters on t.IdPollster equals p.IdPollster
+                          where t.Idcampaign == campaign && t.LastDate.Date == date.Date && p.IdUser.ToString() == idUser
+                          select t;
+               // var POLLTERS= Context.PersonalTrakers.Where(x => x.Idcampaign == campaign && x.LastDate.Date == date.Date);
                 var numPollter = POLLTERS.Select(s => s.IdPollster.ToString()).Distinct().ToArray();
                 var All = Context.TrackingBranches.Where(x => x.Idcampaign == campaign && x.datetime_tracking.Date == date.Date && numPollter.Contains(x.IdPollster.ToString()));
                 return All.Count() > 0 ? All.Select(s=>s.IdPollster).Distinct().Count() : 0;
@@ -480,7 +501,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
             }
         }
 
-        public StatusPollster GetPollsterStatus(int campaign, DateTime date)
+        public StatusPollster GetPollsterStatus(int campaign, DateTime date ,string Iduser)
         {
             try
             {
@@ -488,25 +509,33 @@ namespace Chariot.Engine.DataAccess.MardisCore
 
                  var All = from b in Context.TrackingBranches
                               join t in Context.PersonalTrakers on b.IdPollster equals t.IdPollster
-                              where t.Idcampaign == campaign && t.LastDate.Date == date.Date
-                              select t.IdPollster; 
+                               join p in Context.UserPollsters on t.IdPollster equals p.IdPollster
+                              where t.Idcampaign == campaign && t.LastDate.Date == date.Date && p.IdUser.ToString()== Iduser
+                           select  t.IdPollster; 
                 /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
                 foreach(var item in All.Distinct())
                 {
                     string status = GetPercentageDone(item, campaign, date);
                     switch (status)
                     {
-                        case "Retraso":
-                            statusPollster.Delay = statusPollster.Delay+1;
-                        break;
-                        case "Medio":
+                        case "0-20 %":
+                            statusPollster.Delay = statusPollster.Delay + 1;
+                            break;
+                        case "21-40 %":
+                            statusPollster.Delay = statusPollster.Delay + 1;
+                            break;
+                        case "41-60 %":
+                            statusPollster.Medium = statusPollster.Medium + 1;
+
+                            break;
+                        case "61-80 %":
                             statusPollster.Medium = statusPollster.Medium + 1;
                             break;
-                        case "Normal":
+                        case "81-100 %":
                             statusPollster.Regular = statusPollster.Regular + 1;
                             break;
-                    
                     }
+                    
 
                 }             
                 

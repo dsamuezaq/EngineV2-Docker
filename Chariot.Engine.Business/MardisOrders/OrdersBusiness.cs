@@ -818,10 +818,12 @@ namespace Chariot.Engine.Business.MardisOrders
                 List<InvoiceViewModel> _InvoiceViewModel = new List<InvoiceViewModel>();
 
                 List<int> NumeroDeFaturasEntregadas = _ordersDao.SelectEntity<FacturasEntregadas>().Select(s => s.cO_FACTURA).ToList();
-
+               // string d = "71287128";
                 foreach (var item in Listfact)
                 {
 
+                //    if (item == 451392)
+                  //      d = "dsa";
 
                     if (!NumeroDeFaturasEntregadas.Contains(item)) { 
                     InvoiceViewModel data = new InvoiceViewModel();
@@ -838,20 +840,32 @@ namespace Chariot.Engine.Business.MardisOrders
 
 
                          }).FirstOrDefault();
-                  /*      data = _FacturaEntrega.Where(x => x.factura == item).Select(x => new InvoiceViewModel
-                    {
-                        factura = x.factura,
-                        fecha = x.fecha,
-                        precio = x.precio,
-                        total = x.total,
-                        subtotal = x.subtotal,
-                        iva = x.iva,
-                        codvend = x.codvend,
-                        nombrevend = x.nombrevend
-                    }).FirstOrDefault();
-                  */
+                        /*     
+                         *     
+                         *     data = _FacturaEntrega.Where(x => x.factura == item).Select(x => new InvoiceViewModel
+                          {
+                              factura = x.factura,
+                              fecha = x.fecha,
+                              precio = x.precio,
+                              total = x.total,
+                              subtotal = x.subtotal,
+                              iva = x.iva,
+                              codvend = x.codvend,
+                              nombrevend = x.nombrevend
+                          }).FirstOrDefault();
+                        */
+                       var itemFactura = _FacturaEntrega.Where(x => x.factura == item)
+                         .GroupBy(l => l.codigoprod )
+                         .Select(x => new ProductoFacturaViewModel
+                         {
+                             factura = item,
+                             codigoprod = x.First().codigoprod,
+                             cantidad = x.Sum(pc => pc.cantidad),
+                             nombreprod = x.First().nombreprod
 
-                    data.Invoice_details = _FacturaEntrega.Where(x => x.factura == item).Select(x => new Invoice_detailViewModel
+
+                         }).ToList();
+                        data.Invoice_details = itemFactura.Where(x => x.factura == item).Select(x => new Invoice_detailViewModel
                     {
                         cantidad = DisminuirInventario(x.cantidad, item, x.codigoprod),
                         codigoprod = x.codigoprod,
@@ -862,7 +876,7 @@ namespace Chariot.Engine.Business.MardisOrders
                     }
 
 
-                }
+                    }
 
                 //InvoiceViewModel data1 = new InvoiceViewModel();
 

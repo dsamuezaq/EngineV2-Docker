@@ -834,8 +834,8 @@ namespace Chariot.Engine.Business.MardisOrders
                          {
                              factura = x.Key,
                              fecha = x.First().fecha,
-                             total = Math.Round ( (Double) x.Sum(pc => pc.total),2),
-                             codvend=  x.First().codvend,
+                             total = CalculoFacturasXpago(Math.Round((Double)x.Sum(pc => pc.total), 2),x.Key),
+                             codvend =  x.First().codvend,
                              nombrevend=x.First().nombrevend
 
 
@@ -861,7 +861,8 @@ namespace Chariot.Engine.Business.MardisOrders
                              factura = item,
                              codigoprod = x.First().codigoprod,
                              cantidad = x.Sum(pc => pc.cantidad),
-                             nombreprod = x.First().nombreprod
+                             nombreprod = x.First().nombreprod,
+                             precio=x.Max(m=>m.precio)
 
 
                          }).ToList();
@@ -869,7 +870,8 @@ namespace Chariot.Engine.Business.MardisOrders
                     {
                         cantidad = DisminuirInventario(x.cantidad, item, x.codigoprod),
                         codigoprod = x.codigoprod,
-                        nombreprod = x.nombreprod
+                        nombreprod = x.nombreprod,
+                        precio=x.precio
                     }).ToList();
 
                     _InvoiceViewModel.Add(data);
@@ -915,6 +917,24 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
+        Double CalculoFacturasXpago(Double valor, int factura)
+        {
+
+            var DIFERENCIA = Context.PagoCarteras.Where(x => x.cO_FACTURA == factura);
+            if (DIFERENCIA.Count() > 0)
+            {
+             Double valorcobrado=   DIFERENCIA.GroupBy(l => l.cO_FACTURA)
+                    .Select(x => x.Sum(s => s.cO_VALOR_COBRO)).FirstOrDefault();
+
+                return valor- valorcobrado;
+
+            }
+            else {
+
+                return valor;
+            }
+        }
+
         int DisminuirInventario(int cantidad, int factura, string pedido) {
 
             var cantidadDevuelta = Context.DevolucionFacturas.Where(x => x.d_FACTURA == factura && x.d_PRODUCTO == pedido).Select(x => x.d_CANTIDAD);

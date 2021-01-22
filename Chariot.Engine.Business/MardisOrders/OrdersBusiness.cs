@@ -717,9 +717,9 @@ namespace Chariot.Engine.Business.MardisOrders
 
                 List<DeliveryBranches> detailBranch = _ordersDao.GetBranchbyListCode(clienteRoute.ToList(), idaccount);
 
-                if (clienteRouteInCompleto.Contains("49042")) {
-                    string SA = "a";
-                }
+                //if (clienteRouteInCompleto.Contains("29690")) {
+                //    string SA = "a";
+                //}
      
 
                 CarteraCob.Wait();
@@ -728,7 +728,7 @@ namespace Chariot.Engine.Business.MardisOrders
 
                 if (clienteRoute.Count() > 0)
                 {
-                    var PagosDeCarteraPorFacturas = _ordersDao.SelectEntity<PagoCartera>().Where(x => clienteRoute.ToList().Contains(x.cO_CODCLI.ToString()));
+                    var PagosDeCarteraPorFacturas = _ordersDao.SelectEntity<vw_pagoxcarteraDevolucion>().Where(x => clienteRoute.ToList().Contains(x.cO_CODCLI.ToString()));
                     //var _ca = _Cartera.Where(x => x.codcli.ToString() == "35264").ToList();
                     var _CarteraConPagos = (from CA in _Cartera
                                             join CP in PagosDeCarteraPorFacturas on CA.codcli equals CP.cO_CODCLI into AP
@@ -739,12 +739,12 @@ namespace Chariot.Engine.Business.MardisOrders
                                                 codcli = CA.codcli,
                                                 f_FACTURA = CA.f_FACTURA,
                                                 nrodocumento = CA.nrodocumento,
-                                                valor = Math.Round( (Double)(CA.valor - (LCP?.cO_VALOR_COBRO ?? 0)),2)
+                                                valor = Math.Round( (Double)(CA.valor - (LCP?.valor ?? 0)),2)
 
 
                                             }).ToList();
-
-              
+                    //var s2 = _Cartera.Where(x => x.codcli == 29690).ToList();
+                    //var s3 = _CarteraConPagos.Where(x => x.codcli == 29690).ToList();
                     detailBranch.AsParallel()
                     .ForAll(
                     s =>
@@ -834,7 +834,7 @@ namespace Chariot.Engine.Business.MardisOrders
                          {
                              factura = x.Key,
                              fecha = x.First().fecha,
-                             total = CalculoFacturasXpago(Math.Round((Double)x.Sum(pc => pc.total), 2),x.Key),
+                             total = Math.Round(CalculoFacturasXpago(Math.Round((Double)x.Sum(pc => pc.total), 2),x.Key), 2),
                              codvend =  x.First().codvend,
                              nombrevend=x.First().nombrevend
 
@@ -920,18 +920,44 @@ namespace Chariot.Engine.Business.MardisOrders
         Double CalculoFacturasXpago(Double valor, int factura)
         {
 
+
             var DIFERENCIA = Context.PagoCarteras.Where(x => x.cO_FACTURA == factura);
+           
             if (DIFERENCIA.Count() > 0)
             {
-             Double valorcobrado=   DIFERENCIA.GroupBy(l => l.cO_FACTURA)
+                var DIFERENCIADevolucion = Context.DevolucionFacturas.Where(x => x.d_FACTURA == factura);
+                double pagosdevolucion= 0;
+                if (DIFERENCIADevolucion.Count() > 0)
+                {
+                    foreach (var item in DIFERENCIADevolucion) {
+
+                        pagosdevolucion += item.d_CANTIDAD * item.d_PRECIO;
+                    }
+                
+
+
+                }
+                Double valorcobrado=   DIFERENCIA.GroupBy(l => l.cO_FACTURA)
                     .Select(x => x.Sum(s => s.cO_VALOR_COBRO)).FirstOrDefault();
 
-                return valor- valorcobrado;
+                return valor- valorcobrado- pagosdevolucion;
 
             }
             else {
+                var DIFERENCIADevolucion = Context.DevolucionFacturas.Where(x => x.d_FACTURA == factura);
+                double pagosdevolucion = 0;
+                if (DIFERENCIADevolucion.Count() > 0)
+                {
+                    foreach (var item in DIFERENCIADevolucion)
+                    {
 
-                return valor;
+                        pagosdevolucion += item.d_CANTIDAD * item.d_PRECIO;
+                    }
+
+
+
+                }
+                return valor- pagosdevolucion;
             }
         }
 
@@ -1032,7 +1058,7 @@ namespace Chariot.Engine.Business.MardisOrders
                     return _helpersHttpClientBussiness.PostApi("CoberturaFacturaEstado/AgregarLista", json);
                 });
 
-              //  bool RespuestaActualizacionEstadoFacturaExter = await  _helpersHttpClientBussiness.GettApiParam($"CoberturaFacturaRuta/actualizar?Factura={NumeroFactura}");
+                bool RespuestaActualizacionEstadoFacturaExterNum = await  _helpersHttpClientBussiness.GettApiParam($"CoberturaFacturaRuta/actualizar?Factura={NumeroFactura}");
                //    var _data = _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
                 ///   var _data2 = _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
                 ///   if()

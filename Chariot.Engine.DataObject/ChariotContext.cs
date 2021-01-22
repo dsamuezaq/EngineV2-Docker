@@ -242,7 +242,10 @@ namespace Chariot.Engine.DataObject
         /// Secuencial de ordenes
         /// </summary>
         public DbSet<DevolucionFactura> DevolucionFacturas { get; set; }
-
+        /// <summary>
+        /// Secuencial de ordenes
+        /// </summary>
+        public DbSet<vw_pagoxcarteraDevolucion> pagosxcarteraDevolucion { get; set; }
         /// <summary>
         /// Secuencial de ordenes
         /// </summary>

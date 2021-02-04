@@ -330,7 +330,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
         }
 
-        public Boolean GuardarfacturaEntregadas(String CodigoLocal, int NumeroFactura, string cO_observacion, string cO_estado)
+        public Boolean GuardarfacturaEntregadas(String CodigoLocal, int NumeroFactura, string cO_observacion, string cO_estado ,double lat, double lon)
         {
 
             try
@@ -340,7 +340,8 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                 _DatoDeFacturaEntregada.cO_CODCLI = CodigoLocal;
                 _DatoDeFacturaEntregada.cO_observacion = cO_observacion;
                 _DatoDeFacturaEntregada.cO_estado = cO_estado;
-
+                _DatoDeFacturaEntregada.LAT = lat;
+                _DatoDeFacturaEntregada.LON = lon;
                 Context.FacturasEntregadas.Add(_DatoDeFacturaEntregada);
                 Context.SaveChanges();
 

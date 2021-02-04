@@ -1038,7 +1038,7 @@ namespace Chariot.Engine.Business.MardisOrders
 
         }
 
-        public async Task<ReplyViewModel> BSSActualizarEstadoEntregaFacturaXFumero(int NumeroFactura, String CodigoLocal,string cO_observacion, string cO_estado)
+        public async Task<ReplyViewModel> BSSActualizarEstadoEntregaFacturaXFumero(int NumeroFactura, String CodigoLocal,string cO_observacion, string cO_estado, double lat, double lon)
         {
             ReplyViewModel reply = new ReplyViewModel();
             try
@@ -1064,7 +1064,7 @@ namespace Chariot.Engine.Business.MardisOrders
                 ///   if()
                 ///   
 
-                bool RespuestaActualizacionEstadoFactura= _ordersDao.GuardarfacturaEntregadas(CodigoLocal, NumeroFactura, cO_observacion, cO_estado);
+                bool RespuestaActualizacionEstadoFactura= _ordersDao.GuardarfacturaEntregadas(CodigoLocal, NumeroFactura, cO_observacion, cO_estado,  lat,  lon);
                 RespuestaActualizacionEstadoFacturaExter.Wait();
 
                 if (RespuestaActualizacionEstadoFactura && RespuestaActualizacionEstadoFacturaExter.Result.Result)

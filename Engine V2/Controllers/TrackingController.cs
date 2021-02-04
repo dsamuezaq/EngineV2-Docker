@@ -17,7 +17,7 @@ using Microsoft.Extensions.Options;
 
 namespace Engine_V2.Controllers
 {
-    [Authorize]
+
     [Route("api/[controller]")]
     [ApiController]
     public class TrackingController : AController<TaskCampaignController>

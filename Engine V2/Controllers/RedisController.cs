@@ -40,7 +40,12 @@ namespace Engine_V2.Controllers
         {
             return Ok(_redisBusiness.DataBankBGVue());
         }
-
+        [HttpPost]
+        [Route("GetBankBONOS")]
+        public async Task<IActionResult> GetBankBONOS()
+        {
+            return Ok(_redisBusiness.DataBankBONOBGVue());
+        }
         [HttpPost]
         [Route("GetServiceType")]
         public async Task<IActionResult> GetServiceType(string type)

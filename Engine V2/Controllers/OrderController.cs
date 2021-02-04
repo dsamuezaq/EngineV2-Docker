@@ -350,10 +350,10 @@ namespace Engine_V2.Controllers
         [HttpPost]
         [Route("POSTActualizarEstadoEntregaFacturaXFumero")]
       //  [Authorize]
-        public async Task<IActionResult> POSTActualizarEstadoEntregaFacturaXFumero( int NumeroFactura, String CodigoLocal ,string cO_observacion , string cO_estado)
+        public async Task<IActionResult> POSTActualizarEstadoEntregaFacturaXFumero( int NumeroFactura, String CodigoLocal ,string cO_observacion , string cO_estado, double lat , double lon)
         {
 
-            return Ok(await _ordersBusiness.BSSActualizarEstadoEntregaFacturaXFumero(NumeroFactura, CodigoLocal, cO_observacion, cO_estado));
+            return Ok(await _ordersBusiness.BSSActualizarEstadoEntregaFacturaXFumero(NumeroFactura, CodigoLocal, cO_observacion, cO_estado,  lat,  lon));
         }
 
         [HttpPost]

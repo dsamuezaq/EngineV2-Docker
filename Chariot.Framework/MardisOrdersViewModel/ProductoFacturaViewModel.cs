@@ -13,5 +13,6 @@ namespace Chariot.Framework.MardisOrdersViewModel
         public string nombreprod { get; set; }
         public int cantidad { get; set; }
         public Double? precio { get; set; }
+        public Double? iva { get; set; }
     }
 }

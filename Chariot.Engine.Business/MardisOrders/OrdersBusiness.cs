@@ -863,7 +863,7 @@ namespace Chariot.Engine.Business.MardisOrders
                              cantidad = x.Sum(pc => pc.cantidad),
                              nombreprod = x.First().nombreprod,
                              precio=x.Max(m=>m.precio)
-
+                             ,iva =x.Max(m => m.iva)
 
                          }).ToList();
                         data.Invoice_details = itemFactura.Where(x => x.factura == item).Select(x => new Invoice_detailViewModel
@@ -871,8 +871,10 @@ namespace Chariot.Engine.Business.MardisOrders
                         cantidad = DisminuirInventario(x.cantidad, item, x.codigoprod),
                         codigoprod = x.codigoprod,
                         nombreprod = x.nombreprod,
-                        precio=x.precio
-                    }).ToList();
+                        precio=x.precio,
+                        iva= x.iva
+
+                        }).ToList();
 
                     _InvoiceViewModel.Add(data);
                     }

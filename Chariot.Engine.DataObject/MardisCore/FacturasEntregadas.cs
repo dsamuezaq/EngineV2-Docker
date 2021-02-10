@@ -18,7 +18,7 @@ namespace Chariot.Engine.DataObject.MardisCore
         public string cO_estado { get; set; }
 
         public string cO_observacion { get; set; }
-        public string Enviado { get; set; }
+        public int? Enviado { get; set; }
 
         public double? LAT { get; set; }
 

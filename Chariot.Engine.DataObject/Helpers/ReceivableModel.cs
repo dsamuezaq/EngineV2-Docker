@@ -12,5 +12,6 @@ namespace Chariot.Engine.DataObject.Helpers
         public int nrodocumento { get; set; }
 
         public Double? valor { get; set; }
+        //public Double? iva { get; set; }
     }
 }

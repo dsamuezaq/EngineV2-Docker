@@ -154,8 +154,6 @@ namespace Chariot.Engine.Business.Mardiscore
 
         public ReplyViewModel GetBranches(GetBranchViewModel _data)
         {
-          
-      
             ReplyViewModel reply = new ReplyViewModel();
             reply.messege = "Don't demand data";
             reply.status = "Fail";
@@ -193,6 +191,7 @@ namespace Chariot.Engine.Business.Mardiscore
          
             return reply;
         }
+
         public ReplyViewModel GetTracking(GetTrackingViewModel _data)
         {
             ReplyViewModel reply = new ReplyViewModel();

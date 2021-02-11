@@ -24,5 +24,6 @@ namespace Chariot.Engine.DataObject.Procedure
 
         public string Telefono { set; get; }
 
+        public Boolean StatusRoute { set; get; }
     }
 }

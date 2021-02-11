@@ -323,7 +323,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
             {
                 /// var entities = Context.TrackingBranches.AsNoTracking().ToList();
 
-                var _dataTable = Context.Query<SP_dato_tracking_encuestadores>($@"EXEC dbo.sp_dato_tracking_encuestadores @fecha = '{date.Date.Date}',  @idca = {campaign}  ,  @iduser = '{Iduser}'");
+                var _dataTable = Context.Query<SP_dato_tracking_encuestadores>($@"EXEC dbo.sp_dato_tracking_encuestadores_con_estado @fecha = '{date.Date.Date}',  @idca = {campaign}  ,  @iduser = '{Iduser}'");
                 return _dataTable.Count() > 0 ? _dataTable.ToList(): null;
             }
             catch (Exception e)

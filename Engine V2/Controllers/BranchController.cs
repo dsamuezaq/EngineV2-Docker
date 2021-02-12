@@ -66,7 +66,7 @@ namespace Engine_V2.Controllers
 
         [HttpPut]
         [Route("updatePollster")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> updatePollster(UpdatePollsterSupervisor _data)
         {
             return Ok(_taskCampaignBusiness.UpdatePollsterSupervisor(_data));

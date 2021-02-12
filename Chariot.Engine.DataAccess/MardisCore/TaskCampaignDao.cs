@@ -123,6 +123,15 @@ namespace Chariot.Engine.DataAccess.MardisCore
 
             return consulta;
         }
+
+        public Pollster GetPollsterById(int IdP)
+        {
+            var consulta = from c in Context.Pollsters
+                           where c.Id == IdP
+                           select c;
+            return consulta.ToList().First();
+        }
+
         public List<Pollster> GetPollsterListRoute(int idaccount , IList<string> imeis)
         {
             var consulta = Context.Pollsters.Where(x => x.idaccount == idaccount && !imeis.Contains(x.IMEI)).ToList();

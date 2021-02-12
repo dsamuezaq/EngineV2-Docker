@@ -61,10 +61,17 @@ namespace Engine_V2.Controllers
         [Authorize]
         public async Task<IActionResult> transactionPollster(TransactionPollsterViewModel _data)
         {
-       
-
             return Ok(_taskCampaignBusiness.SavePollster(_data));
         }
+
+        [HttpPut]
+        [Route("updatePollster")]
+        //[Authorize]
+        public async Task<IActionResult> updatePollster(UpdatePollsterSupervisor _data)
+        {
+            return Ok(_taskCampaignBusiness.UpdatePollsterSupervisor(_data));
+        }
+
         [HttpPost]
         [Route("ListPollster")]
         [Authorize]

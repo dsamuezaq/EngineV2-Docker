@@ -2,6 +2,7 @@
 using Chariot.Engine.Business.ClientRest;
 using Chariot.Engine.DataAccess.MardisCore;
 using Chariot.Engine.DataObject;
+using Chariot.Engine.DataObject.MardisCommon;
 using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Framework.Complement;
@@ -145,14 +146,36 @@ namespace Chariot.Engine.Business.Mardiscore
 
             return "No registra Informacion";
         }
+
+        public ReplyViewModel UpdatePollsterSupervisor(UpdatePollsterSupervisor _data)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+                Pollster itemPollster = _taskCampaignDao.GetPollsterById(_data.pollster.Idpollster);
+                itemPollster.StatusRoute = _data.pollster.statusRoute;
+                reply.messege = "Los datos fueron guardados correctamente";
+                reply.status = "Ok";
+                _taskCampaignDao.InsertUpdateOrDelete(itemPollster, _data.transaction);
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No se pudo guardar la información";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+
+        }
+
         public ReplyViewModel SavePollster(TransactionPollsterViewModel _data)
         {
             ReplyViewModel reply = new ReplyViewModel();
             try
             {
-
-          
-
                 reply.messege = "Los datos fueron guardados correctamente";
                 reply.status = "Ok";
                 _taskCampaignDao.InsertUpdateOrDelete(_data.pollster, _data.transaction);

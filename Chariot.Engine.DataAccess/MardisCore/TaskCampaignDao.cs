@@ -36,6 +36,23 @@ namespace Chariot.Engine.DataAccess.MardisCore
                            };
             return consulta.ToList();
         }
+
+        public bool ConsultarEstadoDeRutaDeEncuestadorXIDDevice(string IDdevice, string Nombrecuenta)
+        {
+            //   var consulta = Context.Campaigns.Include(t => t.Account).Where(c => c.StatusRegister == CStatusRegister.Active).ToList();
+            var consultaDatosCuenta = Context.Accounts.Where(x => x.Name == Nombrecuenta);
+
+            if (consultaDatosCuenta.Count() > 0)
+            {
+
+                var consulta = Context.Pollsters.Where(x => x.IMEI == IDdevice && x.idaccount == consultaDatosCuenta.First().Id);
+                return consulta.Count() > 0 ? (consulta.First().StatusRoute == null ? true : false) : true;
+            }
+            else {
+
+                return  true;
+            }
+        }
         /// <summary>
         /// Save data mobil from tracking
         /// </summary>
@@ -204,16 +221,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
 
           
             IList<RouteBranch> _model = new List<RouteBranch>();
-            //var query = Context.Branches.Where(x => x.IdAccount.Equals(idAccount)).Select(new { });
-            //var query = from data in Context.Branches
-            //                  .GroupBy(g => new { g.RUTAAGGREGATE, g.IdAccount })
-            //                  .Where(w => w.Key.IdAccount.Equals(idAccount))
-            //                 .Select(s => new { ruta = s.Key.RUTAAGGREGATE, numero = s.Key.IdAccount } );
 
-            //var query = from data in Context.Branches
-            //            where data.IdAccount == idAccount
-            //            group data by new { data.IdAccount, data.RUTAAGGREGATE } into grupo
-            //            select new { route = grupo.Key.RUTAAGGREGATE , numbreBranches = grupo.Count()};
             var query = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE != "")
                         .Select(s => new { s.RUTAAGGREGATE, s.ESTADOAGGREGATE }).Distinct().OrderBy(x => x.RUTAAGGREGATE);
             var result = query.ToList();

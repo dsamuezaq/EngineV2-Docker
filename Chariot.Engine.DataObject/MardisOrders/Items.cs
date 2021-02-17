@@ -16,5 +16,7 @@ namespace Chariot.Engine.DataObject.MardisOrders
        public int Id { get; set; }
         public string IdRubro { get; set; }
         public string Descripcion { get; set; }
+        public int? Idaccount { get; set; }
+        
     }
 }

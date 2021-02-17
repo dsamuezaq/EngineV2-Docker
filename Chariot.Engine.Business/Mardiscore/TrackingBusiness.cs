@@ -277,6 +277,28 @@ namespace Chariot.Engine.Business.Mardiscore
                
             }   
         }
+
+        public ReplyViewModel ObtenerEstadoDeActivacionDeDescargaDeRutas(String IdDevice, string Nombrecuenta)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+                var _Reply = _taskCampaignDao.ConsultarEstadoDeRutaDeEncuestadorXIDDevice(IdDevice , Nombrecuenta);
+               
+                reply.messege = "success";
+                reply.data = _Reply;
+                reply.status = "Ok";
+                return reply;
+            }
+            catch (Exception e)
+            {
+                reply.messege = "No existen datos con esa Campaña";
+                reply.data = e.Message;
+                reply.status = "Fallo la consulta";
+                return reply;
+
+            }
+        }
         #endregion
         #region Method Private
         #endregion

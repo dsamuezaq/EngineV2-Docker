@@ -25,5 +25,6 @@ namespace Chariot.Framework.MardisOrdersViewModel
         public decimal? Precio8 { get; set; } = 0;
         public decimal? Precio9 { get; set; } = 0;
         public decimal? Precio10 { get; set; }
+        public int? Idaccount { get; set; }
     }
 }

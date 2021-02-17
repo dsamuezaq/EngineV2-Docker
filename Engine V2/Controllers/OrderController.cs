@@ -55,12 +55,12 @@ namespace Engine_V2.Controllers
 
         [HttpGet]
         [Route("getRubros")]
-        public async Task<IActionResult> getRubros()
+        public async Task<IActionResult> getRubros( int Idaccount=15 )
         {
             reply.messege = "No puedo guardar la ubicación del encuestador";
             reply.status = "Fail";
 
-            return Ok(_ordersBusiness.GetRubros());
+            return Ok(_ordersBusiness.GetRubros(Idaccount));
         }
 
         [HttpGet]
@@ -83,10 +83,10 @@ namespace Engine_V2.Controllers
         }
         [HttpGet]
         [Route("getArticulos")]
-        public async Task<IActionResult> getArticulos()
+        public async Task<IActionResult> getArticulos(int Idaccount = 15)
         {
            
-            return Ok(_ordersBusiness.GetArticulos());
+            return Ok(_ordersBusiness.GetArticulos(Idaccount));
         }
         [HttpGet]
         [Route("GETObtenerProductoXCodigo")]
@@ -98,12 +98,12 @@ namespace Engine_V2.Controllers
 
         [HttpGet]
         [Route("getDepositos")]
-        public async Task<IActionResult> getDepositos()
+        public async Task<IActionResult> getDepositos(int Idaccount=15)
         {
             reply.messege = "No puedo guardar la ubicación del encuestador";
             reply.status = "Fail";
 
-            return Ok(_ordersBusiness.GetDepositos());
+            return Ok(_ordersBusiness.GetDepositos(090637));
         }
 
         [HttpGet]
@@ -126,7 +126,7 @@ namespace Engine_V2.Controllers
         }
         [HttpGet]
         [Route("getRegistros")]
-        public async Task<IActionResult> getRegistros()
+        public async Task<IActionResult> getRegistros(int Idaccount=15)
         {
             List<RegistroViewModel> datos = new List<RegistroViewModel>();
             RegistroViewModel dato = new RegistroViewModel();
@@ -137,7 +137,7 @@ namespace Engine_V2.Controllers
 
             dato = new RegistroViewModel();
             dato.tabla = "wsSysMobileRubros";
-            dato.cantidadRegistros = _ordersBusiness.GetRubros().Count();
+            dato.cantidadRegistros = _ordersBusiness.GetRubros(Idaccount).Count();
             dato.paginas = 1;
             datos.Add(dato);
 
@@ -149,13 +149,13 @@ namespace Engine_V2.Controllers
 
             dato = new RegistroViewModel();
             dato.tabla = "wsSysMobileArticulos";
-            dato.cantidadRegistros = _ordersBusiness.GetArticulos().Count();
+            dato.cantidadRegistros = _ordersBusiness.GetArticulos(Idaccount).Count();
             dato.paginas = 1;
             datos.Add(dato);
 
             dato = new RegistroViewModel();
             dato.tabla = "wsSysMobileDepositos";
-            dato.cantidadRegistros = _ordersBusiness.GetDepositos().Count();
+            dato.cantidadRegistros = _ordersBusiness.GetDepositos(Idaccount).Count();
             dato.paginas = 1;
             datos.Add(dato);
 

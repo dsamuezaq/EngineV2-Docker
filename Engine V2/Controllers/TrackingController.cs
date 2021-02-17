@@ -26,13 +26,13 @@ namespace Engine_V2.Controllers
         #region Variable
         private readonly TrackingBusiness _TrackingBusiness;
         private readonly ILogger<TaskCampaignController> _logger;
-       // private readonly IMapper _mapper;
+        // private readonly IMapper _mapper;
         public TrackingController(ILogger<LoginController> logger,
                                            RedisCache distributedCache
                                            , IOptions<AppSettings> appSettings,
                                            ChariotContext _chariotContext, IMapper mapper) : base(_chariotContext, distributedCache, appSettings, mapper)
         {
-            _TrackingBusiness = new TrackingBusiness(_chariotContext,distributedCache, mapper);
+            _TrackingBusiness = new TrackingBusiness(_chariotContext, distributedCache, mapper);
 
         }
         #endregion
@@ -44,28 +44,28 @@ namespace Engine_V2.Controllers
         {
             reply.messege = "No puedo guardar la ubicación del encuestador";
             reply.status = "Fail";
-            if (_TrackingBusiness.SaveTracking(_request)) 
+            if (_TrackingBusiness.SaveTracking(_request))
             {
                 reply.messege = "Success Save Data";
                 reply.status = "Ok";
             }
-           
+
             return reply;
         }
         [HttpPost]
         [Route("SaveBranchTracking")]
-        public async Task<IActionResult> SaveBranchTracking([FromBody] List<TrackingBranchViewModel>_request)
+        public async Task<IActionResult> SaveBranchTracking([FromBody] List<TrackingBranchViewModel> _request)
         {
             try
             {
                 reply.messege = "Could not save the information";
                 reply.status = "Fail";
                 if (_TrackingBusiness.SaveTrackingBranch(_request))
-                  {
+                {
                     reply.messege = "Success Save Data";
                     reply.status = "Ok";
-                  }
-           
+                }
+
                 return Ok(reply); ;
             }
             catch (Exception e)
@@ -75,7 +75,7 @@ namespace Engine_V2.Controllers
                 reply.status = "Error";
                 return Ok(reply);
             }
-        
+
         }
         [HttpPost]
         [Route("SaveNewBranchTracking")]
@@ -155,7 +155,7 @@ namespace Engine_V2.Controllers
             try
             {
                 reply = _TrackingBusiness.GetTracking(_request);
-                return  Ok(reply);
+                return Ok(reply);
             }
             catch (Exception e)
             {
@@ -164,7 +164,7 @@ namespace Engine_V2.Controllers
                 reply.status = "Error";
                 return Ok(reply);
             }
-          
+
         }
 
         [HttpPost]
@@ -192,6 +192,25 @@ namespace Engine_V2.Controllers
             try
             {
                 reply = _TrackingBusiness.GetCampaign(_request);
+                return Ok(reply);
+            }
+            catch (Exception e)
+            {
+                reply.error = e.Message;
+                reply.status = "Error";
+                return Ok(reply);
+            }
+
+        }
+
+        [HttpPost]
+        [Route("ObtenerEstadoDeActivacionDeDescargaDeRutas")]
+        [Authorize]
+        public async Task<IActionResult> ObtenerEstadoDeActivacionDeDescargaDeRutas(string IdDevice, string Nombrecuenta)
+        {
+            try
+            {
+                reply = _TrackingBusiness.ObtenerEstadoDeActivacionDeDescargaDeRutas(IdDevice, Nombrecuenta);
                 return Ok(reply);
             }
             catch (Exception e)

@@ -46,11 +46,11 @@ namespace Chariot.Engine.Business.MardisOrders
 
 
         }
-        public List<RubrosViewModel> GetRubros()
+        public List<RubrosViewModel> GetRubros(int Idaccount)
         {
 
             List<RubrosViewModel> mapperRubros = _mapper.Map<List<RubrosViewModel>>(_ordersDao.SelectEntity<Items>());
-            return mapperRubros;
+            return mapperRubros.Where(x=>x.Idaccount== Idaccount).ToList();
 
         }
         public List<ClientViewModel> GetClientes()
@@ -90,7 +90,7 @@ namespace Chariot.Engine.Business.MardisOrders
 
         }
 
-        public List<ArticulosViewModel> GetArticulos()
+        public List<ArticulosViewModel> GetArticulos(int Idaccount)
         {
             var ProductoCartera = Task.Factory.StartNew(() => {
                 return _helpersHttpClientBussiness.GetApi<GetCoberturaProductoViewModel>("CoberturaProducto/obtener");
@@ -101,7 +101,8 @@ namespace Chariot.Engine.Business.MardisOrders
 
             List<ArticulosViewModel> _reply = (from ext in ProductoCartera.Result.Result
                                               join ar in mapperRubros on ext.codigoprod.Trim() equals ar.IdArticulo.Trim()
-                                              select new ArticulosViewModel {
+                                              where ar.Idaccount== Idaccount
+                                               select new ArticulosViewModel {
                                                   Id = ar.Id,
                                                   IdArticulo = ar.IdArticulo,
                                                   Descripcion = ar.Descripcion,
@@ -166,11 +167,11 @@ namespace Chariot.Engine.Business.MardisOrders
            
 
         }
-        public List<DepositosViewModel> GetDepositos()
+        public List<DepositosViewModel> GetDepositos(int Idaccount)
         {
 
             List<DepositosViewModel> mapperRubros = _mapper.Map<List<DepositosViewModel>>(_ordersDao.SelectEntity<Deposit>());
-            return mapperRubros;
+            return mapperRubros.Where(x => x.Idaccount == Idaccount).ToList();
 
         }
         public List<Visitas> ListadoVisitasBSS()

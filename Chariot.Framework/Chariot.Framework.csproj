@@ -285,6 +285,7 @@
     <Compile Include="MardisOrdersViewModel\CarteraPagoViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\ClientViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\DepositosViewModel.cs" />
+    <Compile Include="MardisOrdersViewModel\FacturaDeuda.cs" />
     <Compile Include="MardisOrdersViewModel\InventaryViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\InvoiceViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\Invoice_detailViewModel.cs" />

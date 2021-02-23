@@ -51,6 +51,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
             }
             catch (Exception ex)
             {
+
                 return false;
             }
 
@@ -180,6 +181,40 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
                 throw;
                 return null;
+            }
+
+        }
+
+        public List<vw_pagoxcarteraDevolucion_factura> ConsultarDatosDePagosCarteraXfactura(int factura)
+        {
+            try
+            {
+                var ResultadoCartera = Context.pagoxcarteraDevolucion_factura.Where(x => x.cO_FACTURA.ToString().Equals(factura.ToString()) );
+                return ResultadoCartera.Count() > 0 ? ResultadoCartera.ToList() : null;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return null;
+            }
+
+        }
+
+        public Boolean ConsularFacturaEntregada(int NumeroFactura)
+        {
+            try
+            {
+                var ResultadoCartera = Context.FacturasEntregadas.Where(x => x.cO_FACTURA == NumeroFactura);
+                return ResultadoCartera.Count() > 0 ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return false;
             }
 
         }
@@ -402,6 +437,8 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
         }
         #endregion
+
+
 
     }
 }

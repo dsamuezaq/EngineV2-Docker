@@ -188,7 +188,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
             catch (Exception e)
 
             {
-                throw new Exception("Error al consultar Sectores");
+                throw new Exception("Error al consultar Sectores" + e.Message);
             }
 
         }

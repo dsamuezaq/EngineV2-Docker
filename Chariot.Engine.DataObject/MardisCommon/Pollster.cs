@@ -28,6 +28,6 @@ namespace Chariot.Engine.DataObject.MardisCommon
         public string PassCel { get; set; }
 
         public int? idaccount { get; set; }
-        public bool? StatusRoute { get; set; }
+        public bool? StatusRoute { get; set; } = false;
     }
 }

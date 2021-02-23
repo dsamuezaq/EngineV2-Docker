@@ -46,7 +46,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
             {
 
                 var consulta = Context.Pollsters.Where(x => x.IMEI == IDdevice && x.idaccount == consultaDatosCuenta.First().Id);
-                return consulta.Count() > 0 ? (consulta.First().StatusRoute == null ? true : false) : true;
+                return consulta.Count() > 0 ? (consulta.First().StatusRoute == false ? true : false) : true;
             }
             else {
 

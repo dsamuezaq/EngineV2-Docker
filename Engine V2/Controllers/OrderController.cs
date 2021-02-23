@@ -45,12 +45,12 @@ namespace Engine_V2.Controllers
         #region Obtener data Pedidos
         [HttpGet]
         [Route("getVendedores")]
-        public async Task<IActionResult> getVendedores()
+        public async Task<IActionResult> getVendedores(int Idaccount = 15)
         {
             reply.messege = "No puedo guardar la ubicación del encuestador";
             reply.status = "Fail";
 
-            return Ok(_ordersBusiness.GetVentas());
+            return Ok(_ordersBusiness.GetVentas(Idaccount));
         }
 
         [HttpGet]
@@ -131,7 +131,7 @@ namespace Engine_V2.Controllers
             List<RegistroViewModel> datos = new List<RegistroViewModel>();
             RegistroViewModel dato = new RegistroViewModel();
             dato.tabla = "wsSysMobileVendedores";
-            dato.cantidadRegistros = _ordersBusiness.GetVentas().Count();
+            dato.cantidadRegistros = _ordersBusiness.GetVentas(Idaccount).Count();
             dato.paginas = 1;
             datos.Add(dato);
 
@@ -327,8 +327,27 @@ namespace Engine_V2.Controllers
 
             return Ok(await _ordersBusiness.GetRoute(idcamion, idaccount));
         }
-        
-        
+
+
+        [HttpPost]
+        [Route("ObtenerRutaClienteXCamion")]
+        //  [Authorize]
+        public async Task<IActionResult> ObtenerRutaClienteXCamion(string idcamion, int idaccount)
+        {
+
+
+            return Ok(await _ordersBusiness.ObtenerRutas(idcamion, idaccount));
+        }
+        [HttpPost]
+        [Route("ObtenerCarteraXCliente")]
+        //  [Authorize]
+        public async Task<IActionResult> ObtenerCarteraXCliente(int idclient, int idaccount)
+        {
+
+
+            return Ok(await _ordersBusiness.ObtenerDatosDeCarteraXCliente(idclient, idaccount));
+        }
+
         [Route("Invoicecustomer")]
        // [Authorize]
         public async Task<IActionResult> Invoicecustomer(int idclient, int idaccount)
@@ -337,14 +356,23 @@ namespace Engine_V2.Controllers
 
             return Ok(await _ordersBusiness.GetInvoice(idclient, idaccount));
         }
-        [HttpPost]
-        [Route("Invoicetruck")]
-      ///  [Authorize]
-        public async Task<IActionResult> Invoicetruck(string iddevice, int idaccount)
+
+        [Route("InvoicecustomerXFact")]
+        // [Authorize]
+        public async Task<IActionResult> InvoicecustomerXFact(int Fact, int idaccount)
         {
 
 
-            return Ok(await _ordersBusiness.GetTruck(iddevice, idaccount));
+            return Ok(await _ordersBusiness.GetInvoicXFact(Fact, idaccount));
+        }
+        [HttpPost]
+        [Route("Invoicetruck")]
+      ///  [Authorize]
+        public async Task<IActionResult> Invoicetruck(string Imei, int idaccount)
+        {
+
+
+            return Ok(await _ordersBusiness.GetTruck(Imei, idaccount));
         }
 
         [HttpPost]

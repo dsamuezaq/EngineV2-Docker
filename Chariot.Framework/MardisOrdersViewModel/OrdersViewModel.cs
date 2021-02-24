@@ -19,6 +19,7 @@ namespace Chariot.Framework.MardisOrdersViewModel
         public Nullable<decimal> gpsX { get; set; }
         public Nullable<decimal> gpsY { get; set; }
         public string p_PEDIDO_MARDIS { get; set; }
+        public int? Idaccount { get; set; } = 15;
         public virtual ICollection<OrderDetail> pedidosItems { get; set; } = new List<OrderDetail>() ;
     }
 }

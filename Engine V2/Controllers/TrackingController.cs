@@ -147,7 +147,7 @@ namespace Engine_V2.Controllers
                 return Ok(reply);
             }
 
-        }
+        } 
         [HttpPost]
         [Route("TrackingPersonalByCampaign")]
         public async Task<IActionResult> TrackingPersonalByCampaign([FromBody] GetTrackingViewModel _request)

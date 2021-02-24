@@ -26,6 +26,7 @@ namespace Chariot.Engine.DataObject.MardisOrders
         public Nullable<decimal> gpsX { get; set; }
         public Nullable<decimal> gpsY { get; set; }
         public string p_PEDIDO_MARDIS { get; set; }
+        public int? Idaccount { get; set; }
         public virtual ICollection<OrderDetail> pedidosItems { get; set; }
     }
 }

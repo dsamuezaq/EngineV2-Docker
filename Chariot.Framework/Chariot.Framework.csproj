@@ -253,6 +253,7 @@
     <Compile Include="Helpers\WebSocketHandler.cs" />
     <Compile Include="MardisClientRestModel\GetCoberturaCarteraViewModel.cs" />
     <Compile Include="MardisClientRestModel\GetCoberturaClienteCupo.cs" />
+    <Compile Include="MardisClientRestModel\GetCoberturaFacturaDevolucion.cs" />
     <Compile Include="MardisClientRestModel\GetCoberturaFacturaRutaViewModel.cs" />
     <Compile Include="MardisClientRestModel\GetCoberturaProductoViewModel.cs" />
     <Compile Include="MardisClientRestModel\PostCoberturaClienteGuardarViewModel.cs" />
@@ -289,6 +290,9 @@
     <Compile Include="MardisOrdersViewModel\InventaryViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\InvoiceViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\Invoice_detailViewModel.cs" />
+    <Compile Include="MardisOrdersViewModel\Modelo_DetalleDevolucion.cs" />
+    <Compile Include="MardisOrdersViewModel\Model_DellateFactura.cs" />
+    <Compile Include="MardisOrdersViewModel\Model_FacturaHistorica.cs" />
     <Compile Include="MardisOrdersViewModel\OrderDetailViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\OrdersViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\ExcelProductViewModelReply.cs" />

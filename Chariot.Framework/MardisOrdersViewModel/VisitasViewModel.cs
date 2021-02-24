@@ -18,5 +18,7 @@ namespace Chariot.Framework.MardisOrdersViewModel
         public string Compro { get; set; }
         public string Observacion { get; set; }
         public string estado { get; set; }
+
+        public int? idaccount { get; set; } = 15;
     }
 }

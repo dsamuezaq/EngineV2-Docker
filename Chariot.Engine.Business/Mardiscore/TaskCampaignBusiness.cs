@@ -62,7 +62,7 @@ namespace Chariot.Engine.Business.Mardiscore
                 {
                     Id = x.Id,
                     IdAccount = x.IdAccount,
-                    ExternalCode = x.Code,
+                    ExternalCode = x.ExternalCode,
                     Code = x.Code,
                     Name = x.Name,
                     MainStreet = x.MainStreet,
@@ -88,7 +88,7 @@ namespace Chariot.Engine.Business.Mardiscore
                     //  FechaVisita = x.FechaVisita,
                     //Link = x.Ext_image,
                     //Isclient = x.Isclient,
-                    Propietarioape = x.PersonOwner.SurName,
+                    Propietarioape = x.PersonOwner.Name  ,
                     //correo = x.PersonOwner.mail,
 
 
@@ -569,7 +569,7 @@ namespace Chariot.Engine.Business.Mardiscore
 
             }
             BranchModel.PersonOwner.StatusRegister = "A";
-            BranchModel.StatusRegister = "A";
+            BranchModel.StatusRegister = "D";
             BranchModel.ESTADOAGGREGATE = "S";
             BranchModel.state_period = "S";
 
@@ -578,7 +578,7 @@ namespace Chariot.Engine.Business.Mardiscore
             BranchModel.Name = item.local;
             BranchModel.MainStreet = item.Dirección;
             BranchModel.Reference = item.Referencia;
-            BranchModel.PersonOwner.Name = item.Nombres;
+            BranchModel.PersonOwner.Name = item.Nombres + " "+ item.Apellidos;
             BranchModel.PersonOwner.SurName = item.Apellidos;
             BranchModel.PersonOwner.mail = item.Mail;
             BranchModel.PersonOwner.Document = item.Cédula;
@@ -635,17 +635,22 @@ namespace Chariot.Engine.Business.Mardiscore
                         nU_CODIGO_VEND = Int64.Parse(resp.Cluster)
                     });
                     var json = JsonConvert.SerializeObject(Post);
-                    var EstadoRespuestaCrearClienteIM = Task.Factory.StartNew(() =>
+                    var EstadoRespuestaCrearClienteIM =  Task.Factory.StartNew(() =>
                     {
                         return _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
                     });
 
-                    EstadoRespuestaCrearClienteIM.Wait();
-                    // _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
-                    reply.status = "Ok";
-                    reply.messege = "Local Guardado";
-                    reply.data = resp.Id;
-                    return reply;
+                    var respuesta = EstadoRespuestaCrearClienteIM.Result.Result;
+
+                    if (respuesta)
+                    {
+                        _routeDao.ActivarLocalesGuardadoIndustrial(resp.Id);
+                        reply.status = "Ok";
+                        reply.messege = "Local Guardado";
+                        reply.data = resp.Id;
+                        return reply;
+                    }
+
                 }
                 catch (Exception e)
                 {

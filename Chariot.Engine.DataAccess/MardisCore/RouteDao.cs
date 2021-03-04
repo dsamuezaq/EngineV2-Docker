@@ -412,6 +412,37 @@ namespace Chariot.Engine.DataAccess.MardisCore
             }
 
         }
+
+        public bool ActivarLocalesGuardadoIndustrial(int id)
+        {
+
+            try
+            {
+                var LocalSesion = Context.Branches.Where(x => x.Id == id);
+                if (LocalSesion.Count()>0)
+                {
+                    var local = LocalSesion.FirstOrDefault();
+                    local.ExternalCode = id.ToString();
+                    local.StatusRegister = "A";
+                    Context.Branches.Update(local);
+                    Context.SaveChanges();
+
+                }
+
+
+                return true;
+            }
+            catch (Exception e)
+            {
+
+                return false;
+            }
+
+
+
+
+        }
+
         public bool AddRouteImei(string document, string rout, int idAccount)
         {
 

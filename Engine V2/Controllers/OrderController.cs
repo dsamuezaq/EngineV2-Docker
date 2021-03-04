@@ -347,6 +347,17 @@ namespace Engine_V2.Controllers
 
             return Ok(await _ordersBusiness.ObtenerDatosDeCarteraXCliente(idclient, idaccount));
         }
+        [HttpPost]
+        [Route("ObtenerCarteraXClienteTotal")]
+        //  [Authorize]
+        public async Task<IActionResult> ObtenerCarteraXClienteTotal(int camion, int idaccount)
+        {
+
+
+            return Ok(await _ordersBusiness.ObtenerDatosDeCarteraXClienteTotal(camion, idaccount));
+        }
+
+        
 
         [Route("Invoicecustomer")]
        // [Authorize]
@@ -365,6 +376,16 @@ namespace Engine_V2.Controllers
 
             return Ok(await _ordersBusiness.GetInvoicXFact(Fact, idaccount));
         }
+        [Route("InvoicecustomerXFactTotal")]
+        // [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> InvoicecustomerXFactTotal(int camion, int idaccount)
+        {
+
+
+            return Ok(await _ordersBusiness.GetInvoicXFactTOTAL(camion, idaccount));
+        }
+        
         [HttpPost]
         [Route("Invoicetruck")]
       ///  [Authorize]
@@ -383,6 +404,16 @@ namespace Engine_V2.Controllers
 
             return Ok(await _ordersBusiness.BSSActualizarEstadoEntregaFacturaXFumero(NumeroFactura, CodigoLocal, cO_observacion, cO_estado,  lat,  lon));
         }
+        [HttpPost]
+        [Route("POSTActualizarEstadoEntregaFacturaXFumerotest")]
+        //  [Authorize]
+        public async Task<IActionResult> POSTActualizarEstadoEntregaFacturaXFumerotest(int NumeroFactura, String CodigoLocal, string cO_observacion, string cO_estado, double lat, double lon)
+        {
+
+            return Ok(await _ordersBusiness.BSSActualizarEstadoEntregaFacturaXFumeroTest(NumeroFactura, CodigoLocal, cO_observacion, cO_estado, lat, lon));
+        }
+
+        
 
         [HttpPost]
         [Route("POSTCrearPagoCarteraXFactura")]

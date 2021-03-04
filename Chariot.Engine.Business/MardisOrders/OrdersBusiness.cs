@@ -481,7 +481,7 @@ namespace Chariot.Engine.Business.MardisOrders
                     List<PostDevolucionFactura> Post = new List<PostDevolucionFactura>();
                     Post = DevolucionFacturas.Select(x => new PostDevolucionFactura
                     {
-                        d_DEVOLUCION = x.Id + 1000,
+                        d_DEVOLUCION = x.Id + 2000,
                         d_ORDEN = x.d_ORDEN,
                         d_FECHA = x.d_FECHA,
                         d_FACTURA = x.d_FACTURA,
@@ -903,6 +903,72 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
+
+
+
+        public async Task<ReplyViewModel> ObtenerDatosDeCarteraXClienteTotal(int camion, int idaccount)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+
+                var CarteraCob = Task.Factory.StartNew(() => {
+                    return _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
+                });
+
+                var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtenerxcamion?codigo=" + camion);
+
+                var ListaDeCodigoCliente = _FacturaEntrega.Select(x => x.codigocliente).Distinct().ToList();
+                //    var  FacturasActivas = _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
+
+
+
+
+                CarteraCob.Wait();
+                var _Cartera = CarteraCob.Result.Result.Where(x=> ListaDeCodigoCliente.Contains(x.codcli)).ToList();
+
+                List<FacturaDeuda> _FacturaDeudas = new List<FacturaDeuda>();
+
+                //    List<int> NumeroDeFaturasEntregadas = _ordersDao.SelectEntity<FacturasEntregadas>().Select(s => s.cO_FACTURA).ToList();
+
+                foreach (var FacturaConDeuda in _Cartera)
+                {
+                    FacturaDeuda _FacturaDeuda = new FacturaDeuda();
+                    var valorespagadosPordia = _ordersDao.ConsultarDatosDePagosCarteraXfactura(FacturaConDeuda.nrodocumento);
+                    var valor = valorespagadosPordia != null ? valorespagadosPordia.FirstOrDefault().valor : 0;
+                    _FacturaDeuda.codigoCliente = FacturaConDeuda.codcli;
+                    _FacturaDeuda.numeroFactura = FacturaConDeuda.nrodocumento;
+
+                    _FacturaDeuda.total = FacturaConDeuda.valor - valor;
+                    
+                    var ExisteFactura = _FacturaEntrega.Where(x => x.factura == FacturaConDeuda.nrodocumento);
+
+                    _FacturaDeuda.EstadoFactura = ExisteFactura.Count() > 0 ? "POR ENTREGAR" : "POR COBRAR";
+                    _FacturaDeuda.Fecha = DateTime.ParseExact(FacturaConDeuda.f_FACTURA.ToString(),
+                                                       "yyyyMMdd",
+                                                       CultureInfo.InvariantCulture,
+                                                       DateTimeStyles.None);
+                    _FacturaDeuda.codigoVendedor = FacturaConDeuda.codvendedor.ToString();
+                    _FacturaDeudas.Add(_FacturaDeuda);
+                }
+
+                reply.messege = "Consulta exito api Externa e info factura Mardis";
+                reply.status = "Ok";
+                reply.data = _FacturaDeudas.OrderByDescending(x => x.Fecha);
+
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No existen datos  en la tabla";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+        }
         public async Task<ReplyViewModel> GetInvoice(int iddevice, int idaccount)
         {
             ReplyViewModel reply = new ReplyViewModel();
@@ -1054,19 +1120,33 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
-
-        public async Task<ReplyViewModel> ObtenerInformacionHistoricaFactura(int Fact, int idaccount)
+        public async Task<ReplyViewModel> GetInvoicXFactTOTAL(int camion, int idaccount)
         {
             ReplyViewModel reply = new ReplyViewModel();
             try
             {
 
-                var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtenerxfactura?factura=" + Fact.ToString());
-                var CoberturaDevolucion = Task.Factory.StartNew(() => {
-                    return _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaDevolucion>("CoberturaFacturaDevolucion/obtenerxfactura?factura=" + Fact.ToString());
+
+                var CarteraCob = Task.Factory.StartNew(() => {
+                    return _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
                 });
-                var Listfact = _FacturaEntrega.Where(x => x.factura == Fact).Select(x => x.factura).Distinct().ToList();
-                List<Model_FacturaHistorica> _InvoiceViewModel = new List<Model_FacturaHistorica>();
+
+                var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtenerxcamion?codigo=" + camion);
+
+                var ListaDeCodigoCliente = _FacturaEntrega.Select(x => x.codigocliente).Distinct().ToList();
+                //    var  FacturasActivas = _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
+
+
+
+
+                CarteraCob.Wait();
+                var _Cartera = CarteraCob.Result.Result.Where(x => ListaDeCodigoCliente.Contains(x.codcli)).ToList();
+
+
+
+
+                var Listfact = _FacturaEntrega.Where(x => ListaDeCodigoCliente.Contains(x.codigocliente)).Select(x => x.factura).Distinct().ToList();
+                List<InvoiceViewModel> _InvoiceViewModel = new List<InvoiceViewModel>();
 
                 List<int> NumeroDeFaturasEntregadas = _ordersDao.SelectEntity<FacturasEntregadas>().Select(s => s.cO_FACTURA).ToList();
 
@@ -1075,13 +1155,90 @@ namespace Chariot.Engine.Business.MardisOrders
 
                     if (!NumeroDeFaturasEntregadas.Contains(item))
                     {
+                        InvoiceViewModel data = new InvoiceViewModel();
+
+                        data = _FacturaEntrega.Where(x => x.factura == item)
+                                .GroupBy(l => l.factura)
+                                .Select(x => new InvoiceViewModel
+                                {
+                                    factura = x.Key,
+                                    fecha = x.First().fecha,
+                                    total = Math.Round(CalculoFacturasXpago(Math.Round((Double)x.Sum(pc => pc.total), 2), x.Key), 2),
+                                    codvend = x.First().codvend,
+                                    nombrevend = x.First().nombrevend
+
+                                }).FirstOrDefault();
+
+                        var itemFactura = _FacturaEntrega.Where(x => x.factura == item)
+                                .GroupBy(l => l.codigoprod)
+                                .Select(x => new ProductoFacturaViewModel
+                                {
+                                    factura = item,
+                                    codigoprod = x.First().codigoprod,
+                                    cantidad = x.Sum(pc => pc.cantidad),
+                                    nombreprod = x.First().nombreprod,
+                                    precio = x.Max(m => m.precio),
+                                    iva = x.Max(m => m.iva)
+
+                                }).ToList();
+                        data.Invoice_details = itemFactura.Where(x => x.factura == item).Select(x => new Invoice_detailViewModel
+                        {
+                            cantidad = DisminuirInventario(x.cantidad, item, x.codigoprod),
+                            codigoprod = x.codigoprod,
+                            nombreprod = x.nombreprod,
+                            precio = x.precio,
+                            iva = x.iva
+
+                        }).ToList();
+
+                        _InvoiceViewModel.Add(data);
+                    }
+
+                }
+
+                reply.messege = "Consulta exito api Externa e info factura Mardis";
+                reply.status = "Ok";
+                reply.data = _InvoiceViewModel;
+
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No existen datos  en la tabla";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+        }
+        public async Task<ReplyViewModel> ObtenerInformacionHistoricaFactura(int Fact, int idaccount)
+        {
+             ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+                var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFactura/obtenerxfactura?factura=" + Fact.ToString());
+                var CoberturaDevolucion = Task.Factory.StartNew(() => {
+                    return _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaDevolucion>("CoberturaFacturaDevolucion/obtenerxfactura?factura=" + Fact.ToString());
+                });
+
+             
+                var Listfact = _FacturaEntrega.Where(x => x.factura == Fact).Select(x => x.factura).Distinct().ToList();
+                List<Model_FacturaHistorica> _InvoiceViewModel = new List<Model_FacturaHistorica>();
+
+            //    List<int> NumeroDeFaturasEntregadas = _ordersDao.SelectEntity<FacturasEntregadas>().Select(s => s.cO_FACTURA).ToList();
+
+                foreach (var item in Listfact)
+                {
+
                         Model_FacturaHistorica data = new Model_FacturaHistorica();
                         data.NumeroFactura = item;
                         var totalFactura = _FacturaEntrega.Where(x => x.factura == item)
                                 .GroupBy(l => l.factura)
                                 .Select(x => 
                                 
-                                  Math.Round(CalculoFacturasXpago(Math.Round((Double)x.Sum(pc => pc.total), 2), x.Key), 2)
+                                 Math.Round((Double)x.Sum(pc => pc.total),2)
 
                                 ).FirstOrDefault();
                         data.TotalFactura = totalFactura;
@@ -1128,7 +1285,7 @@ namespace Chariot.Engine.Business.MardisOrders
                      
 
                         _InvoiceViewModel.Add(data);
-                    }
+                    
 
                 }
 
@@ -1141,7 +1298,7 @@ namespace Chariot.Engine.Business.MardisOrders
             catch (Exception e)
             {
 
-                reply.messege = "No existen datos  en la tabla";
+                                reply.messege = "No existen datos  en la tabla";
                 reply.status = "Fail";
                 reply.error = e.Message;
                 return reply;
@@ -1280,6 +1437,43 @@ namespace Chariot.Engine.Business.MardisOrders
                 RespuestaActualizacionEstadoFacturaExter.Wait();
 
                 if (RespuestaActualizacionEstadoFactura && RespuestaActualizacionEstadoFacturaExter.Result.Result)
+                {
+                    reply.messege = "Actualizo el estado ";
+                    reply.status = "Ok";
+
+                }
+                else
+                {
+                    reply.messege = "Existio un inconveniente Error";
+                    reply.status = "Fail";
+                }
+
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No se pudo guardar la información";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+        }
+
+        public async Task<ReplyViewModel> BSSActualizarEstadoEntregaFacturaXFumeroTest(int NumeroFactura, String CodigoLocal, string cO_observacion, string cO_estado, double lat, double lon)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+                List<PostEstadoFactura> postEstadoFacturas = new List<PostEstadoFactura>();
+        
+
+                bool RespuestaActualizacionEstadoFactura = _ordersDao.GuardarfacturaEntregadas(CodigoLocal, NumeroFactura, cO_observacion, cO_estado, lat, lon);
+             
+
+                if (RespuestaActualizacionEstadoFactura )
                 {
                     reply.messege = "Actualizo el estado ";
                     reply.status = "Ok";

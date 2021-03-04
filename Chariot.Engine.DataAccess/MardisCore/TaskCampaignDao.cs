@@ -75,6 +75,8 @@ namespace Chariot.Engine.DataAccess.MardisCore
                             join pv in Context.Provinces on b.IdProvince equals pv.Id
                             join ds in Context.Districts on b.IdDistrict equals ds.Id
                             where b.IdAccount == idAccount && b.IMEI_ID.Contains(Imeid) && b.ESTADOAGGREGATE=="S"
+                                  && b.StatusRegister==CStatusRegister.Active
+
                             select new Branch
                             {
                                 Code = b.Code,

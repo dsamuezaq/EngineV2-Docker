@@ -47,6 +47,12 @@ namespace Engine_V2.Controllers
             return Ok(_redisBusiness.DataBankBONOBGVue());
         }
         [HttpPost]
+        [Route("GetFrigo")]
+        public async Task<IActionResult> GetFrigo()
+        {
+            return Ok(_redisBusiness.DataFrigo());
+        }
+        [HttpPost]
         [Route("GetServiceType")]
         public async Task<IActionResult> GetServiceType(string type)
         {

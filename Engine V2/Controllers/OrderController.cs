@@ -441,6 +441,15 @@ namespace Engine_V2.Controllers
 
                  return Ok(await _ordersBusiness.ObtenerInformacionHistoricaFactura(Fact, idaccount));
         }
+
+        [HttpPost]
+        [Route("ObtenerInformacionHistoricaFacturaTotal")]
+        //  [Authorize]
+        public async Task<IActionResult> ObtenerInformacionHistoricaFacturaTotal(List<int> Fact, int idaccount)
+        {
+
+            return Ok(await _ordersBusiness.ObtenerInformacionHistoricaFacturaTotal(Fact, idaccount));
+        }
         #endregion
         #endregion
     }

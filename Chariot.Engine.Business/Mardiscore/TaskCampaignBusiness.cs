@@ -89,6 +89,8 @@ namespace Chariot.Engine.Business.Mardiscore
                     //Link = x.Ext_image,
                     //Isclient = x.Isclient,
                     Propietarioape = x.PersonOwner.Name  ,
+                    ZonaPeliograsa=x.Zone,
+                    ActualizoGeo=x.geoupdate
                     //correo = x.PersonOwner.mail,
 
 
@@ -127,6 +129,15 @@ namespace Chariot.Engine.Business.Mardiscore
             return "No registra Informacion";
         }
 
+
+        public string ActualizaGeo(string lat, string lon, int idbranch) {
+
+
+
+
+
+            return _taskCampaignDao.GuardarGeos(idbranch, lat, lon);
+        }
         private string CupoClienteActual(string cliente)
         {
             cliente = "28257";

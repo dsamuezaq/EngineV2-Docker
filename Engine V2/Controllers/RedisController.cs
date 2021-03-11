@@ -53,6 +53,12 @@ namespace Engine_V2.Controllers
             return Ok(_redisBusiness.DataFrigo());
         }
         [HttpPost]
+        [Route("GetSurti")]
+        public async Task<IActionResult> GetSurti()
+        {
+            return Ok(_redisBusiness.DataSurti());
+        }
+        [HttpPost]
         [Route("GetServiceType")]
         public async Task<IActionResult> GetServiceType(string type)
         {

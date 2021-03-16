@@ -112,7 +112,8 @@ namespace Chariot.Engine.DataAccess.MardisCore
                                 CommentBranch = b.CommentBranch,
                                 PersonOwner = p,
                                 Province = pv,
-                                District = ds
+                                District = ds,
+                                geoupdate=b.geoupdate
 
                             
                             };
@@ -149,6 +150,27 @@ namespace Chariot.Engine.DataAccess.MardisCore
                            where c.Id == IdP
                            select c;
             return consulta.ToList().First();
+        }
+        public string GuardarGeos(int Idbranch, string lat, string lon)
+        {
+            try
+            {
+                var consulta = Context.Branches.Where(x => x.Id == Idbranch).FirstOrDefault();
+                consulta.LatitudeBranch = lat;
+                consulta.LenghtBranch = lon;
+                consulta.geoupdate = 1;
+                Context.Update(consulta);
+                Context.SaveChanges();
+                return "Exitoso";
+            }
+            catch (Exception e)
+            {
+
+                return "Error";
+            }
+       
+               
+         
         }
 
         public List<Pollster> GetPollsterListRoute(int idaccount , IList<string> imeis)

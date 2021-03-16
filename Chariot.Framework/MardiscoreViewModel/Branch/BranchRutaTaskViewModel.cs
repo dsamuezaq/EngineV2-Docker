@@ -27,6 +27,8 @@ namespace Chariot.Framework.MardiscoreViewModel.Branch
         public string Celular { get; set; }
         public string TypeBusiness { get; set; }
         public string Cedula { get; set; }
+        public string ZonaPeliograsa { get; set; }
+        public int? ActualizoGeo { get; set; }
         public string ESTADOAGGREGATE { get; set; }
         public string comment { get; set; }
         public List<int> actividad { get; set; }

@@ -72,6 +72,8 @@ namespace Chariot.Engine.DataObject.MardisCore
 
         public string Cluster { get; set; }
         public string state_period { get; set; }
+        public int? geoupdate { get; set; }
+        
 
         //public string Ext_image { get; set; }
 

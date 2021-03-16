@@ -45,11 +45,20 @@ namespace Engine_V2.Controllers
         #region APIs
         [HttpGet]
         [Route("RouteBranch")]
-        public async Task<IActionResult> Get( int idaccount , string iddevice)
+        public async Task<IActionResult> Get(int idaccount, string iddevice)
         {
-         
-            return Ok(_taskCampaignBusiness.GetBranches(idaccount,iddevice));
+
+            return Ok(_taskCampaignBusiness.GetBranches(idaccount, iddevice));
         }
+
+        [HttpPost]
+        [Route("ActualizarGeoLocal")]
+        public async Task<IActionResult> Get(int idbranch, string lat,string lon)
+        {
+
+            return Ok(_taskCampaignBusiness.ActualizaGeo(lat, lon, idbranch));
+        }
+
         [HttpGet]
         [Route("Campaign")]
         public async Task<IActionResult> Campaign(int idaccounte)

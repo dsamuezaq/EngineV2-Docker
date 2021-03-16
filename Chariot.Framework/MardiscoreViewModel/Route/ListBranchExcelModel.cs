@@ -34,6 +34,7 @@ namespace Chariot.Framework.MardiscoreViewModel.Route
         public string Estado { get; set; }
         public string RUTA { get; set; }
         public string IMEI { get; set; }
+        public string Zona_Peligrosa { get; set; }
 
         public String Fecha { get; set; }
         public String Errores { get; set; }

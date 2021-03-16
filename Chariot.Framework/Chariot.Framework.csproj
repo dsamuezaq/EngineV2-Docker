@@ -246,8 +246,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CampaingViewModels\FactNutriMasiveModel.cs" />
+    <Compile Include="CampaingViewModels\FactNutriViewModel.cs" />
     <Compile Include="Helpers\AppSettings.cs" />
     <Compile Include="Helpers\AzureStorageUtil.cs" />
+    <Compile Include="Helpers\JSonConvertUtil.cs" />
     <Compile Include="Helpers\Mappers.cs" />
     <Compile Include="Helpers\NotificationsMessageHandler.cs" />
     <Compile Include="Helpers\WebSocketHandler.cs" />
@@ -262,6 +265,7 @@
     <Compile Include="MardiscoreViewModel\BranchesModelReply.cs" />
     <Compile Include="MardiscoreViewModel\Branch\BranchRutaTaskViewModel.cs" />
     <Compile Include="MardiscoreViewModel\CampaignModelReply.cs" />
+    <Compile Include="MardiscoreViewModel\Route\GetFacturaViewModel.cs" />
     <Compile Include="MardiscoreViewModel\UpdatePollsterSupervisor.cs" />
     <Compile Include="MardiscoreViewModel\PollsterSupervisor.cs" />
     <Compile Include="MardiscoreViewModel\GetBranchViewModel.cs" />
@@ -319,6 +323,7 @@
     <Compile Include="SystemViewModel\ReplyViewModel.cs" />
     <Compile Include="SystemViewModel\ReplyViewModelPollsters.cs" />
     <Compile Include="SystemViewModel\RequestViewModel.cs" />
+    <Compile Include="TaskViewModel\TaskMigrateResultViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -5,6 +5,7 @@ using Chariot.Engine.DataObject;
 using Chariot.Engine.DataObject.MardisCommon;
 using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Engine.DataObject.MardisOrders;
+using Chariot.Framework.CampaingViewModels;
 using Chariot.Framework.Complement;
 using Chariot.Framework.MardisClientRestModel;
 using Chariot.Framework.MardiscoreViewModel;
@@ -17,11 +18,12 @@ using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Xml;
 
 namespace Chariot.Engine.Business.Mardiscore
 {
@@ -191,6 +193,87 @@ namespace Chariot.Engine.Business.Mardiscore
             }
          
          
+        }
+
+        public IList<FactNutriViewModel> GetListFactLoad(string fileBrachMassive)
+        {
+            try
+            {
+                IList<FactNutriViewModel> arreglo = new List<FactNutriViewModel>();
+                ////autorizacion-->estado
+                ///autorizacion-->fecha
+                ///autorizacion-->comprobante
+                //////autorizacion-->comprobante-->infotrubutaria
+                ///mas o menos asies
+                XmlDocument doc = new XmlDocument();
+                XmlDocument doc1 = new XmlDocument();
+
+                //Creacion texto en memoria
+                StringBuilder constructor = new StringBuilder();
+                constructor.AppendLine(fileBrachMassive);
+
+                //Persistencia
+                string pathTxt = "C://xmls//xml_ejemplo.xml";
+                File.WriteAllText(pathTxt, constructor.ToString());
+
+                doc.Load("C://xmls//xml_ejemplo.xml");//Leer el XML
+                var cultureInfo = new CultureInfo("en-US");
+                XmlNode node = doc.DocumentElement.SelectSingleNode(@"/autorizacion/comprobante");
+                XmlNode childNode = node.ChildNodes[0];
+
+                if (childNode is XmlCDataSection)
+                {
+
+                    XmlCDataSection cdataSection = childNode as XmlCDataSection;
+                    doc1.LoadXml(cdataSection.Data);
+
+                    XmlNode xcabecera = doc1.DocumentElement.SelectSingleNode(@"/factura/infoFactura");
+                    var date = xcabecera.ChildNodes[0].InnerText;
+
+                    var datfact = DateTime.UtcNow;
+
+                    XmlNode xcabeceraFact = doc1.DocumentElement.SelectSingleNode(@"/factura/infoTributaria");
+                    var numfact = xcabeceraFact.ChildNodes[9].InnerText;
+                    var razSocial = xcabecera.ChildNodes[5].InnerText;
+                    var ruc = xcabecera.ChildNodes[6].InnerText;
+
+                    XmlNodeList xPersonas1 = doc1.GetElementsByTagName("detalle");
+
+
+                    foreach (XmlNode item in xPersonas1)
+                    {
+                        FactNutriViewModel fact = new FactNutriViewModel();
+                        fact.ruc = ruc;
+                        fact.razonsocial = razSocial;
+                        fact.numFact = numfact;
+                        fact.dateFact = datfact;
+                        fact.bardcode = item.ChildNodes[1].InnerText;
+
+
+                        fact.code = item.ChildNodes[0].InnerText;
+                        if (item.ChildNodes[2].Name == "cantidad")
+                        {
+
+                            fact.cant = float.Parse(item.ChildNodes[2].InnerText.Replace(".000000", ""));
+                        }
+
+                        if (item.ChildNodes[3].Name == "cantidad")
+                        {
+                            fact.cant = float.Parse(item.ChildNodes[3].InnerText.Replace(".000000", ""));
+
+                        }
+
+                        arreglo.Add(fact);
+                    }
+                }
+                return arreglo;
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+
         }
 
         public object GetPollster(int Idaccount)
@@ -503,6 +586,68 @@ namespace Chariot.Engine.Business.Mardiscore
 
 
         }
+
+        //public string DataFactXml(List<FactNutriViewModel> query1, Guid idAccount, string iduser, string option, string campaign, string status)
+        //{
+        //    var error = "";
+        //    try
+        //    {
+        //        product_entry product_entry_model = new product_entry();
+
+        //        string ruc = query1.Select(x => x.ruc).FirstOrDefault();
+
+        //        var users = _branchMigrateDao.UsersRuc(ruc);
+        //        foreach (var item in query1)
+        //        {
+        //            int _idproduct = _branchMigrateDao.ExistProductNutri(item.code);
+
+        //            if (_idproduct > 0)
+        //            {
+
+        //                product_entry_model.Idproduct = _idproduct;
+        //                product_entry_model.invoice_date = item.dateFact;
+        //                product_entry_model.invoice_number = item.numFact;
+        //                product_entry_model.quantity = item.cant;
+        //                product_entry_model.boxes = item.cajas;
+        //                product_entry_model.units_box = item.unidadxcajas;
+        //                product_entry_model.creation_date = DateTime.Now;
+        //            }
+        //            else
+        //            {
+        //                error = "El producto no se encuentra registrado en el maestro";
+        //                return error;
+        //            }
+
+        //            _branchMigrateDao.SaveProductNutriMigrate(product_entry_model, idAccount, users.First(), option, campaign, status);
+
+        //        }
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        var ex = e.Message.ToString();
+
+        //        int ne = -1;
+
+        //        switch (ex)
+        //        {
+        //            case "Error al consultar ubicacion":
+        //                return "La informacion de Provicia o Cuidad o Parrioquia no existe en la Base de datos. Consulte los Catologos";
+
+        //            case "Error al consultar Parroquias":
+        //                ne = 3;
+        //                break;
+        //            case "Error al consultar Sectores":
+        //                ne = 4;
+        //                break;
+
+        //        }
+        //        throw;
+        //    }
+        //    return error == "" ? "" : error;
+        //}
+
+
         public object GuardarlocalesNuevoAbaseLocalYexterna(GetListbranchViewModel _respose)
         {
 
@@ -672,6 +817,7 @@ namespace Chariot.Engine.Business.Mardiscore
         }
 
         #region funciones
+
         string ValidoCodigo(string code, int Idaccount, Guid Iddistrict, int fil)
         {
 

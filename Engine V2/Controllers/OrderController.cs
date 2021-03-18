@@ -251,6 +251,17 @@ namespace Engine_V2.Controllers
 
             return Ok(_ordersBusiness.UpdataProduct(idproduct));
         }
+
+
+        [HttpPost]
+        [Route("ActiveProduct")]
+        [Authorize]
+        public async Task<IActionResult> ActiveProduct(int idproduct)
+        {
+
+
+            return Ok(_ordersBusiness.UpdataActiveProduct(idproduct));
+        }
         [HttpPost]
         [Route("PrintErrorProduct")]
         [Authorize]

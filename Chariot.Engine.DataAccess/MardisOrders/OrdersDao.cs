@@ -114,7 +114,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
         {
             try
             {
-                var _data = Context.ProductOrders.Where(x => x.Idaccount == account && x.StatusRegister==CStatusRegister.Active);
+                var _data = Context.ProductOrders.Where(x => x.Idaccount == account && x.StatusRegister!=CStatusRegister.Repetido);
 
                 return _data.Count() > 0 ? _data.ToList() : null;
             }
@@ -136,6 +136,29 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
                     var _table = _data.First();
                     _table.StatusRegister = CStatusRegister.Delete;
+                    return InsertUpdateOrDelete(_table, "U");
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return false;
+            }
+
+        }
+        public bool ActiveProductById(int Id)
+        {
+            try
+            {
+                var _data = Context.ProductOrders.Where(x => x.Id == Id);
+                if (_data.Count() > 0)
+                {
+
+                    var _table = _data.First();
+                    _table.StatusRegister = CStatusRegister.Active;
                     return InsertUpdateOrDelete(_table, "U");
                 }
 
@@ -365,7 +388,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
         }
 
-        public Boolean GuardarfacturaEntregadas(String CodigoLocal, int NumeroFactura, string cO_observacion, string cO_estado ,double lat, double lon)
+        public Boolean GuardarfacturaEntregadas(String CodigoLocal, int NumeroFactura, string cO_observacion, string cO_estado ,double lat, double lon,int enviado)
         {
 
             try
@@ -377,6 +400,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                 _DatoDeFacturaEntregada.cO_estado = cO_estado;
                 _DatoDeFacturaEntregada.LAT = lat;
                 _DatoDeFacturaEntregada.LON = lon;
+                _DatoDeFacturaEntregada.Enviado = enviado;
                 Context.FacturasEntregadas.Add(_DatoDeFacturaEntregada);
                 Context.SaveChanges();
 

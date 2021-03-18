@@ -315,9 +315,10 @@ namespace Chariot.Engine.Business.MardisOrders
                     Cantidad = x.Precio2,
                     Exento = x.Exento == 1 ? "Si" : "No",
                     Impuesto_interno = x.ImpuestosInternos.ToString() == "1" ? "Si" : "No",
-                    IVA = x.Iva.ToString() == "1" ? "Si" : "No",
+                    IVA = x.Iva.ToString() == "1.12" ? "Si" : "No",
                     Precio = x.Precio1,
-                    Sku = x.Descripcion
+                    Sku = x.Descripcion,
+                    Estado = x.StatusRegister==CStatusRegister.Active? "ACTIVO":"INACTIVO"
 
                 });
 
@@ -410,9 +411,9 @@ namespace Chariot.Engine.Business.MardisOrders
                 _table.Descripcion = _response.product.Sku;
                 _table.StatusRegister = CStatusRegister.Active;
                 _table.IdRubro = "1";
-                _table.Iva = _response.product.IVA == "si" ? 1 : 0;
+                _table.Iva = (decimal)(_response.product.IVA == "Si" ? 1.12 : 1.0);
                 _table.ImpuestosInternos = _response.product.Impuesto_interno == "si" ? 1 : 0;
-                _table.Exento = _response.product.Exento == "si" ? 1 : 0;
+                _table.Exento = _response.product.Exento == "Si" ? 1 : 0;
 
                 _table.Precio1 = _response.product.Precio;
 
@@ -442,6 +443,32 @@ namespace Chariot.Engine.Business.MardisOrders
                 reply.messege = "Los datos fueron guardados correctamente";
                 reply.status = "Ok";
                 if (!_ordersDao.InactiveProductById(Idproduct))
+                {
+                    reply.messege = "No se pudo guardar la información";
+                    reply.status = "Fail";
+                    reply.error = "No se pudo guardar la información";
+                }
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No se pudo guardar la información";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+        }
+        public ReplyViewModel UpdataActiveProduct(int Idproduct)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+                reply.messege = "Los datos fueron guardados correctamente";
+                reply.status = "Ok";
+                if (!_ordersDao.ActiveProductById(Idproduct))
                 {
                     reply.messege = "No se pudo guardar la información";
                     reply.status = "Fail";
@@ -777,13 +804,19 @@ namespace Chariot.Engine.Business.MardisOrders
 
 
                 var _RouteUser = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtenerxcamion?codigo=" + idcamion);
-               // var _RouteUser = _FacturaEntrega.Where(x => x.camion.ToString() == idcamion);
-
+                // var _RouteUser = _FacturaEntrega.Where(x => x.camion.ToString() == idcamion);
+                var ClienteCartera = await _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtenerxcamion?codigo=0" + idcamion);
                 List<int> NumeroDeFaturasEntregadas = _ordersDao.SelectEntity<FacturasEntregadas>().Select(s => s.cO_FACTURA).ToList();
+                var facturasCliente = from f in _RouteUser
 
-                var clienteRoute = from f in _RouteUser
+                               select  f.codigocliente.ToString();
+                var clienteRoute =( from f in _RouteUser
+                                  
+                                   select f.codigocliente.ToString())
+                                   .Union(from f in ClienteCartera
 
-                                   select f.codigocliente.ToString();
+                                          select f.codcli.ToString())
+                                   ;
 
                 var clienteRouteInCompleto = from f in _RouteUser
                                              where !NumeroDeFaturasEntregadas.Contains(f.factura)
@@ -801,10 +834,10 @@ namespace Chariot.Engine.Business.MardisOrders
                     detailBranch.AsParallel()
                             .ForAll(
                                     s => {
-                                        s.camion = _RouteUser.Where(x => x.codigocliente.ToString() == s.Code).Select(x => x.camion).FirstOrDefault();
-                                        s.factura = _RouteUser.Where(x => x.codigocliente.ToString() == s.Code).Select(x => x.factura).FirstOrDefault();
+                                        s.camion = int.Parse(idcamion);
+                                        s.factura = facturaNumero(_RouteUser, ClienteCartera, s.Code);
                                        
-                                        s.estado = clienteRouteInCompleto.Contains(s.Code) ? "P" : "C";
+                                        s.estado =  facturasCliente.Contains(s.Code)?( clienteRouteInCompleto.Contains(s.Code) ? "P": "C"): "B";
 
                                     }
                             );
@@ -815,9 +848,9 @@ namespace Chariot.Engine.Business.MardisOrders
                     detailBranch.AsParallel()
                             .ForAll(
                                     s => {
-                                        s.camion = _RouteUser.Where(x => x.codigocliente.ToString() == s.Code).Select(x => x.camion).FirstOrDefault();
-                                        s.factura = _RouteUser.Where(x => x.codigocliente.ToString() == s.Code).Select(x => x.factura).FirstOrDefault();
-                         
+                                        s.camion = int.Parse(idcamion); ;
+                                        s.factura = facturaNumero(_RouteUser, ClienteCartera, s.Code);
+
 
                                     }
                             );
@@ -839,6 +872,20 @@ namespace Chariot.Engine.Business.MardisOrders
                 return reply;
             }
 
+        }
+        private int facturaNumero(List<GetCoberturaFacturaRutaViewModel> factura, List<GetCoberturaCarteraViewModel> cartera,string cliente) {
+
+            int numero = 0;
+            if (factura.Where(x => x.codigocliente.ToString() == cliente).Select(x => x.factura).Count() > 0)
+            {
+                numero = factura.Where(x => x.codigocliente.ToString() == cliente).Select(x => x.factura).FirstOrDefault();
+
+            }
+            else {
+                numero = cartera.Where(x => x.codcli.ToString() == cliente).Select(x => x.nrodocumento).FirstOrDefault();
+
+            }
+            return numero;
         }
 
         public async Task<ReplyViewModel> ObtenerDatosDeCarteraXCliente(int idcliente, int idaccount)
@@ -1533,7 +1580,7 @@ namespace Chariot.Engine.Business.MardisOrders
 
                 bool RespuestaActualizacionEstadoFacturaExterNum = await _helpersHttpClientBussiness.GettApiParam($"CoberturaFacturaRuta/actualizar?Factura={NumeroFactura}");
 
-                bool RespuestaActualizacionEstadoFactura = _ordersDao.GuardarfacturaEntregadas(CodigoLocal, NumeroFactura, cO_observacion, cO_estado, lat, lon);
+                bool RespuestaActualizacionEstadoFactura = _ordersDao.GuardarfacturaEntregadas(CodigoLocal, NumeroFactura, cO_observacion, cO_estado, lat, lon,1);
                 RespuestaActualizacionEstadoFacturaExter.Wait();
 
                 if (RespuestaActualizacionEstadoFactura && RespuestaActualizacionEstadoFacturaExter.Result.Result)
@@ -1570,7 +1617,7 @@ namespace Chariot.Engine.Business.MardisOrders
                 List<PostEstadoFactura> postEstadoFacturas = new List<PostEstadoFactura>();
         
 
-                bool RespuestaActualizacionEstadoFactura = _ordersDao.GuardarfacturaEntregadas(CodigoLocal, NumeroFactura, cO_observacion, cO_estado, lat, lon);
+                bool RespuestaActualizacionEstadoFactura = _ordersDao.GuardarfacturaEntregadas(CodigoLocal, NumeroFactura, cO_observacion, cO_estado, lat, lon,0);
              
 
                 if (RespuestaActualizacionEstadoFactura )

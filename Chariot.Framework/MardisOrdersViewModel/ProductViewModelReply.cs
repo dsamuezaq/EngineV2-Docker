@@ -16,6 +16,8 @@ namespace Chariot.Framework.MardisOrdersViewModel
         public string Exento { get; set; }
         public Decimal? Cantidad { get; set; }
         public Decimal? Precio { get; set; }
+
+        public string Estado { get; set; }
         public int Idaccount { get; set; }
 
     }

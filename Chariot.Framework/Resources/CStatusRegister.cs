@@ -10,6 +10,7 @@ namespace Chariot.Framework.Resources
     {
         public const string Active = "A";
         public const string Delete = "D";
+        public const string Repetido = "R";
         public const string SinCategorizar = "S";
         public const string Categorizado = "C";
     }

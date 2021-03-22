@@ -121,7 +121,7 @@ namespace Engine_V2.Controllers
         public async Task<IActionResult> GETGuardarVisitas(List<VisitasViewModel> DatosVisitas)
         {
          
-
+             
             return Ok(_ordersBusiness.GuardarVisitaBSS(DatosVisitas));
         }
         [HttpGet]
@@ -365,10 +365,20 @@ namespace Engine_V2.Controllers
         {
 
 
-            return Ok(await _ordersBusiness.ObtenerDatosDeCarteraXClienteTotal(camion, idaccount));
+            return Ok(await _ordersBusiness.ObtenerDatosDeCarteraXClienteTotalTest(camion, idaccount));
         }
 
-        
+        [HttpPost]
+        [Route("ObtenerCarteraXClienteTotalTest")]
+        //  [Authorize]
+        public async Task<IActionResult> ObtenerCarteraXClienteTotalTest(int camion, int idaccount)
+        {
+
+
+            return Ok(await _ordersBusiness.ObtenerDatosDeCarteraXClienteTotalTest(camion, idaccount));
+        }
+
+
 
         [Route("Invoicecustomer")]
        // [Authorize]

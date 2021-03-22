@@ -1016,6 +1016,73 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
+
+        public async Task<ReplyViewModel> ObtenerDatosDeCarteraXClienteTotalTest(int camion, int idaccount)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+
+                //var CarteraCob = Task.Factory.StartNew(() => {
+                //    return _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
+                //});
+                var CarteraCob = Task.Factory.StartNew(() => {
+                    return _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtenerxcamion?codigo=0" + camion);
+                });
+
+                var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtenerxcamion?codigo=" + camion);
+
+                var ListaDeCodigoCliente = _FacturaEntrega.Select(x => x.codigocliente).Distinct().ToList();
+                //    var  FacturasActivas = _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
+
+
+
+
+                CarteraCob.Wait();
+                var _Cartera = CarteraCob.Result.Result.ToList();
+
+                List<FacturaDeuda> _FacturaDeudas = new List<FacturaDeuda>();
+
+                //    List<int> NumeroDeFaturasEntregadas = _ordersDao.SelectEntity<FacturasEntregadas>().Select(s => s.cO_FACTURA).ToList();
+
+                foreach (var FacturaConDeuda in _Cartera)
+                {
+                    FacturaDeuda _FacturaDeuda = new FacturaDeuda();
+                    var valorespagadosPordia = _ordersDao.ConsultarDatosDePagosCarteraXfactura(FacturaConDeuda.nrodocumento);
+                    var valor = valorespagadosPordia != null ? valorespagadosPordia.FirstOrDefault().valor : 0;
+                    _FacturaDeuda.codigoCliente = FacturaConDeuda.codcli;
+                    _FacturaDeuda.numeroFactura = FacturaConDeuda.nrodocumento;
+
+                    _FacturaDeuda.total = FacturaConDeuda.valor - valor;
+
+                    var ExisteFactura = _FacturaEntrega.Where(x => x.factura == FacturaConDeuda.nrodocumento);
+
+                    _FacturaDeuda.EstadoFactura = ExisteFactura.Count() > 0 ? "POR ENTREGAR" : "POR COBRAR";
+                    _FacturaDeuda.Fecha = DateTime.ParseExact(FacturaConDeuda.f_FACTURA.ToString(),
+                                                       "yyyyMMdd",
+                                                       CultureInfo.InvariantCulture,
+                                                       DateTimeStyles.None);
+                    _FacturaDeuda.codigoVendedor = FacturaConDeuda.codvendedor.ToString();
+                    _FacturaDeudas.Add(_FacturaDeuda);
+                }
+
+                reply.messege = "Consulta exito api Externa e info factura Mardis";
+                reply.status = "Ok";
+                reply.data = _FacturaDeudas.OrderByDescending(x => x.Fecha);
+
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No existen datos  en la tabla";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return reply;
+            }
+
+        }
         public async Task<ReplyViewModel> GetInvoice(int iddevice, int idaccount)
         {
             ReplyViewModel reply = new ReplyViewModel();

@@ -52,7 +52,7 @@ namespace Engine_V2.Controllers
         }
 
         [HttpPost]
-        [Route("ActualizarGeoLocal")]
+        [Route("ActualizarGeoLocal")] 
         public async Task<IActionResult> Get(int idbranch, string lat,string lon)
         {
 
@@ -216,6 +216,15 @@ namespace Engine_V2.Controllers
             var model = _taskCampaignBusiness.deleteRoute(_model.IdAccount, _model.Iddevice, _model.RouteCode);
 
             return Ok(model);
+        }
+        #endregion
+        #region AdministracionRutas
+        [HttpPost]
+        [Route("ObtenerLocalesConGeo")]
+        public async Task<IActionResult> ObtenerLocalesConGeo(int cuenta)
+        {
+
+            return Ok(_taskCampaignBusiness.ObtenerLocalesConGeo(cuenta));
         }
         #endregion
     }

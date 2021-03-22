@@ -7,6 +7,7 @@ using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Framework.CampaingViewModels;
 using Chariot.Framework.Complement;
+using Chariot.Framework.MardisBranchViewModel;
 using Chariot.Framework.MardisClientRestModel;
 using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardiscoreViewModel.Branch;
@@ -183,7 +184,38 @@ namespace Chariot.Engine.Business.Mardiscore
 
 
         }
+        public List<MapaLocalModel> ObtenerLocalesConGeo(int cuenta)
+        {
+            try
+            {
+                var locales = _taskCampaignDao.ConsulataLocales(cuenta).Select(x => new MapaLocalModel
+                {
 
+                    Id = x.Id,
+                    Name = x.Name,
+                    Region = "da",
+                    type = x.TypeBusiness
+       ,
+                    SpeedLimit = -1
+       ,
+                    lat = double.Parse(x.LatitudeBranch),
+                    Lng = double.Parse(x.LenghtBranch),
+
+                }).ToList();
+
+                return locales;
+            }
+            catch (Exception e)
+            {
+
+                throw;
+
+                return null;
+            }
+      
+
+
+        }
         public ReplyViewModel SavePollster(TransactionPollsterViewModel _data)
         {
             ReplyViewModel reply = new ReplyViewModel();

@@ -159,6 +159,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 consulta.LatitudeBranch = lat;
                 consulta.LenghtBranch = lon;
                 consulta.geoupdate = 1;
+                consulta.CommentBranch = "G";
                 Context.Update(consulta);
                 Context.SaveChanges();
                 return "Exitoso";
@@ -353,6 +354,79 @@ namespace Chariot.Engine.DataAccess.MardisCore
                                AccountName= a.Name
                            };
             return consulta.ToList();
+        }
+
+        public List<Branch> ConsulataLocales(int idAccount)
+        {
+
+            List<Branch> consulta = new List<Branch>();
+       
+
+
+                var consulta1 = from b in Context.Branches
+                                join p in Context.Persons on b.IdPersonOwner equals p.Id
+                                join pv in Context.Provinces on b.IdProvince equals pv.Id
+                                join ds in Context.Districts on b.IdDistrict equals ds.Id
+                                where b.IdAccount == idAccount && b.ESTADOAGGREGATE == "S"
+                                      && b.StatusRegister == CStatusRegister.Active
+
+                                select new Branch
+                                {
+                                    Code = b.Code,
+                                    ExternalCode = b.ExternalCode,
+                                    Name = b.Name,
+                                    Label = b.Label,
+                                    CreationDate = b.CreationDate,
+                                    IdCountry = b.IdCountry,
+                                    IdProvince = b.IdProvince,
+                                    IdDistrict = b.IdDistrict,
+                                    IdParish = b.IdParish,
+                                    IdSector = b.IdSector,
+                                    Zone = b.Zone,
+                                    Neighborhood = b.Neighborhood,
+                                    MainStreet = b.MainStreet,
+                                    SecundaryStreet = b.SecundaryStreet,
+                                    NumberBranch = b.NumberBranch,
+                                    LatitudeBranch = b.LatitudeBranch,
+                                    LenghtBranch = b.LenghtBranch,
+                                    Reference = b.Reference,
+                                    IsAdministratorOwner = b.IsAdministratorOwner,
+                                    StatusRegister = b.StatusRegister,
+                                    TypeBusiness = b.TypeBusiness,
+                                    ESTADOAGGREGATE = b.ESTADOAGGREGATE,
+                                    RUTAAGGREGATE = b.RUTAAGGREGATE,
+                                    IMEI_ID = b.IMEI_ID,
+                                    routeDate = b.routeDate,
+                                    Cluster = b.Cluster,
+                                    state_period = b.state_period,
+                                    IdAccount = b.IdAccount,
+                                    Id = b.Id,
+                                    IdPersonOwner = b.IdPersonOwner,
+                                    CommentBranch = b.CommentBranch,
+                                    PersonOwner = p,
+                                    Province = pv,
+                                    District = ds,
+                                    geoupdate = b.geoupdate
+
+
+                                };
+
+                consulta = consulta1.ToList();
+                //
+                //   consulta.Where(x => x.Id == item.Id).FirstOrDefault().Province = Context.Provinces.AsNoTracking().Where(x => x.Id == item.IdProvince).FirstOrDefault();
+
+
+                //   consulta.Where(x => x.Id == item.Id).FirstOrDefault().District = Context.Districts.AsNoTracking().Where(x => x.Id == item.IdDistrict).FirstOrDefault();
+
+
+
+
+
+
+
+                return consulta;
+
+           
         }
     }
 }

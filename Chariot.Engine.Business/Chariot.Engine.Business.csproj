@@ -220,6 +220,7 @@
   <ItemGroup>
     <Compile Include="ABusiness.cs" />
     <Compile Include="ClientRest\HelpersHttpClientBussiness.cs" />
+    <Compile Include="ClientRest\HelpersHttpClientENGINEBussiness.cs" />
     <Compile Include="Mardiscore\TaskCampaignBusiness.cs" />
     <Compile Include="Mardiscore\TrackingBusiness.cs" />
     <Compile Include="MardisOrders\OrdersBusiness.cs" />

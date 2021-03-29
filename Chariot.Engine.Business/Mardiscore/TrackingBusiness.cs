@@ -173,6 +173,7 @@ namespace Chariot.Engine.Business.Mardiscore
                      Status = x.AggregateUri == null ? "Pendiente" : "Finalizado"
                      ,Start=x.Start
                      ,End=x.End
+                     ,uri=x.AggregateUri
                      
                  }).ToList();
                 if (_data.Status == "" || _data.Status == null)

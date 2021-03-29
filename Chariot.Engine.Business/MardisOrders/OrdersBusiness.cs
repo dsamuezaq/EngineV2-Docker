@@ -1053,7 +1053,7 @@ namespace Chariot.Engine.Business.MardisOrders
                     var valor = valorespagadosPordia != null ? valorespagadosPordia.FirstOrDefault().valor : 0;
                     _FacturaDeuda.codigoCliente = FacturaConDeuda.codcli;
                     _FacturaDeuda.numeroFactura = FacturaConDeuda.nrodocumento;
-
+                    _FacturaDeuda.Pagos = valor;
                     _FacturaDeuda.total = FacturaConDeuda.valor - valor;
 
                     var ExisteFactura = _FacturaEntrega.Where(x => x.factura == FacturaConDeuda.nrodocumento);
@@ -1425,83 +1425,104 @@ namespace Chariot.Engine.Business.MardisOrders
             try
             {
                 List<Model_FacturaHistorica> _InvoiceViewModel = new List<Model_FacturaHistorica>();
-
+              //  var _FacturaEntregaca = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
                 foreach (int facturaIndividual in Fact) {
-
-                    var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFactura/obtenerxfactura?factura=" + facturaIndividual.ToString());
-                    var CoberturaDevolucion = Task.Factory.StartNew(() => {
-                        return _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaDevolucion>("CoberturaFacturaDevolucion/obtenerxfactura?factura=" + facturaIndividual.ToString());
-                    });
-
-
-                    var Listfact = _FacturaEntrega.Where(x => x.factura == facturaIndividual).Select(x => x.factura).Distinct().ToList();
-               
-                    //    List<int> NumeroDeFaturasEntregadas = _ordersDao.SelectEntity<FacturasEntregadas>().Select(s => s.cO_FACTURA).ToList();
-
-                    foreach (var item in Listfact)
+                    try
                     {
+                        var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFactura/obtenerxfactura?factura=" + facturaIndividual.ToString());
 
-                        Model_FacturaHistorica data = new Model_FacturaHistorica();
-                        data.NumeroFactura = item;
-                        var totalFactura = _FacturaEntrega.Where(x => x.factura == item)
-                                .GroupBy(l => l.factura)
-                                .Select(x =>
+                        //if (_FacturaEntrega.Count() > 0) {
+                        //   var  ca = _FacturaEntregaca.Where(x=>x.factura == facturaIndividual);
+                        //    if (ca.Count() > 0)
+                        //    {
 
-                                 Math.Round((Double)x.Sum(pc => pc.total), 2)
+                        //        _FacturaEntrega = ca.ToList();
 
-                                ).FirstOrDefault();
-                        data.TotalFactura = totalFactura;
-                        double totaldevolucion = 0;
-                        if (CoberturaDevolucion.Result.Result.Count() > 0)
+                        //    }
+
+                        //}
+
+                        var CoberturaDevolucion =
+                            await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaDevolucion>("CoberturaFacturaDevolucion/obtenerxfactura?factura=" + facturaIndividual.ToString());
+
+
+
+                        var Listfact = _FacturaEntrega.Where(x => x.factura == facturaIndividual).Select(x => x.factura).Distinct().ToList();
+
+                        //    List<int> NumeroDeFaturasEntregadas = _ordersDao.SelectEntity<FacturasEntregadas>().Select(s => s.cO_FACTURA).ToList();
+
+                        foreach (var item in Listfact)
                         {
 
-                            var listaDevolucion = CoberturaDevolucion.Result.Result.Where(x => x.dF_FACTURA == item)
-                          .GroupBy(l => l.dF_PRODUCTO)
-                          .Select(x =>
+                            Model_FacturaHistorica data = new Model_FacturaHistorica();
+                            data.NumeroFactura = item;
+                            var totalFactura = _FacturaEntrega.Where(x => x.factura == item)
+                                    .GroupBy(l => l.factura)
+                                    .Select(x =>
 
-                            Math.Round((Double)(x.Sum(pc => pc.dF_PRECIO) * x.Sum(pc => pc.dF_CANTIDAD) + x.Sum(pc => pc.dF_IVA)), 2)
+                                     Math.Round((Double)x.Sum(pc => pc.total), 2)
 
-                          ).ToList();
+                                    ).FirstOrDefault();
+                            data.TotalFactura = totalFactura;
+                            double totaldevolucion = 0;
+                            if (CoberturaDevolucion.Count() > 0)
+                            {
 
-                            totaldevolucion = listaDevolucion.Sum();
-                            data.detalleDevoluciones = CoberturaDevolucion.Result.Result.Where(x => x.dF_FACTURA == item)
-                           .GroupBy(l => l.dF_PRODUCTO)
-                           .Select(x => new Modelo_DetalleDevolucion
-                           {
-                           // factura = item,
-                           codigoprod = x.First().dF_PRODUCTO,
-                               cantidad = x.Sum(pc => pc.dF_CANTIDAD),
-                               nombreprod = x.First().dF_NOMBREPRO,
-                               precio = x.Max(m => m.dF_PRECIO),
-                               iva = x.Max(m => m.dF_IVA)
+                                var listaDevolucion = CoberturaDevolucion.Where(x => x.dF_FACTURA == item)
+                              .GroupBy(l => l.dF_PRODUCTO)
+                              .Select(x =>
 
-                           }).ToList();
+                                Math.Round((Double)(x.Sum(pc => pc.dF_PRECIO) * x.Sum(pc => pc.dF_CANTIDAD) + x.Sum(pc => pc.dF_IVA)), 2)
+
+                              ).ToList();
+
+                                totaldevolucion = listaDevolucion.Sum();
+                                data.detalleDevoluciones = CoberturaDevolucion.Where(x => x.dF_FACTURA == item)
+                               .GroupBy(l => l.dF_PRODUCTO)
+                               .Select(x => new Modelo_DetalleDevolucion
+                               {
+                                   // factura = item,
+                                   codigoprod = x.First().dF_PRODUCTO,
+                                   cantidad = x.Sum(pc => pc.dF_CANTIDAD),
+                                   nombreprod = x.First().dF_NOMBREPRO,
+                                   precio = x.Max(m => m.dF_PRECIO),
+                                   iva = x.Max(m => m.dF_IVA)
+
+                               }).ToList();
+                            }
+                            data.TotalDevolucion = totaldevolucion;
+
+
+                            data.detalleFacturas = _FacturaEntrega.Where(x => x.factura == item)
+                                    .GroupBy(l => l.codigoprod)
+                                    .Select(x => new Model_DellateFactura
+                                    {
+                                        // factura = item,
+                                        codigoprod = x.First().codigoprod,
+                                        cantidad = x.Sum(pc => pc.cantidad),
+                                        nombreprod = x.First().nombreprod,
+                                        precio = x.Max(m => m.precio),
+                                        iva = x.Max(m => m.iva)
+
+                                    }).ToList();
+
+
+                            _InvoiceViewModel.Add(data);
+
                         }
-                        data.TotalDevolucion = totaldevolucion;
+                    }
+                    catch (Exception)
+                    {
 
-
-                        data.detalleFacturas = _FacturaEntrega.Where(x => x.factura == item)
-                                .GroupBy(l => l.codigoprod)
-                                .Select(x => new Model_DellateFactura
-                                {
-                                // factura = item,
-                                codigoprod = x.First().codigoprod,
-                                    cantidad = x.Sum(pc => pc.cantidad),
-                                    nombreprod = x.First().nombreprod,
-                                    precio = x.Max(m => m.precio),
-                                    iva = x.Max(m => m.iva)
-
-                                }).ToList();
-
-
-                        _InvoiceViewModel.Add(data);
-
+                        throw;
+                    }
+                  
 
                     }
                     reply.messege = "Consulta exito api Externa e info factura Mardis";
                     reply.status = "Ok";
                     reply.data = _InvoiceViewModel;
-                }
+                
 
                 
 

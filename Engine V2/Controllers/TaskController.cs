@@ -110,6 +110,14 @@ namespace Engine_V2.Controllers
         }
 
         [HttpPost]
+        [Route("PdfMasive")]
+        public async Task<IActionResult> GetPdfMasive(string campana, string uri)
+        {
+
+            return Ok(_taskCampaignBusiness.GeneratePdf(campana, uri));
+        }
+
+        [HttpPost]
         [Route("SaveProduct")]
         public async Task<IActionResult> SaveProductNutriAxios(GetFacturaViewModel _data)
         {

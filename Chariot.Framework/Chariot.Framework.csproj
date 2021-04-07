@@ -266,6 +266,7 @@
     <Compile Include="MardiscoreViewModel\BranchesModelReply.cs" />
     <Compile Include="MardiscoreViewModel\Branch\BranchRutaTaskViewModel.cs" />
     <Compile Include="MardiscoreViewModel\CampaignModelReply.cs" />
+    <Compile Include="MardiscoreViewModel\ErroresCargaFactura.cs" />
     <Compile Include="MardiscoreViewModel\Route\GetFacturaViewModel.cs" />
     <Compile Include="MardiscoreViewModel\UpdatePollsterSupervisor.cs" />
     <Compile Include="MardiscoreViewModel\PollsterSupervisor.cs" />

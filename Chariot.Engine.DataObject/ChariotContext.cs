@@ -250,7 +250,22 @@ namespace Chariot.Engine.DataObject
         /// Secuencial de ordenes
         /// </summary>
         public DbSet<vw_pagoxcarteraDevolucion_factura> pagoxcarteraDevolucion_factura { get; set; }
-        
+        /// <summary>
+        /// Tabla Invoice
+        /// </summary>
+        public DbSet<Invoice> Invoices { get; set; }
+
+        /// <summary>
+        /// Tabla Invoice Detail
+        /// </summary>
+        public DbSet<Invoice_detail> Invoice_details { get; set; }
+
+        /// <summary>
+        /// Tabla Central Warenhouse
+        /// </summary>
+        public DbSet<Central_Warenhouse> Central_Warenhouses { get; set; }
+
+
         /// <summary>
         /// Secuencial de ordenes
         /// </summary>

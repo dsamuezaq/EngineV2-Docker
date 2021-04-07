@@ -216,8 +216,10 @@
     <Compile Include="MardisCore\PagoCartera.cs" />
     <Compile Include="MardisCore\StatusTask.cs" />
     <Compile Include="MardisCore\StatusTaskAccount.cs" />
+    <Compile Include="MardisOrders\Central_Warenhouse.cs" />
     <Compile Include="MardisOrders\Devolucion.cs" />
     <Compile Include="MardisOrders\DevolucionFactura.cs" />
+    <Compile Include="MardisOrders\Distributor.cs" />
     <Compile Include="MardisOrders\Inventory_detail.cs" />
     <Compile Include="MardisCommon\Account.cs" />
     <Compile Include="MardisCommon\Country.cs" />
@@ -235,6 +237,8 @@
     <Compile Include="MardisCore\UserCampaign.cs" />
     <Compile Include="MardisOrders\Deposit.cs" />
     <Compile Include="MardisOrders\Inventory.cs" />
+    <Compile Include="MardisOrders\Invoice_detail.cs" />
+    <Compile Include="MardisOrders\Invoice.cs" />
     <Compile Include="MardisOrders\Order.cs" />
     <Compile Include="MardisOrders\OrderDetail.cs" />
     <Compile Include="MardisOrders\Product.cs" />

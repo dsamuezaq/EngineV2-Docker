@@ -15,7 +15,6 @@ namespace Chariot.Framework.CampaingViewModels
         public float cajas { get; set; }
         public float cant { get; set; }
         public string numFact { get; set; }
-
         public string razonsocial { get; set; }
         public String Errores { get; set; }
         public string ruc { get; set; }

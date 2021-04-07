@@ -63,27 +63,31 @@ namespace Engine_V2.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoadProductNutriAxios(string idpath, string account, string iduser, string option, string campaign, string status)
+        [Route("LoadProduct")]
+        public async Task<IActionResult> LoadProductNutriAxios(GetFacturaViewModel _data)
         {
-            reply.status = "Ok";
-            reply.messege = "Local Guardado";
-            
             try
             {
-                var model = JSonConvertUtil.Deserialize<FactNutriViewModel>(idpath);
+                var model = JSonConvertUtil.Deserialize<FactNutriViewModel>(_data.urlfile);
                 List<FactNutriViewModel> _model = new List<FactNutriViewModel>();
                 _model.Add(model);
 
-                Guid idAccount = Guid.Parse(account);
-                //var data = _taskCampaignBusiness.DataFactXml(_model, idAccount, iduser, option, campaign, status);
+                var data = _taskCampaignBusiness.DataFactXml(_model, _data.IdAccount, null, null, null, null,false);
 
-                //reply.data = data;
+                if (data.status == "OK") {
+                    reply.status = "Ok";
+                    reply.messege = "Item Guardado";
+                    reply.data = 1;
+                }
+                else{
+                    reply.status = "Fail";
+                    reply.messege = "Item no se Guardo";
+                    reply.data = data;
+                }
                 return Ok(reply);
             }
             catch (Exception e)
             {
-
-
                 IList<TaskMigrateResultViewModel> data = new List<TaskMigrateResultViewModel>();
                 data.Add(new TaskMigrateResultViewModel { description = e.Message, Element = "0", Code = "0" });
                 var rows = from x in data
@@ -97,11 +101,61 @@ namespace Engine_V2.Controllers
 
                 var jsondata = rows.ToArray();
                 reply.data = jsondata;
+                reply.status = "Fail";
+                reply.messege = "Item no se Guardo";
+                reply.data = data;
                 return Ok(reply);
 
             }
         }
 
+        [HttpPost]
+        [Route("SaveProduct")]
+        public async Task<IActionResult> SaveProductNutriAxios(GetFacturaViewModel _data)
+        {
+            try
+            {
+                var model = JSonConvertUtil.Deserialize<FactNutriViewModel>(_data.urlfile);
+                List<FactNutriViewModel> _model = new List<FactNutriViewModel>();
+                _model.Add(model);
 
+                var data = _taskCampaignBusiness.DataFactXml(_model, _data.IdAccount, null, null, null, null,true);
+
+                if (data.status == "OK")
+                {
+                    reply.status = "Ok";
+                    reply.messege = "Item Guardado";
+                    reply.data = 1;
+                }
+                else
+                {
+                    reply.status = "Fail";
+                    reply.messege = "Item no se Guardo";
+                    reply.data = data;
+                }
+                return Ok(reply);
+            }
+            catch (Exception e)
+            {
+                IList<TaskMigrateResultViewModel> data = new List<TaskMigrateResultViewModel>();
+                data.Add(new TaskMigrateResultViewModel { description = e.Message, Element = "0", Code = "0" });
+                var rows = from x in data
+                           select new
+                           {
+                               description = x.description,
+                               data = x.Element,
+                               Code = x.Code
+
+                           };
+
+                var jsondata = rows.ToArray();
+                reply.data = jsondata;
+                reply.status = "Fail";
+                reply.messege = "Item no se Guardo";
+                reply.data = data;
+                return Ok(reply);
+
+            }
+        }
     }
 }

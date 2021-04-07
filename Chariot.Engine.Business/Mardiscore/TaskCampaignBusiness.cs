@@ -33,11 +33,12 @@ namespace Chariot.Engine.Business.Mardiscore
         protected HelpersHttpClientBussiness _helpersHttpClientBussiness = new HelpersHttpClientBussiness();
         protected TaskCampaignDao _taskCampaignDao;
         protected RouteDao _routeDao;
+        protected BranchMigrateDao _branchMigrateDao;
         public TaskCampaignBusiness(ChariotContext _chariotContext,
                                      RedisCache distributedCache,
                                      IMapper mapper) : base(_chariotContext, distributedCache, mapper)
         {
-
+            _branchMigrateDao = new BranchMigrateDao(_chariotContext);
             _taskCampaignDao = new TaskCampaignDao(_chariotContext);
             _routeDao = new RouteDao(_chariotContext);
         }
@@ -630,65 +631,70 @@ namespace Chariot.Engine.Business.Mardiscore
 
         }
 
-        //public string DataFactXml(List<FactNutriViewModel> query1, Guid idAccount, string iduser, string option, string campaign, string status)
-        //{
-        //    var error = "";
-        //    try
-        //    {
-        //        product_entry product_entry_model = new product_entry();
+        public ReplyViewModel DataFactXml(List<FactNutriViewModel> query1, int idAccount, string iduser, string option, string campaign, string status,bool guardar)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            var error = "";
+            try
+            {
+                Invoice invoice_item = new Invoice();
+                Invoice_detail invoice_detail_item = null;
 
-        //        string ruc = query1.Select(x => x.ruc).FirstOrDefault();
+                string ruc = query1.Select(x => x.ruc).FirstOrDefault();
 
-        //        var users = _branchMigrateDao.UsersRuc(ruc);
-        //        foreach (var item in query1)
-        //        {
-        //            int _idproduct = _branchMigrateDao.ExistProductNutri(item.code);
+                var users = _branchMigrateDao.UsersRuc(ruc);
+                bool cabecera = true;
+                foreach (var item in query1)
+                {
+                    invoice_detail_item = new Invoice_detail();
 
-        //            if (_idproduct > 0)
-        //            {
+                    if (cabecera) {
+                        invoice_item.NUMBER = item.numFact;
+                        invoice_item.FECHA = item.dateFact;
+                        invoice_item.CLIENTE = item.razonsocial;
+                        cabecera = false;
+                    }
+                    
+                    int _idproduct = _branchMigrateDao.ExistProductNutri(item.code);
 
-        //                product_entry_model.Idproduct = _idproduct;
-        //                product_entry_model.invoice_date = item.dateFact;
-        //                product_entry_model.invoice_number = item.numFact;
-        //                product_entry_model.quantity = item.cant;
-        //                product_entry_model.boxes = item.cajas;
-        //                product_entry_model.units_box = item.unidadxcajas;
-        //                product_entry_model.creation_date = DateTime.Now;
-        //            }
-        //            else
-        //            {
-        //                error = "El producto no se encuentra registrado en el maestro";
-        //                return error;
-        //            }
+                    if (_idproduct > 0)
+                    {
+                        invoice_detail_item.IDPRODUCTO = _idproduct;
+                        invoice_detail_item.AMOUNT = item.cant;
+                        invoice_detail_item.DESCRIPTION = "";
+                        invoice_detail_item.UNIT_PRICE = 0;
+                        invoice_detail_item.IVA = 0;
+                        invoice_item.Invoice_details = new List<Invoice_detail>();
+                        invoice_item.Invoice_details.Add(invoice_detail_item);
+                    }
+                    else
+                    {
+                        ErroresCargaFactura errorF = new ErroresCargaFactura();
+                        errorF.Code = item.code;
+                        errorF.Error = "El producto no se encuentra registrado en el maestro";
+                        reply.data = errorF;
+                        reply.messege = "Error";
+                        return reply;
+                    }
 
-        //            _branchMigrateDao.SaveProductNutriMigrate(product_entry_model, idAccount, users.First(), option, campaign, status);
+                    if (guardar) {
+                        _branchMigrateDao.SaveProductNutriMigrate(invoice_item, idAccount, 0, option, campaign, status);
+                    }
+                    
+                    reply.status = "OK";
+                    reply.data = 1;
+                }
 
-        //        }
+            }
+            catch (Exception e)
+            {
+                var ex = e.Message.ToString();
 
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        var ex = e.Message.ToString();
-
-        //        int ne = -1;
-
-        //        switch (ex)
-        //        {
-        //            case "Error al consultar ubicacion":
-        //                return "La informacion de Provicia o Cuidad o Parrioquia no existe en la Base de datos. Consulte los Catologos";
-
-        //            case "Error al consultar Parroquias":
-        //                ne = 3;
-        //                break;
-        //            case "Error al consultar Sectores":
-        //                ne = 4;
-        //                break;
-
-        //        }
-        //        throw;
-        //    }
-        //    return error == "" ? "" : error;
-        //}
+                int ne = -1;
+                throw;
+            }
+            return reply;
+        }
 
 
         public object GuardarlocalesNuevoAbaseLocalYexterna(GetListbranchViewModel _respose)

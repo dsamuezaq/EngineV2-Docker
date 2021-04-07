@@ -180,6 +180,7 @@
     <Compile Include="MardisCore\RouteDao.cs" />
     <Compile Include="MardisCore\TaskCampaignDao.cs" />
     <Compile Include="MardisCore\TrackingDao.cs" />
+    <Compile Include="MardisOrders\BranchMigrateDao.cs" />
     <Compile Include="MardisOrders\OrdersDao.cs" />
     <Compile Include="MardisOrders\ProductOrder.cs" />
     <Compile Include="MardisSecurity\UserDao.cs" />

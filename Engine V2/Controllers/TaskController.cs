@@ -165,5 +165,13 @@ namespace Engine_V2.Controllers
 
             }
         }
+
+        [HttpGet]
+        [Route("movilw")]
+        public async Task<IActionResult> GetMovilWarenhouse(int idaccounte)
+        {
+            return Ok(_taskCampaignBusiness.GetAllMovilWarenhouse());
+        }
+
     }
 }

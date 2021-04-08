@@ -265,6 +265,11 @@ namespace Chariot.Engine.DataObject
         /// </summary>
         public DbSet<Central_Warenhouse> Central_Warenhouses { get; set; }
 
+        /// <summary>
+        /// Tabla Movil Warenhouse
+        /// </summary>
+        public DbSet<Movil_Warenhouse> Movil_Warenhouses { get; set; }
+
 
         /// <summary>
         /// Secuencial de ordenes

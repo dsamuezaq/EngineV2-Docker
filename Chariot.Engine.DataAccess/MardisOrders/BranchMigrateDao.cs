@@ -41,7 +41,27 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 }
             }
 
-            public List<Guid> UsersRuc(string ruc)
+        public bool ExistinvoiceNutri(string numFact)
+        {
+            try
+            {
+                var itemReturn = Context.Invoices.Where(x => x.NUMBER == numFact).Select(t => t.IDINVOICE);
+
+                if (itemReturn.Count() > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            catch (Exception e)
+
+            {
+                throw new Exception("Error al consultar Facturas");
+            }
+        }
+
+        public List<Guid> UsersRuc(string ruc)
             {
                 var _ruc = Context.Users.Include(x => x.Persons).Where(x => x.StatusRegister == "A" && x.Persons.Document == ruc).Select(s => s.Id);
                 if (_ruc.Count() > 0)
@@ -58,12 +78,17 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 Person person = null;
                 Central_Warenhouse centralw = new Central_Warenhouse();
                 Invoice invoice = new Invoice();
-
+                IQueryable<Invoice> invoices = Enumerable.Empty<Invoice>().AsQueryable();
                 TaskCampaign task = null;
 
             try
             {
-                invoice = Context.Invoices.Where(i => i.NUMBER == _insertData.NUMBER).First();
+
+                invoices = Context.Invoices.Where(i => i.NUMBER == _insertData.NUMBER);
+
+                if (invoices.Count() > 0) {
+                    invoice = invoices.First();
+                }
 
                 if (invoice.IDINVOICE != 0)
                 {

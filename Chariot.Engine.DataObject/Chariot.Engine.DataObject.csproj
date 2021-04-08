@@ -216,6 +216,7 @@
     <Compile Include="MardisCore\PagoCartera.cs" />
     <Compile Include="MardisCore\StatusTask.cs" />
     <Compile Include="MardisCore\StatusTaskAccount.cs" />
+    <Compile Include="MardisOrders\Movil_Warenhouse.cs" />
     <Compile Include="MardisOrders\Central_Warenhouse.cs" />
     <Compile Include="MardisOrders\Devolucion.cs" />
     <Compile Include="MardisOrders\DevolucionFactura.cs" />

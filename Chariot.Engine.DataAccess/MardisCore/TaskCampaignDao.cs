@@ -37,6 +37,22 @@ namespace Chariot.Engine.DataAccess.MardisCore
             return consulta.ToList();
         }
 
+        public object GetAllMovilWarenhouseDao()
+        {
+            //   var consulta = Context.Campaigns.Include(t => t.Account).Where(c => c.StatusRegister == CStatusRegister.Active).ToList();
+
+            var consulta = from c in Context.Movil_Warenhouses
+                           select new
+                           {
+                               c.ID_MOVILW,
+                               c.ID_CENTRALW,
+                               c.BALANCE,
+                               c.DESCRIPTION,
+                               c.IDVENDEDOR,
+                           };
+            return consulta.ToList();
+        }
+
         public bool ConsultarEstadoDeRutaDeEncuestadorXIDDevice(string IDdevice, string Nombrecuenta)
         {
             //   var consulta = Context.Campaigns.Include(t => t.Account).Where(c => c.StatusRegister == CStatusRegister.Active).ToList();

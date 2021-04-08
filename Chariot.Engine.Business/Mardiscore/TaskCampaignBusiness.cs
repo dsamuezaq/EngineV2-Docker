@@ -45,8 +45,12 @@ namespace Chariot.Engine.Business.Mardiscore
 
         public object GetCampanigAccount()
         {
-
             return _taskCampaignDao.GetCampaing(); 
+        }
+
+        public object GetAllMovilWarenhouse()
+        {
+            return _taskCampaignDao.GetAllMovilWarenhouseDao();
         }
         public List<BranchRutaTaskViewModel> GetBranches(int idaccount, string iddevice) {
 
@@ -626,9 +630,6 @@ namespace Chariot.Engine.Business.Mardiscore
                 reply.error = e.Message;
                 return reply;
             }
-  
-
-
         }
 
         public ReplyViewModel DataFactXml(List<FactNutriViewModel> query1, int idAccount, string iduser, string option, string campaign, string status,bool guardar)

@@ -49,7 +49,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
                                c.ID_CENTRALW,
                                c.BALANCE,
                                c.DESCRIPTION,
-                               IdVendedor = s.Id
+                               s.IdVendedor
                            };
             return consulta.ToList();
         }

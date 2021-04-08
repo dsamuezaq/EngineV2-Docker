@@ -42,13 +42,14 @@ namespace Chariot.Engine.DataAccess.MardisCore
             //   var consulta = Context.Campaigns.Include(t => t.Account).Where(c => c.StatusRegister == CStatusRegister.Active).ToList();
 
             var consulta = from c in Context.Movil_Warenhouses
+                           join s in Context.Salesmans on c.IDVENDEDOR equals s.Id
                            select new
                            {
                                c.ID_MOVILW,
                                c.ID_CENTRALW,
                                c.BALANCE,
                                c.DESCRIPTION,
-                               c.IDVENDEDOR,
+                               IdVendedor = s.Id
                            };
             return consulta.ToList();
         }

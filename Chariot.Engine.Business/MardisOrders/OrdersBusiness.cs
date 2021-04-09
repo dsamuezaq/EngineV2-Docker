@@ -153,8 +153,8 @@ namespace Chariot.Engine.Business.MardisOrders
                                                        Precio6 = ar.Precio6,
                                                        Precio7 = ar.Precio7,
                                                        Precio8 = ar.Precio8,
-                                                       Precio9 = ar.Precio9,
-                                                       Precio10 = mw.BALANCE,
+                                                       Precio9 = cw.BALANCE,
+                                                       Precio10 = ar.Precio10,
                                                        Idaccount = Idaccount
                                                    }).ToList();
                 return _reply;

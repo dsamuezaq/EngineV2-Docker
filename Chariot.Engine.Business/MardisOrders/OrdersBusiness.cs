@@ -129,6 +129,38 @@ namespace Chariot.Engine.Business.MardisOrders
 
 
             }
+            else if (Idaccount == 13)
+            {
+                List<ArticulosViewModel> mapperRubros = _mapper.Map<List<ArticulosViewModel>>(_ordersDao.SelectEntity<Product>().Where(x => x.StatusRegister == "A" && x.Idaccount == Idaccount));
+                List<ArticulosViewModel> _reply = (from ar in mapperRubros
+                                                   join cw in Context.Central_Warenhouses on ar.Id equals cw.IDPRODUCTO
+                                                   join mw in Context.Movil_Warenhouses on cw.ID_CENTRALW equals mw.ID_CENTRALW
+                                                   where ar.Idaccount == Idaccount
+                                                   select new ArticulosViewModel
+                                                   {
+                                                       Id = ar.Id,
+                                                       IdArticulo = ar.IdArticulo,
+                                                       Descripcion = ar.Descripcion,
+                                                       IdRubro = ar.IdRubro,
+                                                       Iva = ar.Iva,
+                                                       ImpuestosInternos = ar.ImpuestosInternos,
+                                                       Exento = ar.Exento,
+                                                       Precio1 = ar.Precio1,
+                                                       Precio2 = ar.Precio2,
+                                                       Precio3 = ar.Precio3,
+                                                       Precio4 = ar.Precio4,
+                                                       Precio5 = ar.Precio5,
+                                                       Precio6 = ar.Precio6,
+                                                       Precio7 = ar.Precio7,
+                                                       Precio8 = ar.Precio8,
+                                                       Precio9 = cw.BALANCE,
+                                                       Precio10 = ar.Precio10,
+                                                       Idaccount = Idaccount
+                                                   }).ToList();
+                return _reply;
+
+
+            }
             else {
 
                 List<ArticulosViewModel> mapperRubros = _mapper.Map<List<ArticulosViewModel>>(_ordersDao.SelectEntity<Product>().Where(x => x.StatusRegister == "A" && x.Idaccount == Idaccount));

@@ -88,25 +88,29 @@ namespace Chariot.Engine.DataAccess.MardisCore
 
                 if (invoices.Count() > 0) {
                     invoice = invoices.First();
-                }
 
-                if (invoice.IDINVOICE != 0)
-                {
-                    invoice.Invoice_details = new List<Invoice_detail>();
-                    invoice.Invoice_details.Add(_insertData.Invoice_details.First());
+                    if (invoice.IDINVOICE != 0)
+                    {
+                        invoice.Invoice_details = new List<Invoice_detail>();
+                        invoice.Invoice_details.Add(_insertData.Invoice_details.First());
+                    }
                 }
-                else {
+                else
+                {
                     invoice = _insertData;
                     Context.Invoices.Add(invoice);
                 }
 
-                if (Context.Central_Warenhouses.Where(c => c.IDPRODUCTO == _insertData.Invoice_details.First().IDPRODUCTO).Count()>0) {
-                    centralw = Context.Central_Warenhouses.Where(c => c.IDPRODUCTO == _insertData.Invoice_details.First().IDPRODUCTO).First();
-                }
+                Context.SaveChanges();
 
-                if (centralw.ID_CENTRALW != 0)
+                if (Context.Central_Warenhouses.Where(c => c.IDPRODUCTO == _insertData.Invoice_details.First().IDPRODUCTO).Count() > 0)
                 {
-                    centralw.BALANCE = centralw.BALANCE + (decimal)_insertData.Invoice_details.First().AMOUNT;
+                    centralw = Context.Central_Warenhouses.Where(c => c.IDPRODUCTO == _insertData.Invoice_details.First().IDPRODUCTO).First();
+
+                    if (centralw.ID_CENTRALW != 0)
+                    {
+                        centralw.BALANCE = centralw.BALANCE + (decimal)_insertData.Invoice_details.First().AMOUNT;
+                    }
                 }
                 else
                 {
@@ -117,7 +121,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
                     centralw.DESCRIPTION = _insertData.Invoice_details.First().DESCRIPTION;
                     Context.Central_Warenhouses.Add(centralw);
                 }
-                
+
                 Context.SaveChanges();
 
                 return "";

@@ -632,7 +632,95 @@ namespace Chariot.Engine.Business.Mardiscore
             }
         }
 
-        public ReplyViewModel DataFactXml(List<FactNutriViewModel> query1, int idAccount, string iduser, string option, string campaign, string status,bool guardar)
+        public ReplyViewModel DataFactXmlFactura(List<FactNutriViewModel> query1, int idAccount, string iduser, string option, string campaign, string status)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            var error = "";
+            try
+            {
+                Invoice invoice_item = new Invoice();
+                string ruc = query1.Select(x => x.ruc).FirstOrDefault();
+
+                var users = _branchMigrateDao.UsersRuc(ruc);
+                bool cabecera = true;
+
+                foreach (var item in query1)
+                {
+                    if (cabecera) {
+                        invoice_item.NUMBER = item.numFact;
+                        invoice_item.FECHA = item.dateFact;
+                        invoice_item.CLIENTE = item.razonsocial;
+                        cabecera = false;
+                    }
+
+                    _branchMigrateDao.SaveInvoive(invoice_item, idAccount, 0, option, campaign, status);
+                    
+                    reply.status = "OK";
+                    reply.data = 1;
+                }
+
+            }
+            catch (Exception e)
+            {
+                var ex = e.Message.ToString();
+                int ne = -1;
+                throw;
+            }
+            return reply;
+        }
+
+        public ReplyViewModel DataFactXmlDetalle(List<FactNutriViewModel> query1, int idAccount, string iduser, string option, string campaign, string status)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            var error = "";
+            try
+            {
+                Invoice_detail invoice_detail_item = null;
+
+                string ruc = query1.Select(x => x.ruc).FirstOrDefault();
+                var users = _branchMigrateDao.UsersRuc(ruc);
+                
+                foreach (var item in query1)
+                {
+                    invoice_detail_item = new Invoice_detail();
+                    int _idproduct = _branchMigrateDao.ExistProductNutri(item.code);
+
+                    if (_idproduct > 0)
+                    {
+                        invoice_detail_item.IDPRODUCTO = _idproduct;
+                        invoice_detail_item.AMOUNT = item.cant;
+                        invoice_detail_item.DESCRIPTION = "";
+                        invoice_detail_item.UNIT_PRICE = 0;
+                        invoice_detail_item.IVA = 0;
+                    }
+                    else
+                    {
+                        ErroresCargaFactura errorF = new ErroresCargaFactura();
+                        errorF.Code = item.code;
+                        errorF.Error = "El producto no se encuentra registrado en el maestro";
+                        reply.data = errorF;
+                        reply.messege = "Error";
+                        return reply;
+                    }
+
+                    _branchMigrateDao.SaveDetalle(invoice_detail_item, item.numFact, idAccount, 0, option, campaign, status);
+
+                    reply.status = "OK";
+                    reply.data = 1;
+                }
+
+            }
+            catch (Exception e)
+            {
+                var ex = e.Message.ToString();
+
+                int ne = -1;
+                throw;
+            }
+            return reply;
+        }
+
+        public ReplyViewModel DataFactXml(List<FactNutriViewModel> query1, int idAccount, string iduser, string option, string campaign, string status, bool guardar)
         {
             ReplyViewModel reply = new ReplyViewModel();
             var error = "";
@@ -649,13 +737,25 @@ namespace Chariot.Engine.Business.Mardiscore
                 {
                     invoice_detail_item = new Invoice_detail();
 
-                    if (cabecera) {
+                    if (cabecera)
+                    {
                         invoice_item.NUMBER = item.numFact;
                         invoice_item.FECHA = item.dateFact;
                         invoice_item.CLIENTE = item.razonsocial;
                         cabecera = false;
                     }
-                    
+
+                    bool Duplicado = _branchMigrateDao.facturaDuplicada(invoice_item, idAccount);
+
+                    if (Duplicado) {
+                        ErroresCargaFactura errorF = new ErroresCargaFactura();
+                        errorF.Code = item.code;
+                        errorF.Error = "Factura Duplicada";
+                        reply.data = errorF;
+                        reply.messege = "Duplicado";
+                        return reply;
+                    }
+
                     int _idproduct = _branchMigrateDao.ExistProductNutri(item.code);
 
                     if (_idproduct > 0)
@@ -678,10 +778,11 @@ namespace Chariot.Engine.Business.Mardiscore
                         return reply;
                     }
 
-                    if (guardar) {
+                    if (guardar)
+                    {
                         _branchMigrateDao.SaveProductNutriMigrate(invoice_item, idAccount, 0, option, campaign, status);
                     }
-                    
+
                     reply.status = "OK";
                     reply.data = 1;
                 }

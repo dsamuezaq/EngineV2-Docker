@@ -80,6 +80,55 @@ namespace Engine_V2.Controllers
                     reply.data = 1;
                 }
                 else{
+                    reply.status = data.messege;
+                    reply.messege = data.error;
+                    reply.data = data;
+                }
+                return Ok(reply);
+            }
+            catch (Exception e)
+            {
+                IList<TaskMigrateResultViewModel> data = new List<TaskMigrateResultViewModel>();
+                data.Add(new TaskMigrateResultViewModel { description = e.Message, Element = "0", Code = "0" });
+                var rows = from x in data
+                           select new
+                           {
+                               description = x.description,
+                               data = x.Element,
+                               Code = x.Code
+
+                           };
+
+                var jsondata = rows.ToArray();
+                reply.data = jsondata;
+                reply.status = "Fail";
+                reply.messege = "Item no se Guardo";
+                reply.data = data;
+                return Ok(reply);
+
+            }
+        }
+
+        [HttpPost]
+        [Route("LoadProductFactura")]
+        public async Task<IActionResult> SaveProductNutriAxiosFactura(GetFacturaViewModel _data)
+        {
+            try
+            {
+                var model = JSonConvertUtil.Deserialize<FactNutriViewModel>(_data.urlfile);
+                List<FactNutriViewModel> _model = new List<FactNutriViewModel>();
+                _model.Add(model);
+
+                var data = _taskCampaignBusiness.DataFactXmlFactura(_model, _data.IdAccount, null, null, null, null);
+
+                if (data.status == "OK")
+                {
+                    reply.status = "Ok";
+                    reply.messege = "Item Guardado";
+                    reply.data = 1;
+                }
+                else
+                {
                     reply.status = "Fail";
                     reply.messege = "Item no se Guardo";
                     reply.data = data;
@@ -127,7 +176,7 @@ namespace Engine_V2.Controllers
                 List<FactNutriViewModel> _model = new List<FactNutriViewModel>();
                 _model.Add(model);
 
-                var data = _taskCampaignBusiness.DataFactXml(_model, _data.IdAccount, null, null, null, null,true);
+                var data = _taskCampaignBusiness.DataFactXmlDetalle(_model,_data.IdAccount, null, null, null, null);
 
                 if (data.status == "OK")
                 {

@@ -19,6 +19,7 @@ namespace Chariot.Engine.DataObject.MardisOrders
         public string NUMBER { get; set; }
         public DateTime FECHA { get; set; } = DateTime.Now;
         public string CLIENTE { get; set; }
+        public string RUC_CEDULA { get; set; }
         public virtual ICollection<Invoice_detail> Invoice_details { get; set; }
 
     }

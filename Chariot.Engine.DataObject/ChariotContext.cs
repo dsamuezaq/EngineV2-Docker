@@ -270,6 +270,10 @@ namespace Chariot.Engine.DataObject
         /// </summary>
         public DbSet<Movil_Warenhouse> Movil_Warenhouses { get; set; }
 
+        /// <summary>
+        /// Tabla Distributor
+        /// </summary>
+        public DbSet<Distributor> Distributors { get; set; }
 
         /// <summary>
         /// Secuencial de ordenes

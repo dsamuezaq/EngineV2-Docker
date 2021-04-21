@@ -130,16 +130,19 @@ namespace Chariot.Engine.DataAccess.MardisCore
             Central_Warenhouse centralw = new Central_Warenhouse();
             Invoice invoice = new Invoice();
             IQueryable<Invoice> invoices = Enumerable.Empty<Invoice>().AsQueryable();
+            IQueryable<Distributor> distributors = Enumerable.Empty<Distributor>().AsQueryable();
             TaskCampaign task = null;
+            int idDistributor = 0;
 
             try
             {
 
                 invoices = Context.Invoices.Where(i => i.NUMBER == numFact);
-
+                
                 if (invoices.Count() > 0)
                 {
                     invoice = invoices.First();
+                    distributors = Context.Distributors.Where(d => d.RUC == invoice.RUC_CEDULA);
 
                     if (invoice.IDINVOICE != 0)
                     {
@@ -158,8 +161,10 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 centralw.IDDISTRIBUTOR = 1;
                 centralw.BALANCE = (decimal)_insertData.AMOUNT;
                 centralw.DESCRIPTION = _insertData.DESCRIPTION;
-                Context.Central_Warenhouses.Add(centralw);
+                centralw.MOVEMENT = "1";
+                centralw.IDDISTRIBUTOR = distributors.Count() > 0 ? distributors.First().IDDISTRIBUTOR : 1;
 
+                Context.Central_Warenhouses.Add(centralw);
                 Context.SaveChanges();
 
                 return "";
@@ -225,6 +230,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
                     centralw.IDDISTRIBUTOR = 1;
                     centralw.BALANCE = (decimal)_insertData.Invoice_details.First().AMOUNT;
                     centralw.DESCRIPTION = _insertData.Invoice_details.First().DESCRIPTION;
+                    centralw.MOVEMENT = "1";
                     Context.Central_Warenhouses.Add(centralw);
                 }
 

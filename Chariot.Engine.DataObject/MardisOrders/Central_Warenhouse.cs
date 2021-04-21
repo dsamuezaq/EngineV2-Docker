@@ -23,7 +23,8 @@ namespace Chariot.Engine.DataObject.MardisOrders
         public virtual Distributor Distributor { get; set; }
         public decimal BALANCE { get; set; }
         public string DESCRIPTION { get; set; }
+        public string MOVEMENT { get; set; }
 
-        
+
     }
 }

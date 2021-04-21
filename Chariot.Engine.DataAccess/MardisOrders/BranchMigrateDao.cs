@@ -158,7 +158,6 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 Context.SaveChanges();
                 
                 centralw.IDPRODUCTO = _insertData.IDPRODUCTO;
-                centralw.IDDISTRIBUTOR = 1;
                 centralw.BALANCE = (decimal)_insertData.AMOUNT;
                 centralw.DESCRIPTION = _insertData.DESCRIPTION;
                 centralw.MOVEMENT = "1";

@@ -650,6 +650,7 @@ namespace Chariot.Engine.Business.Mardiscore
                         invoice_item.NUMBER = item.numFact;
                         invoice_item.FECHA = item.dateFact;
                         invoice_item.CLIENTE = item.razonsocial;
+                        invoice_item.RUC_CEDULA = ruc;
                         cabecera = false;
                     }
 

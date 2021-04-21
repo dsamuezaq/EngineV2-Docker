@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Chariot.Engine.DataObject.MardisOrders
 {
+    [Table("Distributor", Schema = "MardisOrders")]
     public class Distributor
     {
         [Key]

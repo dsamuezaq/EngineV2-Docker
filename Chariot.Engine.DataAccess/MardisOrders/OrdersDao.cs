@@ -25,6 +25,21 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                 foreach (var x in _data)
                 {
                     Context.Orders.Add(x);
+                    if (x.Idaccount == 13) {
+                        foreach (var detalle in x.pedidosItems)
+                        {
+                            IQueryable<Product> producto = Enumerable.Empty<Product>().AsQueryable();
+                            Movil_Warenhouse movilw = new Movil_Warenhouse();
+
+                            producto = Context.ProductOrders.Where(p => p.IdArticulo == detalle.idArticulo);
+
+                            movilw.BALANCE = detalle.cantidad;
+                            movilw.DESCRIPTION = "Venta";
+                            movilw.IDVENDEDOR = int.Parse(x.idVendedor);
+                            movilw.IDPRODUCTO = producto.Count() > 0 ? producto.First().Id : 0;
+                            movilw.MOVEMENT = "-1";
+                        }
+                    }
                 }
                 Context.SaveChanges();
                 //db.PEDIDOS.Add(pEDIDOS);

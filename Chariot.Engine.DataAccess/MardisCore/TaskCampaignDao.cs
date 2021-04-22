@@ -46,7 +46,6 @@ namespace Chariot.Engine.DataAccess.MardisCore
                            select new
                            {
                                c.ID_MOVILW,
-                               c.ID_CENTRALW,
                                c.BALANCE,
                                c.DESCRIPTION,
                                s.IdVendedor

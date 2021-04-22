@@ -66,7 +66,7 @@ namespace Engine_V2.Controllers
                 var _userInfo = auth(userLogin.Email, userLogin.Password);
                 if (_userInfo != null)
                 {
-                 
+
                     return Ok(generateJwtToken(_userInfo));
                 }
                 else
@@ -111,8 +111,8 @@ namespace Engine_V2.Controllers
         public async Task<IActionResult> Auth2()
         {
             Token token = new Token();
-             token.token = "das";
-              return Ok(token); 
+            token.token = "das";
+            return Ok(token);
 
         }
 
@@ -123,7 +123,7 @@ namespace Engine_V2.Controllers
             if (ModelState.IsValid)
             {
                 var _userInfo = auth(userLogin.Email, userLogin.Password);
-                if (_userInfo !=null  && _userInfo.message!= "Usuario o contraseña incorrecto")
+                if (_userInfo != null && _userInfo.message != "Usuario o contraseña incorrecto")
                 {
                     Token token = new Token();
                     token.token = generateJwtTokenEngine(_userInfo);
@@ -151,8 +151,8 @@ namespace Engine_V2.Controllers
         {
             try
             {
-            
-              
+
+
 
                 return Ok(_userBusiness.GetUserMenu(idprofile)); ;
             }
@@ -169,11 +169,11 @@ namespace Engine_V2.Controllers
         [HttpPost]
         [Authorize]
         [Route("Register")]
-        public async Task<IActionResult> Register( string password)
+        public async Task<IActionResult> Register(string password)
         {
-             byte[] passwordHash, passwordSalt;
-             CreatePasswordHash(password, out passwordHash, out passwordSalt);
-             return Ok(passwordHash);
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            return Ok(passwordHash);
         }
 
         #endregion
@@ -188,6 +188,45 @@ namespace Engine_V2.Controllers
         }
 
         #endregion
+        #region bodegas 
+
+        [AllowAnonymous]
+        [Route("AuthEWP")]
+        [HttpPost]
+        public async Task<IActionResult> AuthEWP(String username, String password)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var _userInfo = auth(username, password);
+                if (_userInfo != null && _userInfo.message != "Usuario o contraseña incorrecto")
+                {
+
+                    surtilogin _modellogin = new surtilogin();
+
+
+                    _modellogin.access_token= generateJwtSurtiWP(_userInfo);
+                    _modellogin.token_type = "Bearer";
+                    _modellogin.expires_in =1213232;
+                    _modellogin.refresh_token = _modellogin.access_token;
+                    _modellogin.Responce = "Ok";
+    
+                    return Ok(_modellogin);
+                }
+
+                ReplyViewModel reply = new ReplyViewModel();
+                    reply.status = username     ;
+                    reply.messege = "Usuario o contraseña incorecta";
+                    return Ok(reply);
+                
+
+            }
+            return BadRequest();
+
+        }
+
+        #endregion
+
 
         #endregion
 

@@ -5,6 +5,7 @@ using Chariot.Framework.Complement;
 using Chariot.Framework.Helpers;
 using Chariot.Framework.MardisSecurityViewModel;
 using Chariot.Framework.SystemViewModel;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -117,6 +118,44 @@ namespace Engine_V2.Libraries
                 Subject = userIdentity,
                 Expires = DateTime.UtcNow.AddHours(-5).AddDays(7),
                 NotBefore = DateTime.UtcNow.AddHours(-5),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
+        protected string generateJwtSurtiWP(UserTokenModel InfoUser)
+        {
+            // 
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+      
+
+
+     
+            var identity = new ClaimsIdentity(DefaultAuthenticationTypes.ApplicationCookie, ClaimTypes.Name, ClaimTypes.Role);
+            identity.AddClaim(new Claim("iss", "SurtiServer"));
+            identity.AddClaim(new Claim("aud", InfoUser._user.Email.ToString()));
+            identity.AddClaim(new Claim("sub", "HAILOL"));
+            identity.AddClaim(new Claim("customer_id", InfoUser._user.IdAccount.ToString()));
+            identity.AddClaim(new Claim("empresa_id", InfoUser._user.IdAccount.ToString()));
+            identity.AddClaim(new Claim("canal_name", "HAILOL"));
+            identity.AddClaim(new Claim("estado_camion", ""));
+            identity.AddClaim(new Claim("nombre", InfoUser._user.name));
+            identity.AddClaim(new Claim("warehouse_id", InfoUser._user.IdAccount));
+            
+            identity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", InfoUser._user.Email.ToString()));
+            identity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", InfoUser._user.Id.ToString()));
+            identity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", InfoUser._user.IdAccount.ToString()));
+            var userIdentity = new ClaimsIdentity(identity);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+
+                Expires = DateTime.UtcNow.AddHours(-5).AddDays(7),
+                NotBefore = DateTime.UtcNow.AddHours(-5),
+                
+                Subject = userIdentity,
+        
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

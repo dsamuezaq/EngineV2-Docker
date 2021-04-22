@@ -259,6 +259,8 @@
     <Compile Include="Procedure\SP_dato_tracking_encuestadores.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SurtiApp\DescuentoModeloApp.cs" />
+    <Compile Include="SurtiApp\EntregadorModeloApp.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

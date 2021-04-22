@@ -133,8 +133,7 @@ namespace Chariot.Engine.Business.MardisOrders
             {
                 List<ArticulosViewModel> mapperRubros = _mapper.Map<List<ArticulosViewModel>>(_ordersDao.SelectEntity<Product>().Where(x => x.StatusRegister == "A" && x.Idaccount == Idaccount));
                 List<ArticulosViewModel> _reply = (from ar in mapperRubros
-                                                   join cw in Context.Central_Warenhouses on ar.Id equals cw.IDPRODUCTO
-                                                   join mw in Context.Movil_Warenhouses on cw.ID_CENTRALW equals mw.ID_CENTRALW
+                                                   join mw in Context.Movil_Warenhouses on ar.Id equals mw.IDPRODUCTO
                                                    where ar.Idaccount == Idaccount
                                                    select new ArticulosViewModel
                                                    {

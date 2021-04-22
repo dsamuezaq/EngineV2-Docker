@@ -13,9 +13,6 @@ namespace Chariot.Engine.DataObject.MardisOrders
     {
         [Key]
         public Int64 ID_MOVILW { get; set; } = 0;
-        public Int64 ID_CENTRALW { get; set; }
-        [ForeignKey("ID_CENTRALW")]
-        public virtual Central_Warenhouse central_warenhouse { get; set; }
         public decimal? BALANCE { get; set; }
         public string DESCRIPTION { get; set; }
         public int IDVENDEDOR { get; set; }

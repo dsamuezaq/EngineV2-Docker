@@ -310,6 +310,7 @@
     <Compile Include="MardisOrdersViewModel\TruckViewModel.cs" />
     <Compile Include="MardisOrdersViewModel\VisitasViewModel.cs" />
     <Compile Include="MardisSecurityViewModel\GetMenuViewModel.cs" />
+    <Compile Include="MardisSecurityViewModel\surtilogin.cs" />
     <Compile Include="MardisSecurityViewModel\Token.cs" />
     <Compile Include="MardisSecurityViewModel\UserTokenModel.cs" />
     <Compile Include="MardisSecurityViewModel\UserViewModel.cs" />
@@ -321,6 +322,10 @@
     <Compile Include="RedisViewModel\ServiceModel.cs" />
     <Compile Include="RedisViewModel\tb_bancos_descripcion.cs" />
     <Compile Include="Resources\CStatusRegister.cs" />
+    <Compile Include="SurtiApp\ConsolidadoItemSurtiApp.cs" />
+    <Compile Include="SurtiApp\DescuentoModeloApp.cs" />
+    <Compile Include="SurtiApp\EntregadorModeloApp.cs" />
+    <Compile Include="SurtiApp\Inventario_bodegaModelApp.cs" />
     <Compile Include="SystemViewModel\LoginViewModel.cs" />
     <Compile Include="SystemViewModel\ReplyViewModel.cs" />
     <Compile Include="SystemViewModel\ReplyViewModelPollsters.cs" />
@@ -344,6 +349,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="NewFolder1\" />
     <Folder Include="Ruta\" />
   </ItemGroup>
   <ItemGroup>

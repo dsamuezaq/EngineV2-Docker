@@ -1,7 +1,9 @@
 ﻿using Chariot.Engine.DataObject;
+using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Engine.DataObject.MardisSecurity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -75,5 +77,57 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
 
 
         }
+        #region SurtiAPP
+
+        /// <summary>
+        /// Exist user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="pass"></param>
+        /// <returns></returns>
+        public Distributor GetUserbycredentialsSurti(string user, string pass)
+        {
+            try
+            {
+
+                var usuarios = from u in Context.Users
+                              join s in Context.Distributors on u.Id equals s.Iduser
+                              where u.Email == user && u.Password == pass
+                              select  new Distributor { 
+                              IDDISTRIBUTOR=s.IDDISTRIBUTOR,
+                              NAME=s.NAME,
+                              user=u
+                              
+                              }
+                             ;
+                var usuario = usuarios.ToList();
+   
+                return usuario.Count() > 0 ? usuario.FirstOrDefault() : null;
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+
+
+        }
+        public int ConsulatarIdDistribuidorDeVendedorXIdVendedor(int idvendedor)
+        {
+            try
+            {
+                var Distribuidor = Context.SALESMAN_DISTRIBUTORS.Where(x => x.IDSALESMAN.Equals(idvendedor));
+
+                return Distribuidor.Count() > 0 ? Distribuidor.First().IDDISTRIBUTOR : 0;
+            }
+            catch (Exception e)
+            {
+                var ex = e.Message;
+                return 0;
+            }
+       
+
+        }
+        #endregion
     }
 }

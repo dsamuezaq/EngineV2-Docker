@@ -39,6 +39,8 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                             movilw.IDVENDEDOR = int.Parse(x.idVendedor);
                             movilw.IDPRODUCTO = producto.Count() > 0 ? producto.First().Id : 0;
                             movilw.MOVEMENT = "-1";
+
+                            Context.Movil_Warenhouses.Add(movilw);
                         }
                     }
                 }

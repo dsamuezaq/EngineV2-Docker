@@ -142,11 +142,11 @@ namespace Engine_V2.Libraries
             identity.AddClaim(new Claim("canal_name", "HAILOL"));
             identity.AddClaim(new Claim("estado_camion", ""));
             identity.AddClaim(new Claim("nombre", InfoUser._user.name));
-            identity.AddClaim(new Claim("warehouse_id", InfoUser._user.IdAccount));
+            identity.AddClaim(new Claim("warehouse_id", InfoUser._user.Id));
             
             identity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", InfoUser._user.Email.ToString()));
             identity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", InfoUser._user.Id.ToString()));
-            identity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", InfoUser._user.IdAccount.ToString()));
+            identity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", InfoUser._user.name.ToString()));
             var userIdentity = new ClaimsIdentity(identity);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -161,5 +161,15 @@ namespace Engine_V2.Libraries
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        #region SurtiAPP
+
+        public UserTokenModel autSurti(string user, string pass)
+        {
+
+            var _reply = _userBusiness.FindUserBycredentialsSurti(user, pass);
+            return _reply;
+        }
+        #endregion
     }
 }

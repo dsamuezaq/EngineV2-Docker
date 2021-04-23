@@ -1,4 +1,5 @@
 ﻿using Chariot.Engine.DataObject.MardisCommon;
+using Chariot.Engine.DataObject.MardisOrders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,9 +14,14 @@ namespace Chariot.Engine.DataObject.MardisSecurity
     /// Class User Engine
     /// </summary>
     [Table("User", Schema = "MardisSecurity")]
-    public class User 
+    public class User
     {
-          
+
+
+        public User()
+        {
+            this.Salesmanes = new HashSet<Salesman>();
+        }
         [Key]
         public Guid Id { get; set; }
 
@@ -43,5 +49,8 @@ namespace Chariot.Engine.DataObject.MardisSecurity
         [ForeignKey("IdAccount")]
         public virtual Account Account { get; set; }
 
-    }
+    public virtual ICollection<Salesman> Salesmanes { get; set; }
+
+
+}
 }

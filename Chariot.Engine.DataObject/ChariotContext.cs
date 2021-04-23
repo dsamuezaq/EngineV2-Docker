@@ -276,6 +276,12 @@ namespace Chariot.Engine.DataObject
         public DbSet<Distributor> Distributors { get; set; }
 
         /// <summary>
+        /// Tabla Distributor y vendedor
+        /// </summary>
+        public DbSet<SALESMAN_DISTRIBUTOR> SALESMAN_DISTRIBUTORS { get; set; }
+
+
+        /// <summary>
         /// Secuencial de ordenes
         /// </summary>
         public DbSet<UserPollster> UserPollsters { get; set; }

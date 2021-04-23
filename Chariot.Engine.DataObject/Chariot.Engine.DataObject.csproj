@@ -247,6 +247,7 @@
     <Compile Include="MardisOrders\IEntity.cs" />
     <Compile Include="MardisOrders\Items.cs" />
     <Compile Include="MardisOrders\Salesman.cs" />
+    <Compile Include="MardisOrders\SALESMAN_DISTRIBUTOR.cs" />
     <Compile Include="MardisOrders\SequenceOrder.cs" />
     <Compile Include="MardisOrders\Visitas.cs" />
     <Compile Include="MardisOrders\vw_pagoxcarteraDevolucion.cs" />

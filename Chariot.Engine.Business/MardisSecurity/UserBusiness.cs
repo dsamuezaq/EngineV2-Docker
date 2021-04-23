@@ -119,5 +119,39 @@ namespace Chariot.Engine.Business.MardisSecurity
 
             return reply;
         }
+
+
+
+        #region SurtiAPP
+
+        public UserTokenModel FindUserBycredentialsSurti(string user, string pass)
+        {
+
+            var _data = _userDao.GetUserbycredentialsSurti(user, pass);
+         //  var idDist =_userDao.ConsulatarIdDistribuidorDeVendedorXIdVendedor(_data.Id);
+            UserTokenModel _resultData = new UserTokenModel();
+            if (_data != null)
+            {
+
+                UserViewModel _user = new UserViewModel();
+                _user.Email = _data.user.Email;
+                _user.Idtype = _data.user.IdProfile.ToString(); ;
+                _user.IdAccount = _data.user.IdAccount.ToString();
+                _user.name = _data.NAME.ToString();
+                _user.Id = _data.IDDISTRIBUTOR.ToString();
+                _user.RoleName = _userDao.GetRoleName(_data.user.IdProfile);
+                _user.Init = _data.user.InitialPage;
+                _resultData.DateToken = DateTime.Now;
+                _resultData.message = "Ok";
+                _resultData._user = _user;
+
+                return _resultData;
+
+            };
+            _resultData.message = "Usuario o contraseña incorrecto";
+            return _resultData;
+
+        }
+        #endregion
     }
 }

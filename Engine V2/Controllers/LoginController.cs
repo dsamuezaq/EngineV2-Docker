@@ -198,7 +198,7 @@ namespace Engine_V2.Controllers
             if (ModelState.IsValid)
             {
 
-                var _userInfo = auth(username, password);
+                var _userInfo = autSurti(username, password);
                 if (_userInfo != null && _userInfo.message != "Usuario o contraseña incorrecto")
                 {
 

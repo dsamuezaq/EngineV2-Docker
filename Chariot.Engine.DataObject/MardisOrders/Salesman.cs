@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chariot.Engine.DataObject.MardisSecurity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,6 +18,9 @@ namespace Chariot.Engine.DataObject.MardisOrders
         public string Nombre { get; set; }
         public string CodigoDeValidacion { get; set; }
         public int? Idaccount { get; set; }
-        
+        public Guid? Iduser { get; set; }
+        [ForeignKey("Iduser")]
+        public virtual User user { get; set; }
+
     }
 }

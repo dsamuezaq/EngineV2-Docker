@@ -30,13 +30,15 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                         foreach (var detalle in x.pedidosItems)
                         {
                             IQueryable<Product> producto = Enumerable.Empty<Product>().AsQueryable();
+                            IQueryable<Salesman> vendedor = Enumerable.Empty<Salesman>().AsQueryable();
                             Movil_Warenhouse movilw = new Movil_Warenhouse();
 
                             producto = Context.ProductOrders.Where(p => p.IdArticulo == detalle.idArticulo);
+                            vendedor = Context.Salesmans.Where(v => v.IdVendedor == x.idVendedor && v.Idaccount == x.Idaccount);
 
                             movilw.BALANCE = detalle.cantidad;
                             movilw.DESCRIPTION = "Venta";
-                            movilw.IDVENDEDOR = int.Parse(x.idVendedor);
+                            movilw.IDVENDEDOR = vendedor.Count() > 0 ? vendedor.First().Id : 0;
                             movilw.IDPRODUCTO = producto.Count() > 0 ? producto.First().Id : 0;
                             movilw.MOVEMENT = "-1";
                             //Guardar

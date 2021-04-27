@@ -38,9 +38,15 @@ namespace Chariot.Engine.Business.MardisOrders
         public List<VendedoresViewModel> GetVentas(int Idaccount)
         {
 
-            List<VendedoresViewModel> mapperVendedores = _mapper.Map<List<Salesman>, List<VendedoresViewModel>>(_ordersDao.SelectEntity<Salesman>().Where(x => x.Idaccount == Idaccount).ToList());
-            return mapperVendedores;
-
+            if (Idaccount == 0)
+            {
+                List<VendedoresViewModel> mapperVendedores = _mapper.Map<List<Salesman>, List<VendedoresViewModel>>(_ordersDao.SelectEntity<Salesman>().ToList());
+                return mapperVendedores;
+            }
+            else {
+                List<VendedoresViewModel> mapperVendedores = _mapper.Map<List<Salesman>, List<VendedoresViewModel>>(_ordersDao.SelectEntity<Salesman>().Where(x => x.Idaccount == Idaccount).ToList());
+                return mapperVendedores;
+            }
         }
         public List<RubrosViewModel> GetRubros(int Idaccount)
         {

@@ -280,6 +280,16 @@ namespace Chariot.Engine.DataObject
         /// </summary>
         public DbSet<SALESMAN_DISTRIBUTOR> SALESMAN_DISTRIBUTORS { get; set; }
 
+        /// <summary>
+        /// Tabla Central Warenhouse Resume
+        /// </summary>
+        public DbSet<Central_Warenhouse_Resume> Central_Warenhouse_Resumes { get; set; }
+
+        /// <summary>
+        /// Tabla Movil Warenhouse Resume
+        /// </summary>
+        public DbSet<Movil_Warenhouse_Resume> Movil_Warenhouse_Resumes { get; set; }
+
 
         /// <summary>
         /// Secuencial de ordenes

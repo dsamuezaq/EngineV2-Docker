@@ -1893,7 +1893,7 @@ namespace Chariot.Engine.Business.MardisOrders
                             name = x.nombre,
                             short_description = x.nombre,
                             full_description = x.nombre,
-                            sku= x.IDPRODUCTO.ToString()
+                            sku= x.IDPRODUCTO.ToString(),
 
                             price = x.precio,
                             stock_quantity = x.cantidad,
@@ -1967,8 +1967,8 @@ namespace Chariot.Engine.Business.MardisOrders
                             is_price_by_unit = true,
                             price_by_unit = x.precioUnitario,
                             unit_type = "kgs",
-                            id = x.IDPRODUCTO
-                               sku = x.IDPRODUCTO.ToString()
+                            id = x.IDPRODUCTO,
+                            sku = x.IDPRODUCTO.ToString()
 
 
                         }).FirstOrDefault();

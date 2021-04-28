@@ -28,14 +28,17 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                     Context.Orders.Add(x);
                     //Nutri
                     if (x.Idaccount == 13) {
+
+                        IQueryable<Salesman> vendedor = Enumerable.Empty<Salesman>().AsQueryable();
+                        vendedor = Context.Salesmans.Where(v => v.IdVendedor == x.idVendedor && v.Idaccount == x.Idaccount);
+
                         foreach (var detalle in x.pedidosItems)
                         {
                             IQueryable<Product> producto = Enumerable.Empty<Product>().AsQueryable();
-                            IQueryable<Salesman> vendedor = Enumerable.Empty<Salesman>().AsQueryable();
                             Movil_Warenhouse movilw = new Movil_Warenhouse();
 
                             producto = Context.ProductOrders.Where(p => p.IdArticulo == detalle.idArticulo);
-                            vendedor = Context.Salesmans.Where(v => v.IdVendedor == x.idVendedor && v.Idaccount == x.Idaccount);
+                            
 
                             movilw.BALANCE = detalle.cantidad;
                             movilw.DESCRIPTION = "Venta";
@@ -45,6 +48,16 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                             //Guardar
                             Context.Movil_Warenhouses.Add(movilw);
                         }
+
+                        try
+                        {
+                            Context.Query<string>($@"EXEC dbo.sp_actualiza_movil_warehouse_app @idvendedor = {vendedor.First().Id}");
+                        }
+                        catch (Exception e)
+                        {
+                            throw;
+                        }
+
                     }
                 }
                 Context.SaveChanges();

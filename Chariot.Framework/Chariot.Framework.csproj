@@ -326,6 +326,8 @@
     <Compile Include="SurtiApp\DescuentoModeloApp.cs" />
     <Compile Include="SurtiApp\EntregadorModeloApp.cs" />
     <Compile Include="SurtiApp\Inventario_bodegaModelApp.cs" />
+    <Compile Include="SurtiApp\SP\ItemCarritoModelSurtiApp.cs" />
+    <Compile Include="SurtiApp\SP\ProductoTiendaModeloApp.cs" />
     <Compile Include="SystemViewModel\LoginViewModel.cs" />
     <Compile Include="SystemViewModel\ReplyViewModel.cs" />
     <Compile Include="SystemViewModel\ReplyViewModelPollsters.cs" />

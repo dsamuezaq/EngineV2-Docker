@@ -14,6 +14,7 @@ using Chariot.Framework.Helpers;
 using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardisOrdersViewModel;
 using Chariot.Framework.SurtiApp;
+using Chariot.Framework.SurtiApp.SP;
 using Engine_V2.Libraries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -91,150 +92,119 @@ namespace Engine_V2.Controllers
         public async Task<IActionResult> Entregadores(int Cuenta)
         {
 
-          EntregadorModeloApp _entregadoresModeloApp = new EntregadorModeloApp();
 
-            EntregadorDetalle _entregadorModeloApp = new EntregadorDetalle();
+            var Respuesta=_ordersBusiness.ObtenerVendedorXdistribuidor(Cuenta);
 
-            _entregadorModeloApp.username = "dsamueza@mardisresearch.com";
-            _entregadorModeloApp.email = "dsamueza@mardisresearch.com";
-            _entregadorModeloApp.first_name = "David";
-            _entregadorModeloApp.last_name = "Samueza";
-            _entregadorModeloApp.active = true;
-            _entregadorModeloApp.deleted = false;
-            _entregadorModeloApp.status = "loaded";
-            _entregadorModeloApp.delivery_count = "0";
-            _entregadorModeloApp.id = 5577;
-
-
-
-            _entregadoresModeloApp.entregadores.Add(_entregadorModeloApp);
-            _entregadorModeloApp = new EntregadorDetalle();
-            _entregadorModeloApp.username = "dsamuedza@mardisresearch.com";
-            _entregadorModeloApp.email = "dsamuezad@mardisresearch.com";
-            _entregadorModeloApp.first_name = "Davidss";
-            _entregadorModeloApp.last_name = "Samueza112";
-            _entregadorModeloApp.active = true;
-            _entregadorModeloApp.deleted = false;
-            _entregadorModeloApp.status = "loaded";
-            _entregadorModeloApp.delivery_count = "6";
-            _entregadorModeloApp.id = 5377;
-
-
-
-            _entregadoresModeloApp.entregadores.Add(_entregadorModeloApp);
-            _entregadorModeloApp = new EntregadorDetalle();
-
-            _entregadorModeloApp.username = "dsamuedza@mardisresearch.com";
-            _entregadorModeloApp.email = "dsamuezad@mardisresearch.com";
-            _entregadorModeloApp.first_name = "Oscar";
-            _entregadorModeloApp.last_name = "larreagui";
-            _entregadorModeloApp.active = true;
-            _entregadorModeloApp.deleted = false;
-            _entregadorModeloApp.status = "empty";
-            _entregadorModeloApp.delivery_count = "0";
-            _entregadorModeloApp.id = 5370;
-
-
-
-            _entregadoresModeloApp.entregadores.Add(_entregadorModeloApp);
-            var S = _entregadoresModeloApp;
-            return Ok(S);
+            return Ok(Respuesta.data);
 
         }
         [HttpGet]
-        [Route("inventarioBodegaXIdbodegaCentral/{Cuenta}")]
+        [Route("inventarioBodegaXIdbodegaCentral/{IdbodegaCentral}")]
         //  [Authorize]
         public async Task<IActionResult> inventarioBodegaXIdbodegaCentral(int IdbodegaCentral)
         {
 
-            Inventario_bodegaModelApp _inventario_bodegaModelApp = new Inventario_bodegaModelApp();
+            //Inventario_bodegaModelApp _inventario_bodegaModelApp = new Inventario_bodegaModelApp();
 
-            InventarioDetalebodega _inventariosDetalebodega = new InventarioDetalebodega();
+            //InventarioDetalebodega _inventariosDetalebodega = new InventarioDetalebodega();
           
 
-                _inventariosDetalebodega.subwarehouse = 1;
-            ProductoBodega _productoBodega = new ProductoBodega();
-                _productoBodega.name = "Aji (0.5 Libras)";
-                _productoBodega.short_description = null;
-                _productoBodega.full_description = null;
-                _productoBodega.sku = null;
-                _productoBodega.approved_rating_sum = 0;
-                _productoBodega.price= 0.7500;
-                _productoBodega.disable_buy_button = false;
-                _productoBodega.stock_quantity = 10000;
-                _productoBodega.has_tier_prices = false;
-                _productoBodega.category_ids.Add(29);
-            ImagePoductoBodega _imagePoductoBodega = new ImagePoductoBodega();
-            _imagePoductoBodega.id = 58;
-            _imagePoductoBodega.picture_id = 81;
-            _imagePoductoBodega.position = 0;
-            _imagePoductoBodega.src = "http://surti-test-nopc.azurewebsites.net/images/thumbs/0000081_aji-05-libras.jpeg";
-            _imagePoductoBodega.attachment = null;
-            _productoBodega.unit_type = "kgs";
-            _productoBodega.id = 115;
-            _productoBodega.images.Add(_imagePoductoBodega);
-            _inventariosDetalebodega.product = _productoBodega;
-            _inventariosDetalebodega.id = 48;
+            //    _inventariosDetalebodega.subwarehouse = 1;
+            //ProductoBodega _productoBodega = new ProductoBodega();
+            //    _productoBodega.name = "Aji (0.5 Libras)2";
+            //    _productoBodega.short_description = null;
+            //    _productoBodega.full_description = null;
+            //    _productoBodega.sku = null;
+            //    _productoBodega.approved_rating_sum = 0;
+            //    _productoBodega.price= 0.7500;
+            //    _productoBodega.disable_buy_button = false;
+            //    _productoBodega.stock_quantity = 10000;
+            //    _productoBodega.has_tier_prices = false;
+            //    _productoBodega.category_ids.Add(29);
+            //ImagePoductoBodega _imagePoductoBodega = new ImagePoductoBodega();
+            //_imagePoductoBodega.id = 58;
+            //_imagePoductoBodega.picture_id = 81;
+            //_imagePoductoBodega.position = 0;
+            //_imagePoductoBodega.src = "http://surti-test-nopc.azurewebsites.net/images/thumbs/0000081_aji-05-libras.jpeg";
+            //_imagePoductoBodega.attachment = null;
+            //_productoBodega.unit_type = "kgs";
+            //_productoBodega.id = 115;
+            //_productoBodega.images.Add(_imagePoductoBodega);
+            //_inventariosDetalebodega.product = _productoBodega;
+            //_inventariosDetalebodega.id = 48;
        
 
 
-            _inventario_bodegaModelApp.warehouse_inventory.Add(_inventariosDetalebodega);
+            //_inventario_bodegaModelApp.warehouse_inventory.Add(_inventariosDetalebodega);
 
 
 
-            _inventariosDetalebodega = new InventarioDetalebodega();
+            //_inventariosDetalebodega = new InventarioDetalebodega();
 
 
-            _inventariosDetalebodega.subwarehouse = 2;
-             _productoBodega = new ProductoBodega();
-            _productoBodega.name = "Ajo en Pepa (1 Unidad)";
-            _productoBodega.short_description = "Ajo en Pepa (1 Unidad)";
-            _productoBodega.full_description = null;
-            _productoBodega.sku = null;
-            _productoBodega.approved_rating_sum = 0;
-            _productoBodega.price = 0.7500;
-            _productoBodega.disable_buy_button = false;
-            _productoBodega.stock_quantity = 10000;
-            _productoBodega.has_tier_prices = false;
-            _productoBodega.category_ids.Add(29);
-            _productoBodega.unit_type = "kgs";
-            _productoBodega.id = 125;
-            _imagePoductoBodega = new ImagePoductoBodega();
-            _imagePoductoBodega.id = 58;
-            _imagePoductoBodega.picture_id = 81;
-            _imagePoductoBodega.position = 0;
-            _imagePoductoBodega.src = "http://surti-test-nopc.azurewebsites.net/images/thumbs/0000081_aji-05-libras.jpeg";
-            _imagePoductoBodega.attachment = null;
-            _productoBodega.images.Add(_imagePoductoBodega);
-            _inventariosDetalebodega.product = _productoBodega;
-            _inventariosDetalebodega.id = 121;
+            //_inventariosDetalebodega.subwarehouse = 2;
+            // _productoBodega = new ProductoBodega();
+            //_productoBodega.name = "Ajo en Pepa (1 Unidad)2";
+            //_productoBodega.short_description = "Ajo en Pepa (1 Unidad)2";
+            //_productoBodega.full_description = null;
+            //_productoBodega.sku = null;
+            //_productoBodega.approved_rating_sum = 0;
+            //_productoBodega.price = 0.7500;
+            //_productoBodega.disable_buy_button = false;
+            //_productoBodega.stock_quantity = 10000;
+            //_productoBodega.has_tier_prices = false;
+            //_productoBodega.category_ids.Add(29);
+            //_productoBodega.unit_type = "kgs";
+            //_productoBodega.id = 125;
+            //_imagePoductoBodega = new ImagePoductoBodega();
+            //_imagePoductoBodega.id = 58;
+            //_imagePoductoBodega.picture_id = 81;
+            //_imagePoductoBodega.position = 0;
+            //_imagePoductoBodega.src = "http://surti-test-nopc.azurewebsites.net/images/thumbs/0000081_aji-05-libras.jpeg";
+            //_imagePoductoBodega.attachment = null;
+            //_productoBodega.images.Add(_imagePoductoBodega);
+            //_inventariosDetalebodega.product = _productoBodega;
+            //_inventariosDetalebodega.id = 121;
          
 
 
-            _inventario_bodegaModelApp.warehouse_inventory.Add(_inventariosDetalebodega);
+            //_inventario_bodegaModelApp.warehouse_inventory.Add(_inventariosDetalebodega);
 
-            return Ok(_inventario_bodegaModelApp);
+            var InventarioBodega = _ordersBusiness.ObtenerProductoEnBodegaCentralDistribuidor(IdbodegaCentral);
+            return Ok(InventarioBodega.data);
 
         }
         [HttpGet]
-        [Route("inventarioBodegaXIdbodegaCentralTODOS/{Cuenta}")]
+        [Route("inventarioBodegaXIdbodegaCentralTODOS/{idvendedor}")]
         //  [Authorize]
-        public async Task<IActionResult> inventarioBodegaXIdbodegaCentralTODOS(int IdbodegaCentral)
+        public async Task<IActionResult> inventarioBodegaXIdbodegaCentralTODOS(int idvendedor)
         {
 
-            ConsolidadoItemSurtiApp _inventario_bodegaModelApp = new ConsolidadoItemSurtiApp();
+            var InventarioBodega = _ordersBusiness.ObtenerProductoEnBodegaCentralCamion(idvendedor);
+            return Ok(InventarioBodega.data);
 
-            ConsolidadoInventarioDetalebodega _inventariosDetalebodega = new ConsolidadoInventarioDetalebodega();
-
-
-
+        }
+        #region APIs SURTI SP
+        [HttpGet]
+        [Route("shopping_cart_items/{idvendedor}")]
+        //  [Authorize]
+        public async Task<IActionResult> shopping_cart_items(int idvendedor)
+        {
+            ItemCarritoModelSurtiApp _itemCarritoModelSurtiApp = new ItemCarritoModelSurtiApp();
+            _itemCarritoModelSurtiApp.delivery_date = "Mañana";
+            ItemCarritoDetalleModelSurtiApp _itemDetalle = new ItemCarritoDetalleModelSurtiApp();
+            _itemDetalle.created_on_utc = DateTime.UtcNow;
+            _itemDetalle.updated_on_utc = DateTime.UtcNow;
+            _itemDetalle.shopping_cart_type = "ShoppingCart";
+            _itemDetalle.product_id = 117;
+            _itemDetalle.weight = 0.0000;
             ConsolidadoProductoBodega _productoBodega = new ConsolidadoProductoBodega();
-            _productoBodega.name = "Aji (0.5 Libras)";
+            _productoBodega.name = "Brazo de Cerdo";
             _productoBodega.short_description = null;
             _productoBodega.full_description = null;
             _productoBodega.sku = null;
             _productoBodega.approved_rating_sum = 0;
-            _productoBodega.price = 0.7500;
+            _productoBodega.price = 17.0100;
             _productoBodega.disable_buy_button = false;
             _productoBodega.stock_quantity = 10000;
             _productoBodega.has_tier_prices = false;
@@ -243,54 +213,138 @@ namespace Engine_V2.Controllers
             _imagePoductoBodega.id = 58;
             _imagePoductoBodega.picture_id = 81;
             _imagePoductoBodega.position = 0;
-            _imagePoductoBodega.src = "http://surti-test-nopc.azurewebsites.net/images/thumbs/0000081_aji-05-libras.jpeg";
+            _imagePoductoBodega.src = "https://surti-test-nopc.azurewebsites.net/images/thumbs/0000173_brazo-de-cerdo.jpeg";
             _imagePoductoBodega.attachment = null;
-            _productoBodega.images.Add(_imagePoductoBodega);
-            _productoBodega.id = 115;
             _productoBodega.unit_type = "kgs";
-            _inventariosDetalebodega.product = _productoBodega;
-            _inventariosDetalebodega.id = 1;
-      
+            _productoBodega.price_by_unit = 2.3500;
+            _productoBodega.unit_type = "kgs";
+            _productoBodega.id = 117;
+            _productoBodega.images.Add(_imagePoductoBodega);
+            _itemDetalle.product = _productoBodega;
+            _itemDetalle.customer_id = 2542;
+            _itemDetalle.id= 3847;
+            _itemCarritoModelSurtiApp.shopping_carts.Add(_itemDetalle);
 
 
-            _inventario_bodegaModelApp.consolidadoItem.Add(_inventariosDetalebodega);
-
-
-
-            _inventariosDetalebodega = new ConsolidadoInventarioDetalebodega();
-
-
- 
+            ////////////
+            ///PRODUCTO 2
+            ///////////
+            _itemCarritoModelSurtiApp.delivery_date = "Mañana";
+             _itemDetalle = new ItemCarritoDetalleModelSurtiApp();
+            _itemDetalle.created_on_utc = DateTime.UtcNow;
+            _itemDetalle.updated_on_utc = DateTime.UtcNow;
+            _itemDetalle.shopping_cart_type = "ShoppingCart";
+            _itemDetalle.product_id = 49;
+            _itemDetalle.weight = 0.0000;
             _productoBodega = new ConsolidadoProductoBodega();
             _productoBodega.name = "Ajo en Pepa (1 Unidad)";
             _productoBodega.short_description = "Ajo en Pepa (1 Unidad)";
             _productoBodega.full_description = null;
             _productoBodega.sku = null;
             _productoBodega.approved_rating_sum = 0;
-            _productoBodega.price = 0.7500;
+            _productoBodega.price = 0.1000;
             _productoBodega.disable_buy_button = false;
             _productoBodega.stock_quantity = 10000;
             _productoBodega.has_tier_prices = false;
             _productoBodega.category_ids.Add(29);
-            _imagePoductoBodega = new ImagePoductoBodega();
+             _imagePoductoBodega = new ImagePoductoBodega();
             _imagePoductoBodega.id = 58;
             _imagePoductoBodega.picture_id = 81;
             _imagePoductoBodega.position = 0;
-            _imagePoductoBodega.src = "http://surti-test-nopc.azurewebsites.net/images/thumbs/0000081_aji-05-libras.jpeg";
+            _imagePoductoBodega.src = "https://surti-test-nopc.azurewebsites.net/images/thumbs/0000173_brazo-de-cerdo.jpeg";
             _imagePoductoBodega.attachment = null;
-            _productoBodega.images.Add(_imagePoductoBodega);
-            _productoBodega.id = 125;
             _productoBodega.unit_type = "kgs";
-            _inventariosDetalebodega.product = _productoBodega;
-            _inventariosDetalebodega.id = 2;
+            _productoBodega.price_by_unit = 0.1000;
+            _productoBodega.unit_type = "kgs";
+            _productoBodega.id = 49;
+            _productoBodega.images.Add(_imagePoductoBodega);
+            _itemDetalle.product = _productoBodega;
+            _itemDetalle.customer_id = 2542;
+            _itemDetalle.id = 3855;
+            _itemCarritoModelSurtiApp.shopping_carts.Add(_itemDetalle);
 
-
-            _inventario_bodegaModelApp.consolidadoItem.Add(_inventariosDetalebodega);
-
-            return Ok(_inventario_bodegaModelApp);
+            return Ok(_itemCarritoModelSurtiApp);
 
         }
+            [HttpGet]
+            [Route("products-for-tiendas")]
+            //  [Authorize]
+            public async Task<IActionResult> productsfortiendas(int warehouse_id)
+            {
 
-        #endregion
-    }
+            ProductoTiendaModeloApp _productoTiendaModeloApp = new ProductoTiendaModeloApp();
+
+        
+            ProductoCatalogoTienda _itemDetalle = new ProductoCatalogoTienda();
+            _itemDetalle.Id = 49;
+            _itemDetalle.catalog_name = "TOP Ventas";
+ 
+            ConsolidadoProductoBodega _productoBodega = new ConsolidadoProductoBodega();
+            _productoBodega.name = "Brazo de Cerdo";
+            _productoBodega.short_description = null;
+            _productoBodega.full_description = null;
+            _productoBodega.sku = null;
+            _productoBodega.approved_rating_sum = 0;
+            _productoBodega.price = 17.0100;
+            _productoBodega.disable_buy_button = false;
+            _productoBodega.stock_quantity = 10000;
+            _productoBodega.has_tier_prices = false;
+            _productoBodega.category_ids.Add(29);
+            ImagePoductoBodega _imagePoductoBodega = new ImagePoductoBodega();
+            _imagePoductoBodega.id = 58;
+            _imagePoductoBodega.picture_id = 81;
+            _imagePoductoBodega.position = 0;
+            _imagePoductoBodega.src = "https://surti-test-nopc.azurewebsites.net/images/thumbs/0000173_brazo-de-cerdo.jpeg";
+            _imagePoductoBodega.attachment = null;
+            _productoBodega.unit_type = "kgs";
+            _productoBodega.price_by_unit = 2.3500;
+            _productoBodega.unit_type = "kgs";
+            _productoBodega.id = 117;
+            _productoBodega.images.Add(_imagePoductoBodega);
+
+
+
+
+            _itemDetalle.products.Add(_productoBodega);
+
+
+             _productoBodega = new ConsolidadoProductoBodega();
+            _productoBodega.name = "Cebolla Colorada (1 Gaveta)";
+            _productoBodega.short_description = "14 libras de Cebolla Colorada";
+            _productoBodega.full_description = null;
+            _productoBodega.sku = null;
+            _productoBodega.approved_rating_sum = 0;
+            _productoBodega.price = 5.9000;
+            _productoBodega.disable_buy_button = false;
+            _productoBodega.stock_quantity = 10000;
+            _productoBodega.has_tier_prices = false;
+            _productoBodega.category_ids.Add(29);
+             _imagePoductoBodega = new ImagePoductoBodega();
+            _imagePoductoBodega.id = 58;
+            _imagePoductoBodega.picture_id = 81;
+            _imagePoductoBodega.position = 0;
+            _imagePoductoBodega.src = "https://surti-test-nopc.azurewebsites.net/images/thumbs/0000155_cebolla-colorada-1-gaveta.jpeg";
+            _imagePoductoBodega.attachment = null;
+            _productoBodega.unit_type = "kgs";
+            _productoBodega.price_by_unit = 2.3500;
+            _productoBodega.unit_type = "kgs";
+            _productoBodega.id = 58;
+            _productoBodega.images.Add(_imagePoductoBodega);
+
+
+
+
+            _itemDetalle.products.Add(_productoBodega);
+
+
+
+
+            _productoTiendaModeloApp.catalogs.Add(_itemDetalle);
+
+            return Ok(_productoTiendaModeloApp);
+
+        }
+            #endregion
+            #endregion
+        }
 }

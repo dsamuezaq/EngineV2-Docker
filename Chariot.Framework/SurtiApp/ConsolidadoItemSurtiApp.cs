@@ -10,6 +10,8 @@ namespace Chariot.Framework.SurtiApp
     {
 
         public List<ConsolidadoInventarioDetalebodega> consolidadoItem { get; set; } = new List<ConsolidadoInventarioDetalebodega>();
+        public List<ConsolidadoInventarioDetalebodega> warehouse_inventory { get; set; } = new List<ConsolidadoInventarioDetalebodega>();
+        
 
     }
     public class ConsolidadoInventarioDetalebodega
@@ -23,15 +25,16 @@ namespace Chariot.Framework.SurtiApp
     public class ConsolidadoProductoBodega
     {
 
+
         public string name { get; set; }
         public string short_description { get; set; }
         public string full_description { get; set; }
         public string sku { get; set; }
-        public double? approved_rating_sum { get; set; }
+        public double? approved_rating_sum { get; set; } = 0;
         public double? price { get; set; }
-        public bool disable_buy_button { get; set; }
+        public bool disable_buy_button { get; set; } = false;
         public double? stock_quantity { get; set; }
-        public bool has_tier_prices { get; set; }
+        public bool has_tier_prices { get; set; } = false;
         public List<int> manufacturer_ids { get; set; } = new List<int>();
         public List<int> category_ids { get; set; } = new List<int>();
         public List<ImagePoductoBodega> images { get; set; } = new List<ImagePoductoBodega>();
@@ -41,12 +44,13 @@ namespace Chariot.Framework.SurtiApp
         public double? inventory_warehouse { get; set; }
         public double? inventory_weight { get; set; } = 10;
         public double? weight_warehouse { get; set; } = 12.2;
-        public double? is_price_by_unit { get; set; }
-        public double? price_by_unit { get; set; } = 1.21;
+        public bool? is_price_by_unit { get; set; }
+        public double price_by_unit { get; set; } 
         public string unit_type { get; set; }
         public bool is_taxed { get; set; }
         public int id { get; set; }
-
+        public bool isWeightedProduct { get; set; } = false;
+        
 
     }
 

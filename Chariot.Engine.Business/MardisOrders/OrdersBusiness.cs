@@ -92,7 +92,7 @@ namespace Chariot.Engine.Business.MardisOrders
 
         }
 
-        public List<ArticulosViewModel> GetArticulos(int Idaccount,int idVendedor)
+        public List<ArticulosViewModel> GetArticulos(int Idaccount,string idVendedor)
         {
 
             if (Idaccount == 15)
@@ -137,10 +137,20 @@ namespace Chariot.Engine.Business.MardisOrders
             }
             else if (Idaccount == 13)
             {
+
+                int idV = 0;
+                IQueryable<Salesman> vendedores = Enumerable.Empty<Salesman>().AsQueryable();
+                vendedores = (from s in Context.Salesmans where s.IdVendedor.Equals(idVendedor) select s);
+
+                if (vendedores.Count() > 0) {
+                    idV = vendedores.First().Id;
+                }
+
                 List<ArticulosViewModel> mapperRubros = _mapper.Map<List<ArticulosViewModel>>(_ordersDao.SelectEntity<Product>().Where(x => x.StatusRegister == "A" && x.Idaccount == Idaccount));
                 List<ArticulosViewModel> _reply = (from ar in mapperRubros
-                                                   join mw in Context.Movil_Warenhouse_Resumes on ar.Id equals mw.IDPRODUCTO where mw.IDVENDEDOR == idVendedor
+                                                   join mw in Context.Movil_Warenhouse_Resumes on ar.Id equals mw.IDPRODUCTO
                                                    where ar.Idaccount == Idaccount
+                                                   where mw.IDVENDEDOR == idV
                                                    select new ArticulosViewModel
                                                    {
                                                        Id = ar.Id,

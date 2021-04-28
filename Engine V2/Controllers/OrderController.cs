@@ -83,7 +83,7 @@ namespace Engine_V2.Controllers
         }
         [HttpGet]
         [Route("getArticulos")]
-        public async Task<IActionResult> getArticulos(int Idaccount = 15, int Idvendedor = 15)
+        public async Task<IActionResult> getArticulos(int Idaccount = 15, string Idvendedor = "9999999999")
         {
            
             return Ok(_ordersBusiness.GetArticulos(Idaccount, Idvendedor));
@@ -149,7 +149,7 @@ namespace Engine_V2.Controllers
 
             dato = new RegistroViewModel();
             dato.tabla = "wsSysMobileArticulos";
-            dato.cantidadRegistros = _ordersBusiness.GetArticulos(Idaccount,0).Count();
+            dato.cantidadRegistros = _ordersBusiness.GetArticulos(Idaccount,"0").Count();
             dato.paginas = 1;
             datos.Add(dato);
 

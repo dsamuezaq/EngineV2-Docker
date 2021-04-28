@@ -165,6 +165,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
 
                 Context.Central_Warenhouses.Add(centralw);
                 Context.SaveChanges();
+                Context.Query<string>($@"EXEC dbo.sp_actualiza_central_warehouse_app @idproducto = {centralw.IDPRODUCTO}, @iddistribuidor = {centralw.IDDISTRIBUTOR}");
 
                 return "";
 

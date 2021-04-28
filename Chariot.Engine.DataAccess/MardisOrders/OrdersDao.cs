@@ -23,14 +23,20 @@ namespace Chariot.Engine.DataAccess.MardisOrders
         public bool SaveDataPedido(List<Order> _data) {
             try
             {
+                int idVende = 0;
                 foreach (var x in _data)
                 {
                     Context.Orders.Add(x);
+                    
                     //Nutri
                     if (x.Idaccount == 13) {
 
                         IQueryable<Salesman> vendedor = Enumerable.Empty<Salesman>().AsQueryable();
                         vendedor = Context.Salesmans.Where(v => v.IdVendedor == x.idVendedor && v.Idaccount == x.Idaccount);
+
+                        if (vendedor.Count() > 0) {
+                            idVende = vendedor.First().Id;
+                        }
 
                         foreach (var detalle in x.pedidosItems)
                         {
@@ -48,19 +54,10 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                             //Guardar
                             Context.Movil_Warenhouses.Add(movilw);
                         }
-
-                        try
-                        {
-                            Context.Query<string>($@"EXEC dbo.sp_actualiza_movil_warehouse_app @idvendedor = {vendedor.First().Id}");
-                        }
-                        catch (Exception e)
-                        {
-                            throw;
-                        }
-
                     }
                 }
                 Context.SaveChanges();
+                Context.Query<string>($@"EXEC dbo.sp_actualiza_movil_warehouse_app @idvendedor = {idVende}");
                 //db.PEDIDOS.Add(pEDIDOS);
                 return true;
             }

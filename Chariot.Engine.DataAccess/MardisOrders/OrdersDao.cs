@@ -524,7 +524,8 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                                                                                    categoria,
                                                                                    IDDISTRIBUTOR,
                                                                                    IDPRODUCTO,
-                                                                                   idcategoria FROM MardisOrders.vw_resumen_Stock_bodegaCentral where IDDISTRIBUTOR={idnumeroDisitribuidores}");
+                                                                                   idcategoria,
+                                                                                   barcode  FROM MardisOrders.vw_resumen_Stock_bodegaCentral where IDDISTRIBUTOR={idnumeroDisitribuidores}");
                 return _dataTable.Count() > 0 ? _dataTable.ToList() : null;
 
 
@@ -550,7 +551,8 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                                                                                    categoria,
                                                                                    IDDISTRIBUTOR,
                                                                                    IDPRODUCTO,
-                                                                                   idcategoria FROM MardisOrders.vw_resumen_Stock_bodegaCentral_CAMION where IDVENDEDOR={IdVendedor}");
+                                                                                   idcategoria,
+                                                                                   barcode FROM MardisOrders.vw_resumen_Stock_bodegaCentral_CAMION where IDVENDEDOR={IdVendedor}");
                 return _dataTable.Count() > 0 ? _dataTable.ToList() : null;
 
 
@@ -560,6 +562,48 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
                 throw;
                 return null;
+            }
+
+        }
+
+        public Boolean GuardarBodegaMovil(int warehouseid, int productid, int quantity, int entregadorid, int userid, string comment)
+        {
+            try
+            {
+
+                Movil_Warenhouse movil_Warenhouse = new Movil_Warenhouse();
+                movil_Warenhouse.IDVENDEDOR = entregadorid;
+                movil_Warenhouse.BALANCE = quantity;
+                movil_Warenhouse.DESCRIPTION = "INGRESO DE INVENTARIO APP";
+                movil_Warenhouse.MOVEMENT = "1";
+                movil_Warenhouse.IDPRODUCTO = productid;
+                movil_Warenhouse.COMMENT = comment;
+                Context.Movil_Warenhouses.Add(movil_Warenhouse);
+                Context.SaveChanges();
+
+
+                Central_Warenhouse central_Warenhouse = new Central_Warenhouse();
+                central_Warenhouse.IDDISTRIBUTOR = warehouseid;
+                central_Warenhouse.BALANCE = quantity;
+                central_Warenhouse.DESCRIPTION = "INGRESO DE INVENTARIO APP";
+                central_Warenhouse.MOVEMENT = "-1";
+                central_Warenhouse.IDPRODUCTO = productid;
+
+                Context.Central_Warenhouses.Add(central_Warenhouse);
+
+
+
+                Context.SaveChanges();
+                var _dataTable = Context.Query<List<int>>($@"EXEC dbo.sp_actuaiza_movil_warehouse_resume_APP @idvendedor ={entregadorid} ,@idproducto = { productid}  ,@iddistribuidor ={warehouseid}");
+                return true;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return false;
             }
 
         }

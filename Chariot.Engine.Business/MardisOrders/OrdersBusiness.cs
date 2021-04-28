@@ -1841,7 +1841,8 @@ namespace Chariot.Engine.Business.MardisOrders
                         active = true,
                         deleted = false,
                         delivery_count = x.cantidad.ToString(),
-                        status = x.statusV
+                        status = x.statusV,
+                       
 
 
 
@@ -1882,7 +1883,7 @@ namespace Chariot.Engine.Business.MardisOrders
                             name = x.nombre,
                             short_description = x.nombre,
                             full_description = x.nombre,
-                            sku= x.IDPRODUCTO.ToString()
+                            sku = x.barcode,
 
                             price = x.precio,
                             stock_quantity = x.cantidad,
@@ -1890,7 +1891,7 @@ namespace Chariot.Engine.Business.MardisOrders
                             images = ImagenProducto(),
                             conversion_product_id = x.IDPRODUCTO,
                             inventory_warehouse = x.cantidad,
-                            is_price_by_unit = true,
+                            is_price_by_unit = false,
                             price_by_unit=x.precioUnitario,
                             unit_type = "kgs",
                             id = x.IDPRODUCTO
@@ -1926,6 +1927,38 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
+        public ReplyViewModel  CrearInventarioMovil(int warehouseid, int productid, int quantity, int entregadorid, int userid, string comment)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+                reply.messege = "Los datos fueron guardados correctamente";
+                reply.status = "Ok";
+                var FueGuardoExitoso = _ordersDao.GuardarBodegaMovil(warehouseid, productid, quantity, entregadorid, userid, comment);
+                if (FueGuardoExitoso)
+                {
+                    reply.data = "Ok";
+                }
+                else {
+                    reply.data = "GenericError.ProductNotFound";
+                }
+         
+
+           
+                return reply;
+            }
+            catch (Exception e)
+            {
+              
+                reply.messege = "No se pudo guardar la información";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                reply.data = "GenericError.WarehouseMissingInventory";
+                return reply;
+            }
+
+        }
+
         public ReplyViewModel ObtenerProductoEnBodegaCentralCamion(int Idvendedor)
         {
             ReplyViewModel reply = new ReplyViewModel();
@@ -1953,11 +1986,11 @@ namespace Chariot.Engine.Business.MardisOrders
                             images = ImagenProducto(),
                             conversion_product_id = x.IDPRODUCTO,
                             inventory_warehouse = x.cantidad,
-                            is_price_by_unit = true,
+                            is_price_by_unit = false,
                             price_by_unit = x.precioUnitario,
                             unit_type = "kgs",
-                            id = x.IDPRODUCTO
-                               sku = x.IDPRODUCTO.ToString()
+                            id = x.IDPRODUCTO,
+                            sku = x.barcode
 
 
                         }).FirstOrDefault();

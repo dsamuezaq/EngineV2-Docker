@@ -2,6 +2,7 @@
 using Chariot.Engine.DataObject.Helpers;
 using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Engine.DataObject.MardisOrders;
+using Chariot.Engine.DataObject.MardisOrders.Vistas;
 using Chariot.Framework.Resources;
 using System;
 using System.Collections.Generic;
@@ -478,7 +479,87 @@ namespace Chariot.Engine.DataAccess.MardisOrders
         }
         #endregion
 
+        #region App Bodega
 
+        public List<vw_resumen_Stock_vendedor> ConsularVendedoresXDistribuidor(int idnumeroDisitribuidores)
+        {
+            try
+            {
+
+                var _dataTable = Context.Query<vw_resumen_Stock_vendedor>($@"SELECT cantidad,
+                                                                                        id,
+                                                                                        idVendedor,
+                                                                                        nombre,
+                                                                                        codigoDeValidacion,
+                                                                                        Idaccount,
+                                                                                        IDDISTRIBUTOR,
+                                                                                        statusV 
+                                                                                   FROM MardisOrders.vw_resumen_Stock_vendedor where IDDISTRIBUTOR={idnumeroDisitribuidores}");
+                return _dataTable.Count() > 0 ? _dataTable.ToList() : null;
+           
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return null;
+            }
+
+        }
+
+        public List<vw_resumen_Stock_bodegaCentral> ConsularBodegaCentralXDistribuidor(int idnumeroDisitribuidores)
+        {
+            try
+            {
+
+                var _dataTable = Context.Query<vw_resumen_Stock_bodegaCentral>($@"SELECT nombre,
+                                                                                   precio,
+                                                                                   precioUnitario,
+                                                                                   cantidad,
+                                                                                   categoria,
+                                                                                   IDDISTRIBUTOR,
+                                                                                   IDPRODUCTO,
+                                                                                   idcategoria FROM MardisOrders.vw_resumen_Stock_bodegaCentral where IDDISTRIBUTOR={idnumeroDisitribuidores}");
+                return _dataTable.Count() > 0 ? _dataTable.ToList() : null;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return null;
+            }
+
+        }
+
+        public List<vw_resumen_Stock_bodegaCentral> ConsularBodegaCentralXCambion(int IdVendedor)
+        {
+            try
+            {
+
+                var _dataTable = Context.Query<vw_resumen_Stock_bodegaCentral>($@"SELECT nombre,
+                                                                                   precio,
+                                                                                   precioUnitario,
+                                                                                   cantidad,
+                                                                                   categoria,
+                                                                                   IDDISTRIBUTOR,
+                                                                                   IDPRODUCTO,
+                                                                                   idcategoria FROM MardisOrders.vw_resumen_Stock_bodegaCentral_CAMION where IDVENDEDOR={IdVendedor}");
+                return _dataTable.Count() > 0 ? _dataTable.ToList() : null;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return null;
+            }
+
+        }
+        #endregion
 
     }
 }

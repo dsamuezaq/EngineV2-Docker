@@ -250,6 +250,8 @@
     <Compile Include="MardisOrders\SALESMAN_DISTRIBUTOR.cs" />
     <Compile Include="MardisOrders\SequenceOrder.cs" />
     <Compile Include="MardisOrders\Visitas.cs" />
+    <Compile Include="MardisOrders\Vistas\vw_resumen_Stock_bodegaCentral.cs" />
+    <Compile Include="MardisOrders\Vistas\vw_resumen_Stock_vendedor.cs" />
     <Compile Include="MardisOrders\vw_pagoxcarteraDevolucion.cs" />
     <Compile Include="MardisOrders\vw_pagoxcarteraDevolucion_factura.cs" />
     <Compile Include="MardisSecurity\AuthorizationProfile.cs" />

@@ -17,5 +17,8 @@ namespace Chariot.Engine.DataObject.MardisOrders.Vistas
         public int IDPRODUCTO { get; set; }
         public int idcategoria { get; set; }
 
+        public string barcode { get; set; }
+        
+
     }
 }

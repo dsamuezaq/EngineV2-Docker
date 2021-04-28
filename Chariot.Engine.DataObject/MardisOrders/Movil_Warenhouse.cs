@@ -18,6 +18,8 @@ namespace Chariot.Engine.DataObject.MardisOrders
         public int IDVENDEDOR { get; set; }
         public string MOVEMENT { get; set; }
         public int IDPRODUCTO { get; set; }
+        public string COMMENT { get; set; }
+
         [ForeignKey("IDPRODUCTO")]
         public virtual Product product { get; set; }
     }

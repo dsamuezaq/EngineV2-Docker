@@ -184,6 +184,17 @@ namespace Engine_V2.Controllers
             return Ok(InventarioBodega.data);
 
         }
+        [HttpPost]
+        [Route("load-inventario-camion")]
+        //  [Authorize]
+        public async Task<IActionResult> loadinventariocamion(int warehouseid, int productid, int quantity, int entregadorid , int userid, string comment)
+        {
+
+            var InventarioBodega = _ordersBusiness.CrearInventarioMovil( warehouseid,  productid,  quantity,  entregadorid,  userid,  comment);
+            return Ok(InventarioBodega.data);
+
+        }
+
         #region APIs SURTI SP
         [HttpGet]
         [Route("shopping_cart_items/{idvendedor}")]
@@ -330,20 +341,13 @@ namespace Engine_V2.Controllers
             _productoBodega.unit_type = "kgs";
             _productoBodega.id = 58;
             _productoBodega.images.Add(_imagePoductoBodega);
+                  _itemDetalle.products.Add(_productoBodega);
+                  _productoTiendaModeloApp.catalogs.Add(_itemDetalle);
 
+                return Ok(_productoTiendaModeloApp);
 
+             }
 
-
-            _itemDetalle.products.Add(_productoBodega);
-
-
-
-
-            _productoTiendaModeloApp.catalogs.Add(_itemDetalle);
-
-            return Ok(_productoTiendaModeloApp);
-
-        }
             #endregion
             #endregion
         }

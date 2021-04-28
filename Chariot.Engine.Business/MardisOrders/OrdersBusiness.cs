@@ -137,7 +137,7 @@ namespace Chariot.Engine.Business.MardisOrders
             }
             else if (Idaccount == 13)
             {
-
+                //IDVENDEDOR
                 int idV = 0;
                 IQueryable<Salesman> vendedores = Enumerable.Empty<Salesman>().AsQueryable();
                 vendedores = (from s in Context.Salesmans where s.IdVendedor.Equals(idVendedor) select s);
@@ -145,6 +145,7 @@ namespace Chariot.Engine.Business.MardisOrders
                 if (vendedores.Count() > 0) {
                     idV = vendedores.First().Id;
                 }
+                //IDVENDEDOR
 
                 List<ArticulosViewModel> mapperRubros = _mapper.Map<List<ArticulosViewModel>>(_ordersDao.SelectEntity<Product>().Where(x => x.StatusRegister == "A" && x.Idaccount == Idaccount));
                 List<ArticulosViewModel> _reply = (from ar in mapperRubros

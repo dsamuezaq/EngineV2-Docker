@@ -15,8 +15,10 @@ namespace Chariot.Engine.DataObject.MardisOrders
         [Key]
         public int Id { get; set; }
         public string IdVendedor { get; set; }
-        public string Nombre { get; set; }
-        public string CodigoDeValidacion { get; set; }
+         public string Nombre { get; set; }
+         public string CodigoDeValidacion { get; set; }
+        public string dispositivo { get; set; }
+        public string estado { get; set; }
         public int? Idaccount { get; set; }
         public Guid? Iduser { get; set; }
         [ForeignKey("Iduser")]

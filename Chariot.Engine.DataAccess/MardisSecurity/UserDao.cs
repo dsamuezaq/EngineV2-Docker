@@ -1,6 +1,7 @@
 ﻿using Chariot.Engine.DataObject;
 using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Engine.DataObject.MardisSecurity;
+using Chariot.Framework.Resources;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -128,6 +129,69 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
        
 
         }
+
+        public double ValidarRegistroUsuario(String usuario, String dispositivo, String tipos)
+        {
+            if (tipos == "Registro")
+            {
+                var vendedor = Context.Salesmans.Where(x => x.IdVendedor.Equals(usuario) && x.estado== CStatusRegister.Active);
+
+                if (vendedor.Count() > 0)
+                {
+                    var usuarioRegistrado = vendedor.ToList().Where(x => x.dispositivo != null);
+                    if (usuarioRegistrado.Count() == 0)
+                    {
+                        foreach (Salesman vendedorSinRegistro in vendedor.ToList())
+                        {
+                            vendedorSinRegistro.dispositivo = dispositivo;
+                            Context.Salesmans.Update(vendedorSinRegistro);
+                            Context.SaveChanges();
+
+                        }
+                        return double.Parse(vendedor.First().CodigoDeValidacion);
+                    }
+                    else
+                    {
+                        return vendedor.ToList().Where(x => x.dispositivo.Equals(dispositivo)).Count() > 0 ? double.Parse( vendedor.First().CodigoDeValidacion ): -2.0;
+
+
+                    }
+
+
+
+                }
+
+            }
+            else {
+                var vendedor = Context.Salesmans.Where(x => x.IdVendedor.Equals(usuario) && x.estado == CStatusRegister.Active);
+
+                if (vendedor.Count() > 0) 
+                {
+                    foreach (Salesman vendedorSinRegistro in vendedor.ToList())
+                    {
+                        vendedorSinRegistro.dispositivo = null;
+                        Context.Salesmans.Update(vendedorSinRegistro);
+                        Context.SaveChanges();
+                    }
+
+                }
+
+
+            }
+            return -2.0; ;
+
+        }  
+               
+            
+        
+                
+                   
+
+
+
+
+
+         
         #endregion
     }
 }

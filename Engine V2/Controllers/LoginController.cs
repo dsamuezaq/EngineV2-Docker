@@ -227,7 +227,26 @@ namespace Engine_V2.Controllers
 
         #endregion
 
+        #region PedidosIndustrial
 
+        [AllowAnonymous]
+        [Route("RegistroPedido")]
+        [HttpPost]
+        public object RegistroPedido(String usuario, String dispositivo,String tipo)
+        {
+            if (ModelState.IsValid)
+            {
+
+              
+                return Ok(loginPedido(usuario, dispositivo, tipo));
+
+           
+            }
+            return BadRequest();
+
+        }
+
+        #endregion
         #endregion
 
 

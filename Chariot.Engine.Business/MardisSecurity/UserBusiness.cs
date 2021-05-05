@@ -152,6 +152,20 @@ namespace Chariot.Engine.Business.MardisSecurity
             return _resultData;
 
         }
+
+
+        #endregion
+
+        #region PedidoAPP
+        public double ValidarRegistroUsuario(String usuario, String dispositivo, String tipos)
+        {
+
+            var _data = _userDao.ValidarRegistroUsuario(usuario, dispositivo, tipos);
+        
+            return _data;
+
+        }
+
         #endregion
     }
 }

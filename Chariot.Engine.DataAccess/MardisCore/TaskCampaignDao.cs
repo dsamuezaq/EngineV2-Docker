@@ -19,13 +19,13 @@ namespace Chariot.Engine.DataAccess.MardisCore
         {
 
         }
-        public object GetCampaing()
+        public object GetCampaing(int idaccount)
         {
             //   var consulta = Context.Campaigns.Include(t => t.Account).Where(c => c.StatusRegister == CStatusRegister.Active).ToList();
 
             var consulta = from c in Context.Campaigns
                            join a in Context.Accounts on c.IdAccount equals a.Id
-                           where c.StatusRegister == CStatusRegister.Active
+                           where c.StatusRegister == CStatusRegister.Active && c.IdAccount == idaccount
                            select new
                            {
                                c.Id,

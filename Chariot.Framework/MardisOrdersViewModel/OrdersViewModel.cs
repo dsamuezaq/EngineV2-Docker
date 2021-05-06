@@ -13,6 +13,7 @@ namespace Chariot.Framework.MardisOrdersViewModel
         public string codCliente { get; set; }
         public string fecha { get; set; }
         public string idVendedor { get; set; }
+        public string codigoext { get; set; }
         public Nullable<decimal> totalNeto { get; set; }
         public Nullable<decimal> totalFinal { get; set; }
         public Nullable<decimal> transferido { get; set; }

@@ -125,6 +125,16 @@ namespace Engine_V2.Controllers
              
             return Ok(_ordersBusiness.GuardarVisitaBSS(DatosVisitas));
         }
+        [HttpPost]
+        [Route("GETGuardarVisitasIndividual")]
+        public async Task<IActionResult> GETGuardarVisitasIndividual(VisitasViewModel DatosVisitas)
+        {
+
+            List<VisitasViewModel> visitas = new List<VisitasViewModel>();
+            visitas.Add(DatosVisitas);
+            return Ok(_ordersBusiness.GuardarVisitaBSS(visitas));
+        }
+
         [HttpGet]
         [Route("getRegistros")]
         public async Task<IActionResult> getRegistros(int Idaccount=15)

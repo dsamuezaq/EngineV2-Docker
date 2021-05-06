@@ -25,7 +25,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
 
             var consulta = from c in Context.Campaigns
                            join a in Context.Accounts on c.IdAccount equals a.Id
-                           where c.StatusRegister == CStatusRegister.Active && c.IdAccount == idaccount
+                       //    where c.StatusRegister == CStatusRegister.Active && c.IdAccount == idaccount
                            select new
                            {
                                c.Id,

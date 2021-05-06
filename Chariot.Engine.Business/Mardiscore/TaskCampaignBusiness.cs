@@ -43,9 +43,9 @@ namespace Chariot.Engine.Business.Mardiscore
             _routeDao = new RouteDao(_chariotContext);
         }
 
-        public object GetCampanigAccount()
+        public object GetCampanigAccount(int idaccount)
         {
-            return _taskCampaignDao.GetCampaing(); 
+            return _taskCampaignDao.GetCampaing(idaccount); 
         }
 
         public object GetAllMovilWarenhouse()

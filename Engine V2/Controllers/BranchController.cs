@@ -61,9 +61,9 @@ namespace Engine_V2.Controllers
 
         [HttpGet]
         [Route("Campaign")]
-        public async Task<IActionResult> Campaign(int idaccounte)
+        public async Task<IActionResult> Campaign(int idaccount = 0)
         {
-           return Ok(_taskCampaignBusiness.GetCampanigAccount());
+           return Ok(_taskCampaignBusiness.GetCampanigAccount(idaccount));
         }
         [HttpPost]
         [Route("transactionPollster")]

@@ -148,11 +148,12 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
                             Context.SaveChanges();
 
                         }
-                        return double.Parse(vendedor.First().CodigoDeValidacion);
+                        string valor = vendedor.First().CodigoDeValidacion + "." + vendedor.First().Idaccount;
+                        return double.Parse(valor);
                     }
                     else
                     {
-                        return vendedor.ToList().Where(x => x.dispositivo.Equals(dispositivo)).Count() > 0 ? double.Parse( vendedor.First().CodigoDeValidacion ): -4.0;
+                        return vendedor.ToList().Where(x => x.dispositivo.Equals(dispositivo)).Count() > 0 ? (double.Parse(vendedor.First().CodigoDeValidacion + "." + vendedor.First().Idaccount)): -4.0;
 
 
                     }

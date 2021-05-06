@@ -65,6 +65,7 @@ namespace Engine_V2.Controllers
 
         [HttpGet]
         [Route("getClientes")]
+        [Route("getClientes")]
         public async Task<IActionResult> getClientes()
         {
             reply.messege = "No puedo guardar la ubicación del encuestador";
@@ -204,7 +205,14 @@ namespace Engine_V2.Controllers
         {
             return Ok(_ordersBusiness.SaveDataOrders(PEDIDOS));
         }
-
+        [HttpPost]
+        [Route("PEDIDOSINDIVIDUAL")]
+        public object PostPEDIDOSONE(OrdersViewModel PEDIDOSI)
+        {
+            List<OrdersViewModel> pedido = new List<OrdersViewModel>();
+            pedido.Add(PEDIDOSI);
+            return Ok(_ordersBusiness.SaveDataOrdersInvidual(pedido));
+        }
         [HttpPost]
         [Route("Devolucion")]
         public async Task<IActionResult> PostDevolucion(List<Devolucion> Devolucion)

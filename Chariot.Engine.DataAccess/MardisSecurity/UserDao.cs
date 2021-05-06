@@ -152,7 +152,7 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
                     }
                     else
                     {
-                        return vendedor.ToList().Where(x => x.dispositivo.Equals(dispositivo)).Count() > 0 ? double.Parse( vendedor.First().CodigoDeValidacion ): -2.0;
+                        return vendedor.ToList().Where(x => x.dispositivo.Equals(dispositivo)).Count() > 0 ? double.Parse( vendedor.First().CodigoDeValidacion ): -4.0;
 
 
                     }
@@ -178,7 +178,7 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
 
 
             }
-            return -2.0; ;
+            return -2.0; 
 
         }  
                

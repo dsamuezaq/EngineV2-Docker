@@ -20,6 +20,7 @@ namespace Chariot.Engine.DataObject.MardisOrders
         public string codCliente { get; set; }
         public string fecha { get; set; }
         public string idVendedor { get; set; }
+        public string idpedidoExterno { get; set; }
         public Nullable<decimal> totalNeto { get; set; }
         public Nullable<decimal> totalFinal { get; set; }
         public Nullable<decimal> transferido { get; set; }

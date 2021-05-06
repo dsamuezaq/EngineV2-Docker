@@ -296,6 +296,19 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
+        public double SaveDataOrdersInvidual(List<OrdersViewModel> PEDIDOS)
+        {
+            try
+            {
+                List<Order> mapperOrders = _mapper.Map<List<Order>>(PEDIDOS);
+                return _ordersDao.SaveDataPedidoI(mapperOrders);
+            }
+            catch (Exception e)
+            {
+                return -1.0;
+            }
+
+        }
         public bool GuardarDevoluciones(List<Devolucion> devoluciones)
         {
             try

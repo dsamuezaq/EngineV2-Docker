@@ -68,6 +68,57 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
           
         }
+        public double SaveDataPedidoI(List<Order> _data)
+        {
+            try
+            {
+                int idVende = 0;
+                foreach (var x in _data)
+                {
+                    Context.Orders.Add(x);
+
+                    //Nutri
+                    if (x.Idaccount == 13)
+                    {
+
+                        IQueryable<Salesman> vendedor = Enumerable.Empty<Salesman>().AsQueryable();
+                        vendedor = Context.Salesmans.Where(v => v.IdVendedor == x.idVendedor && v.Idaccount == x.Idaccount);
+
+                        if (vendedor.Count() > 0)
+                        {
+                            idVende = vendedor.First().Id;
+                        }
+
+                        foreach (var detalle in x.pedidosItems)
+                        {
+                            IQueryable<Product> producto = Enumerable.Empty<Product>().AsQueryable();
+                            Movil_Warenhouse movilw = new Movil_Warenhouse();
+
+                            producto = Context.ProductOrders.Where(p => p.IdArticulo == detalle.idArticulo);
+
+
+                            movilw.BALANCE = detalle.cantidad;
+                            movilw.DESCRIPTION = "Venta";
+                            movilw.IDVENDEDOR = vendedor.Count() > 0 ? vendedor.First().Id : 0;
+                            movilw.IDPRODUCTO = producto.Count() > 0 ? producto.First().Id : 0;
+                            movilw.MOVEMENT = "-1";
+                            //Guardar
+                            Context.Movil_Warenhouses.Add(movilw);
+                        }
+                    }
+                }
+                Context.SaveChanges();
+                Context.Query<string>($@"EXEC dbo.sp_actualiza_movil_warehouse_app @idvendedor = {idVende}");
+                //db.PEDIDOS.Add(pEDIDOS);
+                return 1.0;
+            }
+            catch (Exception ex)
+            {
+                return -2.0;
+            }
+
+
+        }
         public bool SaveDataDevolucion(List<Devolucion> _data)
         {
             try
@@ -107,6 +158,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
 
         }
+
         public int GetLastCode()
         {
             try

@@ -106,16 +106,25 @@ namespace Engine_V2.Controllers
         {
 
        
-            return Ok(_taskCampaignBusiness.GuardarlocalesNuevoAbaseLocalYexterna(response));
+            return Ok(_taskCampaignBusiness.GuardarlocalesNuevoAbaseLocalYexternaant(response));
         }
+        [HttpPost]
+        [Route("POSTGuardarLocalesNuevoAPPPedidoI")]
+        //  [Authorize]
+        public object LoadTPOSTGuardarLocalesNuevoAPPPedidoaskI(GetListbranchViewModel response)
+        {
+
+
+            return Ok(_taskCampaignBusiness.GuardarlocalesNuevoAbaseLocalYexternamew(response));
+        }
+
         [HttpPost]
         [Route("PrintErrorLoadTask")]
         [Authorize]
         public async Task<IActionResult> PrintErrorLoadTask(List<ListBranchExcelModel> response)
         {
+
             string sWebRootFolder = _Env.ContentRootPath;
-
-
             var log = DateTime.Now;
             string LogFile = log.ToString("yyyyMMddHHmmss");
             string sFileName = @"Ruta4.xlsx";

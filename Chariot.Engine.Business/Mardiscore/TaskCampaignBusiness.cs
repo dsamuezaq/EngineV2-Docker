@@ -801,7 +801,7 @@ namespace Chariot.Engine.Business.Mardiscore
         }
 
 
-        public object GuardarlocalesNuevoAbaseLocalYexterna(GetListbranchViewModel _respose)
+        public object GuardarlocalesNuevoAbaseLocalYexternaant(GetListbranchViewModel _respose)
         {
 
             ReplyViewModel reply = new ReplyViewModel();
@@ -831,6 +831,170 @@ namespace Chariot.Engine.Business.Mardiscore
                 reply.data = _respose._route;
 
                 return reply;
+            }
+
+            BranchModel.routeDate = DateTime.Now;
+            if (BranchModel.Id == 0)
+            {
+                BranchModel.Code = item.Codigo_Encuesta;
+                BranchModel.ExternalCode = item.PT_indice;
+                BranchModel.PersonOwner.Code = item.Codigo_Encuesta;
+                BranchModel.IdAccount = _respose.account;
+                BranchModel.PersonOwner.IdAccount = _respose.account;
+                BranchModel.IdCountry = Guid.Parse("BE7CF5FF-296B-464D-82FA-EF0B4F48721B");// Pais ecuador
+                BranchModel.IsAdministratorOwner = "SI";
+                BranchModel.Zone = "-";
+                BranchModel.Neighborhood = "-";
+
+                BranchModel.NumberBranch = "-";
+                BranchModel.SecundaryStreet = "-";
+                BranchModel.StatusRegister = "A";
+                BranchModel.PersonOwner.SurName = "-";
+                BranchModel.PersonOwner.TypeDocument = "CI";
+                BranchModel.PersonOwner.StatusRegister = "A";
+                BranchModel.IdSector = _routeDao.GetSectorByName("CENTRO", BranchModel.IdDistrict);
+
+                //if (_branchMigrateDao.ValTypeBussiness(item.Tipo.ToUpper().TrimEnd().TrimStart(), Guid.Parse(campaign)))
+                //{
+                //    BranchModel.TypeBusiness = item.Tipo.ToUpper().TrimEnd().TrimStart();
+                //}
+                //else
+                //{
+                //    error = "Tipo de negocio no permitido";
+                //    break;
+                //}
+
+
+            }
+            BranchModel.PersonOwner.StatusRegister = "A";
+            BranchModel.StatusRegister = "D";
+            BranchModel.ESTADOAGGREGATE = "S";
+            BranchModel.state_period = "S";
+
+            BranchModel.ExternalCode = item.PT_indice;
+            BranchModel.TypeBusiness = item.Tipo.ToUpper().TrimEnd().TrimStart();
+            BranchModel.Name = item.local;
+            BranchModel.MainStreet = item.Dirección;
+            BranchModel.Reference = item.Referencia;
+            BranchModel.PersonOwner.Name = item.Nombres + " " + item.Apellidos;
+            BranchModel.PersonOwner.SurName = item.Apellidos;
+            BranchModel.PersonOwner.mail = item.Mail;
+            BranchModel.PersonOwner.Document = item.Cédula;
+            BranchModel.PersonOwner.Mobile = item.Celular;
+            BranchModel.PersonOwner.Phone = item.Telefono;
+            BranchModel.Label = item.local;
+            var latitud = item.Latitud;
+            var lat = latitud.Contains("E") ? ExponecialToString(latitud) : latitud;
+            BranchModel.LatitudeBranch = lat.Length <= 10 ? lat : lat.Substring(0, 11);
+            var longitud = item.Longitud;
+            string len = longitud.Contains("E") ? ExponecialToString(longitud) : longitud;
+            BranchModel.LenghtBranch = len.Length <= 10 ? len : len.Substring(0, 11);
+            BranchModel.Cluster = item.CLUSTER;
+            BranchModel.RUTAAGGREGATE = item.RUTA;
+            BranchModel.IMEI_ID = item.IMEI;
+
+            BranchModel.CommentBranch = "nuevo";
+
+            var date = DateTime.Now;
+            if (_respose.option == 2)
+            {
+
+                try
+                {
+                    date = DateTime.ParseExact(item.Fecha, "dd-MM-yyyy", null);
+                }
+                catch (Exception e)
+                {
+
+                    reply.status = "error";
+                    reply.messege = "El campo fecha no tienen un format";
+                    _respose._route.Errores = "El campo fecha no tienen un format (dd-MM-yy)";
+                    reply.data = _respose._route;
+
+
+                    return reply;
+                    throw new Exception("Error al consultar Sectores");
+                }
+            }
+            Branch resp = _routeDao.GuardarlocalesCreadoAPPPedido(BranchModel, _respose.account, _respose.iduser, _respose.option, _respose.campaign, _respose.status, date);
+            if (resp != null)
+            {
+                try
+                {
+                    List<PostCoberturaClienteGuardarViewModel> Post = new List<PostCoberturaClienteGuardarViewModel>();
+                    Post.Add(new PostCoberturaClienteGuardarViewModel
+                    {
+                        nU_ID = resp.Id,
+                        nU_CEDULA_RUC = Int64.Parse(resp.PersonOwner.Document),
+                        nU_NOMBRE = resp.PersonOwner.Name + " " + resp.PersonOwner.SurName,
+                        nU_DIRECCION = resp.MainStreet,
+                        nU_TIPO_NEG = resp.TypeBusiness,
+                        nU_TELEFONO = Int64.Parse(resp.PersonOwner.Phone),
+                        nU_CODIGO_VEND = Int64.Parse(resp.Cluster)
+                    });
+                    var json = JsonConvert.SerializeObject(Post);
+                    var EstadoRespuestaCrearClienteIM = Task.Factory.StartNew(() =>
+                    {
+                        return _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
+                    });
+
+                    var respuesta = EstadoRespuestaCrearClienteIM.Result.Result;
+
+                    if (respuesta)
+                    {
+                        _routeDao.ActivarLocalesGuardadoIndustrial(resp.Id);
+                        reply.status = "Ok";
+                        reply.messege = "Local Guardado";
+                        reply.data = resp.Id;
+                        return reply;
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    reply.status = "error";
+                    reply.messege = e.Message;
+                    _respose._route.Errores = "Error base Externo";
+                    reply.data = 999999999;
+                    throw;
+                }
+
+            };
+            reply.status = "error";
+            reply.messege = "Error base mardis";
+            _respose._route.Errores = "Error base mardis";
+            reply.data = _respose._route;
+
+            return reply;
+
+        }
+        public object GuardarlocalesNuevoAbaseLocalYexternamew(GetListbranchViewModel _respose)
+        {
+
+            ReplyViewModel reply = new ReplyViewModel();
+
+
+            var item = _respose._route;
+            Branch BranchModel = new Branch();
+            BranchModel = _routeDao.GetBranchbyCode(item.Codigo_Encuesta, _respose.account);
+            var _data = _routeDao.GetIdUbicationByName(item.Provincia, item.Canton, item.Parroquia);
+            if (_data == null)
+            {
+
+                return null;
+            }
+            BranchModel.IdProvince = _data.idprovince;
+            BranchModel.IdDistrict = _data.Iddistrict;
+            BranchModel.IdParish = _data.Idparish;
+            var valcodigo = ValidoCodigo(item.Codigo_Encuesta, _respose.account, _data.Iddistrict, 1);
+            if (valcodigo != "")
+            {
+                reply.status = "error";
+                reply.messege = valcodigo;
+                _respose._route.Errores = valcodigo;
+                reply.data = _respose._route;
+
+                return null;
             }
 
             BranchModel.routeDate = DateTime.Now;
@@ -912,15 +1076,20 @@ namespace Chariot.Engine.Business.Mardiscore
                     reply.data = _respose._route;
 
 
-                    return reply;
+                    return null;
                     throw new Exception("Error al consultar Sectores");
                 }
             }
             Branch resp = _routeDao.GuardarlocalesCreadoAPPPedido(BranchModel, _respose.account, _respose.iduser, _respose.option, _respose.campaign, _respose.status, date);
             if (resp != null)
             {
+
+                _respose.iduser = resp.Id.ToString();
                 try
                 {
+
+                    if (resp.IdAccount == 15) { 
+                    _routeDao.ActivarLocalesGuardadoIndustrial(resp.Id);
                     List<PostCoberturaClienteGuardarViewModel> Post = new List<PostCoberturaClienteGuardarViewModel>();
                     Post.Add(new PostCoberturaClienteGuardarViewModel
                     {
@@ -942,30 +1111,20 @@ namespace Chariot.Engine.Business.Mardiscore
 
                     if (respuesta)
                     {
-                        _routeDao.ActivarLocalesGuardadoIndustrial(resp.Id);
-                        reply.status = "Ok";
-                        reply.messege = "Local Guardado";
-                        reply.data = resp.Id;
-                        return reply;
-                    }
 
+
+                     return _respose;
+                    }
+                    }
+                    return _respose;
                 }
                 catch (Exception e)
                 {
-                    reply.status = "error";
-                    reply.messege = e.Message;
-                    _respose._route.Errores = "Error base Externo";
-                    reply.data = 999999999;
-                    throw;
+                    return -2.0;
                 }
-            
+                return 1.0;
             };
-            reply.status = "error";
-            reply.messege = "Error base mardis";
-            _respose._route.Errores = "Error base mardis";
-            reply.data = _respose._route;
-
-            return reply;
+            return  _respose;
 
         }
 

@@ -13,13 +13,13 @@ namespace Chariot.Engine.DataObject.MardisOrders
     public  class Salesman
     {
         [Key]
-        public int Id { get; set; }
-        public string IdVendedor { get; set; }
-         public string Nombre { get; set; }
-         public string CodigoDeValidacion { get; set; }
+        public int id { get; set; }
+        public string idVendedor { get; set; }
+         public string nombre { get; set; }
+         public string codigoDeValidacion { get; set; }
         public string dispositivo { get; set; }
         public string estado { get; set; }
-        public int? Idaccount { get; set; }
+        public int? idaccount { get; set; }
         public Guid? Iduser { get; set; }
         [ForeignKey("Iduser")]
         public virtual User user { get; set; }

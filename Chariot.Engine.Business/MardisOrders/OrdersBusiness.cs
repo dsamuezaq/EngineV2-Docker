@@ -46,7 +46,7 @@ namespace Chariot.Engine.Business.MardisOrders
                 return mapperVendedores;
             }
             else {
-                List<VendedoresViewModel> mapperVendedores = _mapper.Map<List<Salesman>, List<VendedoresViewModel>>(_ordersDao.SelectEntity<Salesman>().Where(x => x.Idaccount == Idaccount).ToList());
+                List<VendedoresViewModel> mapperVendedores = _mapper.Map<List<Salesman>, List<VendedoresViewModel>>(_ordersDao.SelectEntity<Salesman>().Where(x => x.idaccount == Idaccount).ToList());
                 return mapperVendedores;
             }
         }
@@ -142,11 +142,11 @@ namespace Chariot.Engine.Business.MardisOrders
                 //IDVENDEDOR
                 int idV = 0;
                 IQueryable<Salesman> vendedores = Enumerable.Empty<Salesman>().AsQueryable();
-                vendedores = (from s in Context.Salesmans where s.IdVendedor.Equals(idVendedor) select s);
+                vendedores = (from s in Context.Salesmans where s.idVendedor.Equals(idVendedor) select s);
 
                 if (vendedores.Count() > 0)
                 {
-                    idV = vendedores.First().Id;
+                    idV = vendedores.First().id;
                 }
                 //IDVENDEDOR
 

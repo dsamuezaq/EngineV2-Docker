@@ -130,11 +130,11 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
 
         }
 
-        public double ValidarRegistroUsuario(String usuario, String dispositivo, String tipos)
+        public object ValidarRegistroUsuario(String usuario, String dispositivo, String tipos)
         {
             if (tipos == "Registro")
             {
-                var vendedor = Context.Salesmans.Where(x => x.IdVendedor.Equals(usuario) && x.estado== CStatusRegister.Active);
+                var vendedor = Context.Salesmans.Where(x => x.idVendedor.Equals(usuario) && x.estado== CStatusRegister.Active);
 
                 if (vendedor.Count() > 0)
                 {
@@ -148,12 +148,13 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
                             Context.SaveChanges();
 
                         }
-                        string valor = vendedor.First().CodigoDeValidacion + "." + vendedor.First().Idaccount;
-                        return double.Parse(valor);
+
+                        return vendedor.First();
                     }
                     else
                     {
-                        return vendedor.ToList().Where(x => x.dispositivo.Equals(dispositivo)).Count() > 0 ? (double.Parse(vendedor.First().CodigoDeValidacion + "." + vendedor.First().Idaccount)): -4.0;
+                       
+                        return vendedor.ToList().Where(x => x.dispositivo.Equals(dispositivo)).Count() > 0 ? vendedor.First() : YaestRegistrado(vendedor.First() ,"Registrado");
 
 
                     }
@@ -164,7 +165,7 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
 
             }
             else {
-                var vendedor = Context.Salesmans.Where(x => x.IdVendedor.Equals(usuario) && x.estado == CStatusRegister.Active);
+                var vendedor = Context.Salesmans.Where(x => x.idVendedor.Equals(usuario) && x.estado == CStatusRegister.Active);
 
                 if (vendedor.Count() > 0) 
                 {
@@ -178,16 +179,23 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
                 }
 
 
+
             }
-            return -2.0; 
+            Salesman vendedorS = new Salesman();
+            return YaestRegistrado(vendedorS, "Error"); 
 
-        }  
-               
-            
-        
-                
-                   
+        }
 
+
+
+
+
+        Object YaestRegistrado(Salesman _vendedor,String Estado) {
+
+            _vendedor.estado = Estado;
+
+            return _vendedor;
+        }
 
 
 
@@ -195,4 +203,5 @@ namespace Chariot.Engine.DataAccess.MardisSecurity
          
         #endregion
     }
+    
 }

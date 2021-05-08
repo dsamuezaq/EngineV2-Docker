@@ -170,7 +170,7 @@ namespace Engine_V2.Libraries
             var _reply = _userBusiness.FindUserBycredentialsSurti(user, pass);
             return _reply;
         }
-        public double loginPedido(String usuario, String dispositivo, String tipo)
+        public object loginPedido(String usuario, String dispositivo, String tipo)
         {
 
             var _reply = _userBusiness.ValidarRegistroUsuario(usuario, dispositivo, tipo);

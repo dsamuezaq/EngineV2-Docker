@@ -32,10 +32,10 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                     if (x.Idaccount == 13) {
 
                         IQueryable<Salesman> vendedor = Enumerable.Empty<Salesman>().AsQueryable();
-                        vendedor = Context.Salesmans.Where(v => v.IdVendedor == x.idVendedor && v.Idaccount == x.Idaccount);
+                        vendedor = Context.Salesmans.Where(v => v.idVendedor == x.idVendedor && v.idaccount == x.Idaccount);
 
                         if (vendedor.Count() > 0) {
-                            idVende = vendedor.First().Id;
+                            idVende = vendedor.First().id;
                         }
 
                         foreach (var detalle in x.pedidosItems)
@@ -48,7 +48,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
                             movilw.BALANCE = detalle.cantidad;
                             movilw.DESCRIPTION = "Venta";
-                            movilw.IDVENDEDOR = vendedor.Count() > 0 ? vendedor.First().Id : 0;
+                            movilw.IDVENDEDOR = vendedor.Count() > 0 ? vendedor.First().id : 0;
                             movilw.IDPRODUCTO = producto.Count() > 0 ? producto.First().Id : 0;
                             movilw.MOVEMENT = "-1";
                             //Guardar
@@ -82,11 +82,11 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                     {
 
                         IQueryable<Salesman> vendedor = Enumerable.Empty<Salesman>().AsQueryable();
-                        vendedor = Context.Salesmans.Where(v => v.IdVendedor == x.idVendedor && v.Idaccount == x.Idaccount);
+                        vendedor = Context.Salesmans.Where(v => v.idVendedor == x.idVendedor && v.idaccount == x.Idaccount);
 
                         if (vendedor.Count() > 0)
                         {
-                            idVende = vendedor.First().Id;
+                            idVende = vendedor.First().id;
                         }
 
                         foreach (var detalle in x.pedidosItems)
@@ -99,7 +99,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
                             movilw.BALANCE = detalle.cantidad;
                             movilw.DESCRIPTION = "Venta";
-                            movilw.IDVENDEDOR = vendedor.Count() > 0 ? vendedor.First().Id : 0;
+                            movilw.IDVENDEDOR = vendedor.Count() > 0 ? vendedor.First().id : 0;
                             movilw.IDPRODUCTO = producto.Count() > 0 ? producto.First().Id : 0;
                             movilw.MOVEMENT = "-1";
                             //Guardar

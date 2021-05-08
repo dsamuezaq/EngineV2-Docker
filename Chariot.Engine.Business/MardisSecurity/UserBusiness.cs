@@ -157,7 +157,7 @@ namespace Chariot.Engine.Business.MardisSecurity
         #endregion
 
         #region PedidoAPP
-        public double ValidarRegistroUsuario(String usuario, String dispositivo, String tipos)
+        public object ValidarRegistroUsuario(String usuario, String dispositivo, String tipos)
         {
 
             var _data = _userDao.ValidarRegistroUsuario(usuario, dispositivo, tipos);

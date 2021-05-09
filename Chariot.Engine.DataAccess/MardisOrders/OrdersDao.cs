@@ -76,13 +76,13 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                 foreach (var x in _data)
                 {
                     Context.Orders.Add(x);
-
+                    Context.SaveChanges();
                     //Nutri
                     if (x.Idaccount == 13)
                     {
 
                         IQueryable<Salesman> vendedor = Enumerable.Empty<Salesman>().AsQueryable();
-                        vendedor = Context.Salesmans.Where(v => v.idVendedor == x.idVendedor && v.idaccount == x.Idaccount);
+                        vendedor = Context.Salesmans.Where(v => v.codigoDeValidacion ==  x.idVendedor && v.idaccount == x.Idaccount);
 
                         if (vendedor.Count() > 0)
                         {
@@ -107,7 +107,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                         }
                     }
                 }
-                Context.SaveChanges();
+       
                 Context.Query<string>($@"EXEC dbo.sp_actualiza_movil_warehouse_app @idvendedor = {idVende}");
                 //db.PEDIDOS.Add(pEDIDOS);
                 return 1.0;

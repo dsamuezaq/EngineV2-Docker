@@ -4,6 +4,7 @@ using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Engine.DataObject.MardisOrders.Vistas;
 using Chariot.Framework.Resources;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +73,121 @@ namespace Chariot.Engine.DataAccess.MardisOrders
         {
             try
             {
+                return _data.First().Idaccount == 15 ? GuardarPedidoIndustrial(_data) : GuardarPedidosutri(_data);
+            }
+            catch (Exception)
+            {
+
+                return -2.0;
+            }
+               
+
+        }
+
+        double GuardarPedidoIndustrial(List<Order> _data)
+        {
+            try
+            {
+                var databaseTable = Context.Branches.Where(x => x.ExternalCode == _data.First().codCliente && x.IdAccount == _data.First().Idaccount);
+                string codigonuevo = "";
+                if (databaseTable.Count() > 0) {
+       
+                    codigonuevo = VerificaionBranch(databaseTable.FirstOrDefault());
+                    if (codigonuevo != "")
+                       _data.First().codCliente = codigonuevo;
+                }
+                String json = null;
+                foreach (Order orden in _data)
+                {
+
+               
+                    List<PedidosAPI> Post = new List<PedidosAPI>();
+                    try
+                    {
+                        int order = 0;
+                        foreach (var itemorden in orden.pedidosItems)
+                        {
+                            order = order + 1;
+                            Post.Add(new PedidosAPI
+                            {
+
+                                p_PEDIDO = int.Parse(orden.codigoext),
+                                p_ORDEN = order,
+                                p_CANTIDAD = (int)itemorden.cantidad,
+                                p_FECHA = int.Parse(orden.fecha),
+                                p_CLIENTE = int.Parse(orden.codCliente),
+                                p_PRODUCTO = itemorden.idArticulo,
+                                p_PRECIO =(decimal) itemorden.importeUnitario,//(decimal)Context.ProductOrders.Where(x => x.IdArticulo == itemorden.idArticulo && x.StatusRegister == "A" && x.Idaccount == orden.Idaccount).FirstOrDefault().Precio1,
+                                p_VENDEDOR = int.Parse(orden.idVendedor),
+                                p_ESTADO = 0,
+                                p_PEDIDO_MARDIS = orden.p_PEDIDO_MARDIS,
+                                p_NUEVO_CLIENTE = orden.codCliente,
+                                p_FORMA_PAGO= itemorden.formapago
+
+                            }); ; ;
+
+                        }
+                         json = JsonConvert.SerializeObject(Post);
+
+                        HelpersHttpClient _helpersHttpClientBussiness = new HelpersHttpClient();
+                        var EstadoRespuestaCrearClienteIM = Task.Factory.StartNew(() =>
+                        {
+                            return _helpersHttpClientBussiness.PostApi("pedidocobertura/agregarlista", json);
+                        });
+
+                        var respuesta = EstadoRespuestaCrearClienteIM.Result.Result;
+                        if (respuesta)
+                        {
+
+                            json = null;
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+
+                    orden.errorenvio = json;
+                    Context.Orders.Add(orden);
+                    Context.SaveChanges();
+
+                }
+
+
+                //db.PEDIDOS.Add(pEDIDOS);
+                return 1.0;
+            }
+            catch (Exception ex)
+            {
+                return -2.0;
+            }
+
+        }
+
+        String VerificaionBranch(Branch local) {
+
+            if (local.CommentBranch == "nuevo") {
+
+                if (local.ExternalCode == local.Id.ToString())
+                {
+                    return "";
+                }
+                else {
+                    local.ExternalCode = local.Id.ToString();
+                    Context.Branches.Update(local);
+                    Context.SaveChanges();
+                    return local.ExternalCode;
+                }
+            
+            }
+
+            return "";
+        }
+
+        double GuardarPedidosutri(List<Order> _data) {
+            try
+            {
                 int idVende = 0;
                 foreach (var x in _data)
                 {
@@ -82,7 +198,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                     {
 
                         IQueryable<Salesman> vendedor = Enumerable.Empty<Salesman>().AsQueryable();
-                        vendedor = Context.Salesmans.Where(v => v.codigoDeValidacion ==  x.idVendedor && v.idaccount == x.Idaccount);
+                        vendedor = Context.Salesmans.Where(v => v.codigoDeValidacion == x.idVendedor && v.idaccount == x.Idaccount);
 
                         if (vendedor.Count() > 0)
                         {
@@ -107,7 +223,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                         }
                     }
                 }
-       
+
                 Context.Query<string>($@"EXEC dbo.sp_actualiza_movil_warehouse_app @idvendedor = {idVende}");
                 //db.PEDIDOS.Add(pEDIDOS);
                 return 1.0;
@@ -116,7 +232,6 @@ namespace Chariot.Engine.DataAccess.MardisOrders
             {
                 return -2.0;
             }
-
 
         }
         public bool SaveDataDevolucion(List<Devolucion> _data)

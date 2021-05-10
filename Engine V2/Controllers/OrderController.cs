@@ -90,6 +90,22 @@ namespace Engine_V2.Controllers
             return Ok(_ordersBusiness.GetArticulos(Idaccount, Idvendedor));
         }
         [HttpGet]
+        [Route("ObtenerLogCierreDia")]
+        public object ObtenerLogCierreDia( string Idvendedor = "9999999999")
+        {
+
+            return Ok(_ordersBusiness.ObtenerLogCierre(Idvendedor));
+        }
+        [HttpPost]
+        [Route("GuardarLogCierreDia")]
+        public async Task<IActionResult> GuardarLogCierreDia(Log_Cierre_Dia Respuesta)
+        {
+
+            return Ok(_ordersBusiness.SaveLog_Cierre_Dia(Respuesta));
+        }
+
+
+        [HttpGet]
         [Route("GETObtenerProductoXCodigo")]
         public async Task<IActionResult> GETObtenerProductoXCodigo(string CodigoProducto)
         {

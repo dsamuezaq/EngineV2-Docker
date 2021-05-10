@@ -57,6 +57,46 @@ namespace Chariot.Engine.Business.MardisOrders
             return mapperRubros.Where(x => x.Idaccount == Idaccount).ToList();
 
         }
+        public Log_Cierre_Dia ObtenerLogCierre(string idvendedor)
+        {
+            Log_Cierre_Dia DatosCierreDia;
+            try
+            {
+                DatosCierreDia = _ordersDao.SelectEntity<Log_Cierre_Dia>().Where(x => x.idVendedor == idvendedor && x.fecha_cierre == null).First();
+                return DatosCierreDia;
+
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+         
+          
+        }
+        public bool SaveLog_Cierre_Dia(Log_Cierre_Dia _responselist)
+        {
+            List<ReplyViewModel> _data = new List<ReplyViewModel>();
+          
+            
+                var _insert = _ordersDao.InsertUpdateOrDeleteSelectAll(_responselist, "I");
+
+                if (_insert != null)
+                {
+                return true;
+
+                }
+                else
+                {
+                return false;
+
+                 }
+          
+
+           
+            return false;
+
+        }
         public List<ClientViewModel> GetClientes()
         {
 

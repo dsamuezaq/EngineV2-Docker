@@ -290,6 +290,10 @@ namespace Chariot.Engine.DataObject
         /// </summary>
         public DbSet<Movil_Warenhouse_Resume> Movil_Warenhouse_Resumes { get; set; }
 
+        /// <summary>
+        /// Tabla Movil Warenhouse Resume
+        /// </summary>
+        public DbSet<Log_Cierre_Dia> Log_Cierre_Dias { get; set; }
 
         /// <summary>
         /// Secuencial de ordenes

@@ -919,51 +919,64 @@ namespace Chariot.Engine.Business.Mardiscore
             Branch resp = _routeDao.GuardarlocalesCreadoAPPPedido(BranchModel, _respose.account, _respose.iduser, _respose.option, _respose.campaign, _respose.status, date);
             if (resp != null)
             {
-                try
+                _routeDao.ActivarLocalesGuardadoIndustrial(resp.Id);
+                if (_respose.account == 15)
                 {
-                    List<PostCoberturaClienteGuardarViewModel> Post = new List<PostCoberturaClienteGuardarViewModel>();
-                    Post.Add(new PostCoberturaClienteGuardarViewModel
+                    try
                     {
-                        nU_ID = resp.Id,
-                        nU_CEDULA_RUC = Int64.Parse(resp.PersonOwner.Document),
-                        nU_NOMBRE = resp.PersonOwner.Name + " " + resp.PersonOwner.SurName,
-                        nU_DIRECCION = resp.MainStreet,
-                        nU_TIPO_NEG = resp.TypeBusiness,
-                        nU_TELEFONO = Int64.Parse(resp.PersonOwner.Phone),
-                        nU_CODIGO_VEND = Int64.Parse(resp.Cluster)
-                    });
-                    var json = JsonConvert.SerializeObject(Post);
-                    var EstadoRespuestaCrearClienteIM = Task.Factory.StartNew(() =>
-                    {
-                        return _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
-                    });
+                        List<PostCoberturaClienteGuardarViewModel> Post = new List<PostCoberturaClienteGuardarViewModel>();
+                        Post.Add(new PostCoberturaClienteGuardarViewModel
+                        {
+                            nU_ID = resp.Id,
+                            nU_CEDULA_RUC = Int64.Parse(resp.PersonOwner.Document),
+                            nU_NOMBRE = resp.PersonOwner.Name + " " + resp.PersonOwner.SurName,
+                            nU_DIRECCION = resp.MainStreet,
+                            nU_TIPO_NEG = resp.TypeBusiness,
+                            nU_TELEFONO = Int64.Parse(resp.PersonOwner.Phone),
+                            nU_CODIGO_VEND = Int64.Parse(resp.Cluster)
+                        });
+                        var json = JsonConvert.SerializeObject(Post);
+                        var EstadoRespuestaCrearClienteIM = Task.Factory.StartNew(() =>
+                        {
+                            return _helpersHttpClientBussiness.PostApi("CoberturaClienteNuevo/agregarlista", json);
+                        });
 
-                    var respuesta = EstadoRespuestaCrearClienteIM.Result.Result;
+                        var respuesta = EstadoRespuestaCrearClienteIM.Result.Result;
 
-                    if (respuesta)
-                    {
-                        _routeDao.ActivarLocalesGuardadoIndustrial(resp.Id);
-                        reply.status = "Ok";
-                        reply.messege = "Local Guardado";
-                        reply.data = resp.Id;
-                        return reply;
+                        if (respuesta)
+                        {
+
+                            reply.status = "Ok";
+                            reply.messege = "Local Guardado";
+                            reply.data = resp.Id;
+                            return reply;
+                        }
+
+
                     }
-
+                    catch (Exception e)
+                    {
+                        reply.status = "error";
+                        reply.messege = e.Message;
+                        _respose._route.Errores = "Error base Externo";
+                        reply.data = 999999999;
+                        throw;
+                    }
                 }
-                catch (Exception e)
+                else
                 {
-                    reply.status = "error";
-                    reply.messege = e.Message;
-                    _respose._route.Errores = "Error base Externo";
-                    reply.data = 999999999;
-                    throw;
+                    reply.status = "Ok";
+                    reply.messege = "Local Guardado";
+                    reply.data = resp.Id;
+                    return reply;
+
                 }
 
             };
             reply.status = "error";
             reply.messege = "Error base mardis";
             _respose._route.Errores = "Error base mardis";
-            reply.data = _respose._route;
+            reply.data = _respose._route.Codigo_Encuesta;
 
             return reply;
 

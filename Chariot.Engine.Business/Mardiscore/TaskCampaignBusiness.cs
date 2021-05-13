@@ -13,6 +13,7 @@ using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardiscoreViewModel.Branch;
 using Chariot.Framework.MardiscoreViewModel.Route;
 using Chariot.Framework.Resources;
+using Chariot.Framework.SurtiApp.CargaStock;
 using Chariot.Framework.SystemViewModel;
 using Newtonsoft.Json;
 using OfficeOpenXml;
@@ -1104,13 +1105,20 @@ namespace Chariot.Engine.Business.Mardiscore
                     if (resp.IdAccount == 15) { 
                     _routeDao.ActivarLocalesGuardadoIndustrial(resp.Id);
                     List<PostCoberturaClienteGuardarViewModel> Post = new List<PostCoberturaClienteGuardarViewModel>();
-                    Post.Add(new PostCoberturaClienteGuardarViewModel
+                       
+                        string Direccompleta = resp.MainStreet;
+                        int max = 90;
+                        string direccion = Direccompleta.Substring(0, max < Direccompleta.Length ? max : Direccompleta.Length);
+                        string Tipo = resp.TypeBusiness;
+                        int maxt = 30;
+                        string Tipoapi = Tipo.Substring(0, maxt < Tipo.Length ? max : Tipo.Length);
+                        Post.Add(new PostCoberturaClienteGuardarViewModel
                     {
                         nU_ID = resp.Id,
                         nU_CEDULA_RUC = Int64.Parse(resp.PersonOwner.Document),
                         nU_NOMBRE = resp.PersonOwner.Name + " " + resp.PersonOwner.SurName,
-                        nU_DIRECCION = resp.MainStreet,
-                        nU_TIPO_NEG = resp.TypeBusiness,
+                        nU_DIRECCION = direccion,
+                        nU_TIPO_NEG = Tipoapi,
                         nU_TELEFONO = Int64.Parse(resp.PersonOwner.Phone),
                         nU_CODIGO_VEND = Int64.Parse(resp.Cluster)
                     });
@@ -1422,6 +1430,129 @@ namespace Chariot.Engine.Business.Mardiscore
                         worksheet.Cells[rows, 21].Value = t.IMEI;
                         worksheet.Cells[rows, 22].Value = t.Fecha;
                         worksheet.Cells[rows, 23].Value = t.Errores;
+
+                        rows++;
+
+                    }
+
+
+
+
+
+
+                    package.Save();
+                    //var streams = new MemoryStream(package.GetAsByteArray());
+
+                    var log = DateTime.Now;
+                    string LogFile = log.ToString("yyyyMMddHHmmss");
+
+
+                    ReplyViewModel reply = new ReplyViewModel();
+                    reply.status = "Ok";
+                    reply.messege = "Impresión exitosa";
+                    //reply.data = GetUrlAzureContainerbyStrem(streams, LogFile, ".xlsx");
+                    return reply;
+                }
+
+            }
+            catch (Exception e)
+            {
+
+                ReplyViewModel reply = new ReplyViewModel();
+                reply.status = "Error";
+                reply.messege = e.Message;
+
+                return reply;
+            }
+
+
+
+
+
+        }
+
+
+        public ReplyViewModel PrintErrorTaskProducto(List<CargaStockItemModelWeb> model, FileInfo file)
+        {
+
+
+            // string sWebRootFolder = _Env.WebRootPath;
+
+
+
+            //string sFileName = @"Listado.xlsx";
+            //    string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+
+            ;
+            try
+            {
+
+                using (ExcelPackage package = new ExcelPackage(file))
+                {
+
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("ErroresCarga");
+
+                    Color colFromHex = System.Drawing.ColorTranslator.FromHtml("#B7DEE8");
+
+                    worksheet.Column(1).Width = 20;
+                    worksheet.Column(2).Width = 20;
+                    worksheet.Column(3).Width = 20;
+                    worksheet.Column(4).Width = 50;
+                    worksheet.Column(5).Width = 32;
+                    worksheet.Column(6).Width = 80;
+                    worksheet.Cells[1, 1].Value = "Id_Producto";
+                    worksheet.Cells[1, 1].Style.Font.Color.SetColor(Color.White);
+                    worksheet.Cells[1, 1].Style.Font.Bold = true;
+                    worksheet.Cells[1, 1].Style.Font.Size = 12;
+                    worksheet.Cells[1, 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(colFromHex);
+
+                    worksheet.Cells[1, 2].Value = "Nombre_Producto";
+                    worksheet.Cells[1, 2].Style.Font.Size = 12;
+                    worksheet.Cells[1, 2].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[1, 2].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    worksheet.Cells[1, 2].Style.Font.Color.SetColor(Color.White);
+                    worksheet.Cells[1, 2].Style.Font.Bold = true;
+
+                    worksheet.Cells[1, 3].Value = "Vendedor";
+                    worksheet.Cells[1, 3].Style.Font.Size = 12;
+                    worksheet.Cells[1, 3].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[1, 3].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    worksheet.Cells[1, 3].Style.Font.Color.SetColor(Color.White);
+                    worksheet.Cells[1, 3].Style.Font.Bold = true;
+
+
+                    worksheet.Cells[1, 4].Value = "Cedula";
+                    worksheet.Cells[1, 4].Style.Font.Size = 12;
+                    worksheet.Cells[1, 4].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[1, 4].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    worksheet.Cells[1, 4].Style.Font.Color.SetColor(Color.White);
+                    worksheet.Cells[1, 4].Style.Font.Bold = true;
+
+                    worksheet.Cells[1, 5].Value = "Cantidad";
+                    worksheet.Cells[1, 5].Style.Font.Size = 12;
+                    worksheet.Cells[1, 5].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[1, 5].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    worksheet.Cells[1, 5].Style.Font.Color.SetColor(Color.White);
+                    worksheet.Cells[1, 5].Style.Font.Bold = true;
+
+
+                    worksheet.Cells[1, 6].Value = "Errores";
+                    worksheet.Cells[1, 6].Style.Font.Size = 12;
+                    worksheet.Cells[1, 6].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[1, 6].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    worksheet.Cells[1, 6].Style.Font.Color.SetColor(Color.White);
+                    worksheet.Cells[1, 6].Style.Font.Bold = true;
+                    int rows = 2;
+                    int rowsobs = 2;
+                    foreach (var t in model)
+                    {
+                        worksheet.Cells[rows, 1].Value = t.Id_Producto;
+                        worksheet.Cells[rows, 2].Value = t.Nombre_Producto;
+                        worksheet.Cells[rows, 3].Value = t.Vendedor;
+                        worksheet.Cells[rows, 4].Value = t.Cedula;
+                        worksheet.Cells[rows, 5].Value = t.Cantidad;
+                        worksheet.Cells[rows, 6].Value = t.Errores;
 
                         rows++;
 

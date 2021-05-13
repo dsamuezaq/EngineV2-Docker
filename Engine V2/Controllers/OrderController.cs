@@ -12,6 +12,7 @@ using Chariot.Framework.Complement;
 using Chariot.Framework.Helpers;
 using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardisOrdersViewModel;
+using Chariot.Framework.SystemViewModel;
 using Engine_V2.Libraries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -94,6 +95,7 @@ namespace Engine_V2.Controllers
         public object ObtenerLogCierreDia( string Idvendedor = "9999999999")
         {
 
+      
             return Ok(_ordersBusiness.ObtenerLogCierre(Idvendedor));
         }
         [HttpPost]
@@ -343,9 +345,9 @@ namespace Engine_V2.Controllers
         [Route("inventario")]
         public async Task<IActionResult> Postinventario(List<InventaryViewModel> inventaries)
         {
- 
 
-            return Ok(_ordersBusiness.SaveDataInventary(inventaries));
+            ReplyViewModel reply = new ReplyViewModel();
+            return Ok(reply);
         }
 
         #endregion

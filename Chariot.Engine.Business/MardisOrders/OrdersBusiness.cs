@@ -12,6 +12,7 @@ using Chariot.Framework.MardiscoreViewModel;
 using Chariot.Framework.MardisOrdersViewModel;
 using Chariot.Framework.Resources;
 using Chariot.Framework.SurtiApp;
+using Chariot.Framework.SurtiApp.CargaStock;
 using Chariot.Framework.SystemViewModel;
 using Newtonsoft.Json;
 using OfficeOpenXml;
@@ -1928,6 +1929,55 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
+        public DataObject.SurtiApp.EntregadorModeloApp ObtenerVendedorXdistribuidorEngine(int Iddistribuidor)
+        {
+            DataObject.SurtiApp.EntregadorModeloApp _entregadorModeloApp = new DataObject.SurtiApp.EntregadorModeloApp();
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+                var vistaResultado = _ordersDao.ConsularVendedoresXDistribuidor(Iddistribuidor);
+                reply.messege = "Los datos fueron guardados correctamente";
+                reply.status = "Ok";
+                if (vistaResultado.Count() > 0)
+                {
+
+                    List<DataObject.SurtiApp.EntregadorDetalle> _entregadorDetalle = vistaResultado.Select(x => new DataObject.SurtiApp.EntregadorDetalle
+                    {
+                        id = x.id,
+                        username = x.nombre,
+                        first_name = x.nombre,
+                        email = x.nombre,
+                        last_name = "",
+                        active = true,
+                        deleted = false,
+                        delivery_count = x.cantidad.ToString(),
+                        status = x.statusV,
+
+
+
+
+                    }).ToList();
+      
+                    _entregadorModeloApp.entregadores.AddRange(_entregadorDetalle);
+                    reply.data = _entregadorModeloApp;
+                }
+                return _entregadorModeloApp;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No se pudo guardar la información";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                return null;
+            }
+
+        }
+        public int Distribuidor(string iduser) {
+            int Iddistribuidor = _ordersDao.DistribuidorID(Guid.Parse(iduser));
+            return Iddistribuidor;
+
+        }
         public ReplyViewModel ObtenerProductoEnBodegaCentralDistribuidor(int Iddistribuidor)
         {
             ReplyViewModel reply = new ReplyViewModel();
@@ -2086,6 +2136,91 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
+        public ReplyViewModel ObtenerProductoEnBodegaCentralCamionEngine(int Idvendedor)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+                var vistaResultado = _ordersDao.ConsularBodegaCentralXCambion(Idvendedor);
+                reply.messege = "Los datos fueron guardados correctamente";
+                reply.status = "Ok";
+
+                var warehouse_quantity = vistaResultado.Sum(x => x.cantidad);
+              
+                    reply.data = vistaResultado.Select(x=>new { code=x.barcode, producto=x.nombre,cantidad=x.cantidad,precio=x.precio });
+                
+                return reply;
+            }
+            catch (Exception e)
+            {
+                ConsolidadoItemSurtiApp _entregadorModeloApp = new ConsolidadoItemSurtiApp();
+                reply.messege = "No existe inventario para el vendedor";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                reply.data = _entregadorModeloApp;
+                return reply;
+            }
+
+        }
+        public ReplyViewModel CrearInventarioExcel(CargaStockModeloWeb cargaStockModeloWeb)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+                reply.messege = "Los datos fueron guardados correctamente";
+                reply.status = "Ok";
+
+                string errores = "";
+                int Iddistribuidor = _ordersDao.DistribuidorID(Guid.Parse(cargaStockModeloWeb.iduser));
+                int idvendedor = _ordersDao.VendedorID(cargaStockModeloWeb.stockCamion.Cedula);
+                int idProducto = _ordersDao.ProductoID(cargaStockModeloWeb.stockCamion.Id_Producto,cargaStockModeloWeb.account);
+                if (Iddistribuidor == 0)
+                    errores = "El distribuidor no se encuentra registrado-";
+                if (idvendedor == 0)
+                    errores = errores+ "El vendedor no se cuentra asignado al distruibuidor-";
+                if (idProducto == 0)
+                    errores = errores + "El producto no se encuentra registrado";
+                var FueGuardoExitoso = false;
+                if (errores=="")
+                  FueGuardoExitoso = _ordersDao.GuardarBodegaMovil(Iddistribuidor,
+                                                                      idProducto,
+                                                                      int.Parse(cargaStockModeloWeb.stockCamion.Cantidad), 
+                                                                      idvendedor, 
+                                                                     1,
+                                                                      "Cargado Engine");
+               
+                if (FueGuardoExitoso)
+                {
+       
+                    reply.status = "Ok";
+                    reply.messege = "Producto Cargado";
+                    reply.data = cargaStockModeloWeb;
+                }
+                else
+                {
+                    reply.status = "Error";
+                    reply.messege = "Producto Cargado";
+                    cargaStockModeloWeb.stockCamion.Errores= errores;
+                    reply.data = cargaStockModeloWeb.stockCamion;
+                }
+
+
+
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No se pudo guardar la información";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                reply.data = "GenericError.WarehouseMissingInventory";
+                return reply;
+            }
+
+        }
+
+
         private List<ImagePoductoBodega> ImagenProducto() {
             List<ImagePoductoBodega> _imagenes = new List<ImagePoductoBodega>();
             ImagePoductoBodega _imagePoductoBodega = new ImagePoductoBodega();

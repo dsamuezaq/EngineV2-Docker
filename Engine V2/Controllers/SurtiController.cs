@@ -12,9 +12,12 @@ using Chariot.Engine.DataObject.MardisOrders;
 using Chariot.Framework.Complement;
 using Chariot.Framework.Helpers;
 using Chariot.Framework.MardiscoreViewModel;
+using Chariot.Framework.MardiscoreViewModel.Route;
 using Chariot.Framework.MardisOrdersViewModel;
 using Chariot.Framework.SurtiApp;
+using Chariot.Framework.SurtiApp.CargaStock;
 using Chariot.Framework.SurtiApp.SP;
+using Chariot.Framework.SystemViewModel;
 using Engine_V2.Libraries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +34,7 @@ namespace Engine_V2.Controllers
     {
         #region Variable
         private readonly OrdersBusiness _ordersBusiness;
+        private readonly TaskCampaignBusiness _taskCampaignBusiness;
         private readonly ILogger<TaskCampaignController> _logger;
         private IHostingEnvironment _Env;
         // private readonly IMapper _mapper;
@@ -40,6 +44,7 @@ namespace Engine_V2.Controllers
                                            ChariotContext _chariotContext, IMapper mapper, IHostingEnvironment envrnmt) : base(_chariotContext, distributedCache, appSettings, mapper)
         {
             _ordersBusiness = new OrdersBusiness(_chariotContext, distributedCache, mapper);
+            _taskCampaignBusiness = new TaskCampaignBusiness(_chariotContext, distributedCache, mapper);
             _Env = envrnmt;
         }
         #endregion
@@ -194,7 +199,87 @@ namespace Engine_V2.Controllers
             return Ok(InventarioBodega.data);
 
         }
+        [HttpPost]
+        [Route("LoadStock")]
+        //  [Authorize]
+        public async Task<IActionResult> LoadStock(CargaStockModeloWeb _datoCarga)
+        {
+          
+            return Ok(_ordersBusiness.CrearInventarioExcel(_datoCarga));
 
+        }
+        [HttpPost]
+        [Route("ObtnerVenddoresActivos")]
+        //  [Authorize]
+        public async Task<IActionResult> ObtnerVenddoresActivos(GetCampaignViewModel _data)
+        {
+            var idvendedor = _ordersBusiness.Distribuidor(_data.Iduser.ToString());
+            var Respuesta = _ordersBusiness.ObtenerVendedorXdistribuidorEngine(idvendedor);
+
+            var resulta = Respuesta.entregadores.Select(x => new { id=x.id, route = x.username, status = x.status == "empty" ? false : true }).ToList();
+            try
+            {
+
+
+                reply.messege = "success";
+                reply.data = resulta;
+                reply.status = "Ok";
+       
+            }
+            catch (Exception e)
+            {
+                reply.messege = "No existen datos de campaña";
+                reply.data = e.Message;
+                reply.status = "Fallo la consulta";
+           
+
+            }
+            return Ok(reply);
+
+        }
+        [HttpPost]
+        [Route("ObtnerInventarioVenddoresActivos")]
+        //  [Authorize]
+        public async Task<IActionResult> ObtnerInventarioVenddoresActivos(GetEncuestadorViewModel _data)
+        {
+            var InventarioBodega = _ordersBusiness.ObtenerProductoEnBodegaCentralCamionEngine(int.Parse(_data.RouteCode));
+    
+            return Ok(InventarioBodega);
+
+        }
+
+        [HttpPost]
+        [Route("PrintErrorLoadTask")]
+   
+        public async Task<IActionResult> PrintErrorLoadTask(List<CargaStockItemModelWeb> response)
+        {
+
+            string sWebRootFolder = _Env.ContentRootPath;
+            var log = DateTime.Now;
+            string LogFile = log.ToString("yyyyMMddHHmmss");
+            string sFileName = @"Ruta4.xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            if (file.Exists)
+            {
+                file.Delete();
+                file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+
+            }
+            else
+            {
+
+                file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+
+            }
+            var reply = _taskCampaignBusiness.PrintErrorTaskProducto(response, file);
+
+            var streams = new MemoryStream(System.IO.File.ReadAllBytes(Path.Combine(sWebRootFolder, sFileName)));
+            reply.data = _taskCampaignBusiness.GetUrlAzureContainerbyStrem(streams, LogFile, ".xlsx");
+
+            return Ok(reply);
+        }
         #region APIs SURTI SP
         [HttpGet]
         [Route("shopping_cart_items/{idvendedor}")]

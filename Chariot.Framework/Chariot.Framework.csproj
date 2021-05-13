@@ -357,6 +357,8 @@
     <Compile Include="RedisViewModel\ServiceModel.cs" />
     <Compile Include="RedisViewModel\tb_bancos_descripcion.cs" />
     <Compile Include="Resources\CStatusRegister.cs" />
+    <Compile Include="SurtiApp\CargaStock\CargaStockItemModelWeb.cs" />
+    <Compile Include="SurtiApp\CargaStock\CargaStockModeloWeb.cs" />
     <Compile Include="SurtiApp\ConsolidadoItemSurtiApp.cs" />
     <Compile Include="SurtiApp\DescuentoModeloApp.cs" />
     <Compile Include="SurtiApp\EntregadorModeloApp.cs" />

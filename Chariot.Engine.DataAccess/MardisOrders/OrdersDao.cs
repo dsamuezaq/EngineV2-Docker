@@ -784,6 +784,56 @@ namespace Chariot.Engine.DataAccess.MardisOrders
             }
 
         }
+
+        public int DistribuidorID(Guid IdUsuario)
+        {
+            try
+            {
+                var Distribuidor = Context.Distributors.Where(x => x.Iduser == IdUsuario);
+                return Distribuidor.Count() > 0 ? Distribuidor.First().IDDISTRIBUTOR :0;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return 0;
+            }
+
+        }
+
+        public int VendedorID(string Cedula)
+        {
+            try
+            {
+                var Vendedor = Context.Salesmans.Where(x => x.idVendedor ==Cedula);
+                return Vendedor.Count() > 0 ? Vendedor.First().id : 0;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return 0;
+            }
+
+        }
+        public int ProductoID(string CodigoProducto, int idcuenta)
+        {
+            try
+            {
+                var  Producto = Context.ProductOrders.Where(x => x.IdArticulo ==CodigoProducto && x.Idaccount==13 && x.StatusRegister==CStatusRegister.Active);
+                return Producto.Count() > 0 ? Producto.First().Id : 0;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return 0;
+            }
+
+        }
         #endregion
 
     }

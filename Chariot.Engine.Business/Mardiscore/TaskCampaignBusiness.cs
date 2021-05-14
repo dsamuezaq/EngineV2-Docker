@@ -53,6 +53,11 @@ namespace Chariot.Engine.Business.Mardiscore
         {
             return _taskCampaignDao.GetAllMovilWarenhouseDao();
         }
+
+        public List<ParameterRoute> ObtenerParametrosRutas(string idusuario, string ruta)
+        {
+            return _taskCampaignDao.ObtenerParametrosRutas(idusuario, ruta);
+        }
         public List<BranchRutaTaskViewModel> GetBranches(int idaccount, string iddevice) {
 
 

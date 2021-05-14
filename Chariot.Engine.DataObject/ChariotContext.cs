@@ -299,6 +299,11 @@ namespace Chariot.Engine.DataObject
         /// Secuencial de ordenes
         /// </summary>
         public DbSet<UserPollster> UserPollsters { get; set; }
+
+        /// <summary>
+        /// Parametros de locales por ruta
+        /// </summary>
+        public DbSet<ParameterRoute> ParametrosRuta { get; set; }
         public IEnumerable<T> Query<T>(string query) where T : class
         {
             return connection.Query<T>(query);

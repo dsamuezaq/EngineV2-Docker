@@ -52,6 +52,13 @@ namespace Chariot.Engine.DataAccess.MardisCore
                            };
             return consulta.ToList();
         }
+        public List<ParameterRoute> ObtenerParametrosRutas(string idusuario, string ruta)
+        {
+            //   var consulta = Context.Campaigns.Include(t => t.Account).Where(c => c.StatusRegister == CStatusRegister.Active).ToList();
+
+            var consulta = Context.ParametrosRuta.Where(x => x.codigoRuta == ruta && x.estado == CStatusRegister.Active);
+            return consulta.ToList();
+        }
 
         public bool ConsultarEstadoDeRutaDeEncuestadorXIDDevice(string IDdevice, string Nombrecuenta)
         {

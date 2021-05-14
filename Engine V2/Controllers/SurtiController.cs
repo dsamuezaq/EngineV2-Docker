@@ -280,6 +280,16 @@ namespace Engine_V2.Controllers
 
             return Ok(reply);
         }
+        [HttpPost]
+        [Route("BodegaCentralList")]
+        [Authorize]
+        public async Task<IActionResult> BodegaCentralList(int account, string idusuario)
+        {
+            var iddistribuidor = _ordersBusiness.Distribuidor(idusuario.ToString());
+            var InventarioBodega = _ordersBusiness.ObtenerBodegaCentralXDistribuidor(iddistribuidor);
+
+            return Ok(InventarioBodega);
+        }
         #region APIs SURTI SP
         [HttpGet]
         [Route("shopping_cart_items/{idvendedor}")]

@@ -254,6 +254,7 @@
     <Compile Include="MardisCommon\UserPollster.cs" />
     <Compile Include="MardisCore\FacturasEntregadas.cs" />
     <Compile Include="MardisCore\PagoCartera.cs" />
+    <Compile Include="MardisCore\ParameterRoute.cs" />
     <Compile Include="MardisCore\StatusTask.cs" />
     <Compile Include="MardisCore\StatusTaskAccount.cs" />
     <Compile Include="MardisOrders\Central_Warenhouse_Resume.cs" />

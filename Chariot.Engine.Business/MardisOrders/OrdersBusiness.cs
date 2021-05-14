@@ -5,6 +5,7 @@ using Chariot.Engine.DataObject;
 using Chariot.Engine.DataObject.Helpers;
 using Chariot.Engine.DataObject.MardisCore;
 using Chariot.Engine.DataObject.MardisOrders;
+using Chariot.Engine.DataObject.MardisOrders.Vistas;
 using Chariot.Engine.DataObject.SurtiApp;
 using Chariot.Framework.Complement;
 using Chariot.Framework.MardisClientRestModel;
@@ -2042,7 +2043,8 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
-        public ReplyViewModel  CrearInventarioMovil(int warehouseid, int productid, int quantity, int entregadorid, int userid, string comment)
+
+        public ReplyViewModel CrearInventarioMovil(int warehouseid, int productid, int quantity, int entregadorid, int userid, string comment)
         {
             ReplyViewModel reply = new ReplyViewModel();
             try
@@ -2054,9 +2056,38 @@ namespace Chariot.Engine.Business.MardisOrders
                 {
                     reply.data = "Ok";
                 }
-                else {
+                else
+                {
                     reply.data = "GenericError.ProductNotFound";
                 }
+
+
+
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No se pudo guardar la información";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                reply.data = "GenericError.WarehouseMissingInventory";
+                return reply;
+            }
+
+        }
+        public ReplyViewModel  ObtenerBodegaCentralXDistribuidor(int Iddistribuidor)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+
+                List<vw_resumen_Stock_bodegaCentral> vistaResultado = _ordersDao.ConsularBodegaCentralXDistribuidor(Iddistribuidor);
+                reply.messege = "Los datos fueron guardados correctamente";
+                reply.status = "Ok";
+       
+                   reply.data = vistaResultado.Select(x=>new { codigo=x.barcode, sku=x.nombre,cantidad = x.cantidad, precio=x.precio }).ToList();
+              
          
 
            
@@ -2065,7 +2096,7 @@ namespace Chariot.Engine.Business.MardisOrders
             catch (Exception e)
             {
               
-                reply.messege = "No se pudo guardar la información";
+                reply.messege = "No se encontrar inventario";
                 reply.status = "Fail";
                 reply.error = e.Message;
                 reply.data = "GenericError.WarehouseMissingInventory";

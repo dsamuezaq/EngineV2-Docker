@@ -51,6 +51,14 @@ namespace Engine_V2.Controllers
             return Ok(_taskCampaignBusiness.GetBranches(idaccount, iddevice));
         }
 
+        [HttpPost]        
+        [Route("ObtenerParametroRuta")]
+        public async Task<IActionResult> ObtenerParametroRuta(string idusuario, string ruta)
+        {
+
+            return Ok(_taskCampaignBusiness.ObtenerParametrosRutas(idusuario, ruta));
+        }
+
         [HttpPost]
         [Route("ActualizarGeoLocal")] 
         public async Task<IActionResult> Get(int idbranch, string lat,string lon)

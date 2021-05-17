@@ -54,9 +54,9 @@ namespace Chariot.Engine.Business.Mardiscore
             return _taskCampaignDao.GetAllMovilWarenhouseDao();
         }
 
-        public List<ParameterRoute> ObtenerParametrosRutas(string idusuario, string ruta)
+        public List<ParameterRoute> ObtenerParametrosRutas(string idusuario, string ruta, int cuenta)
         {
-            return _taskCampaignDao.ObtenerParametrosRutas(idusuario, ruta);
+            return _taskCampaignDao.ObtenerParametrosRutas(idusuario, ruta, cuenta);
         }
         public List<BranchRutaTaskViewModel> GetBranches(int idaccount, string iddevice) {
 
@@ -101,7 +101,7 @@ namespace Chariot.Engine.Business.Mardiscore
                     District = x.District.Name,
                     //  FechaVisita = x.FechaVisita,
                     //Link = x.Ext_image,
-                    //Isclient = x.Isclient,
+                    isclient = x.isclient,
                     Propietarioape = x.PersonOwner.Name  ,
                     ZonaPeliograsa=x.Zone,
                     ActualizoGeo=x.geoupdate

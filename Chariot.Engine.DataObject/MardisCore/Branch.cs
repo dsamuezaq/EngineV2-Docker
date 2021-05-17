@@ -69,7 +69,7 @@ namespace Chariot.Engine.DataObject.MardisCore
         public string RUTAAGGREGATE { get; set; }
         public string IMEI_ID { get; set; }
         public string CommentBranch { get; set; }
-
+        public string isclient { get; set; }
         public string Cluster { get; set; }
         public string state_period { get; set; }
         public int? geoupdate { get; set; }

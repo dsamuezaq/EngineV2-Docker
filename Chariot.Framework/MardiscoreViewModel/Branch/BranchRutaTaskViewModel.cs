@@ -39,7 +39,7 @@ namespace Chariot.Framework.MardiscoreViewModel.Branch
         public DateTime? FechaVisita { get; set; }
         public DateTime? FechaVisitaInicio { get; set; }
         public string Link { get; set; }
-        public string Isclient { get; set; }
+        public string isclient { get; set; }
         public string Propietarioape { get; set; }
         public string correo { get; set; }
         //public List<ViewContact> Contacts { get; set; }

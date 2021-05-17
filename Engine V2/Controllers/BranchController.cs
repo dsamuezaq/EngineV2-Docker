@@ -53,10 +53,10 @@ namespace Engine_V2.Controllers
 
         [HttpPost]        
         [Route("ObtenerParametroRuta")]
-        public async Task<IActionResult> ObtenerParametroRuta(string idusuario, string ruta)
+        public async Task<IActionResult> ObtenerParametroRuta(string idusuario, string ruta, int cuenta)
         {
 
-            return Ok(_taskCampaignBusiness.ObtenerParametrosRutas(idusuario, ruta));
+            return Ok(_taskCampaignBusiness.ObtenerParametrosRutas(idusuario, ruta, cuenta));
         }
 
         [HttpPost]

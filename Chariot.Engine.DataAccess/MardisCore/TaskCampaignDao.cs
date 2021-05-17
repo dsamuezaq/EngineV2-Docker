@@ -52,11 +52,11 @@ namespace Chariot.Engine.DataAccess.MardisCore
                            };
             return consulta.ToList();
         }
-        public List<ParameterRoute> ObtenerParametrosRutas(string idusuario, string ruta)
+        public List<ParameterRoute> ObtenerParametrosRutas(string idusuario, string ruta, int cuenta)
         {
             //   var consulta = Context.Campaigns.Include(t => t.Account).Where(c => c.StatusRegister == CStatusRegister.Active).ToList();
 
-            var consulta = Context.ParametrosRuta.Where(x => x.codigoRuta == ruta && x.estado == CStatusRegister.Active);
+            var consulta = Context.ParametrosRuta.Where(x => x.codigoRuta == ruta && x.estado == CStatusRegister.Active && x.idaccount== cuenta);
             return consulta.ToList();
         }
 
@@ -97,6 +97,7 @@ namespace Chariot.Engine.DataAccess.MardisCore
                             join p in Context.Persons on b.IdPersonOwner equals p.Id
                             join pv in Context.Provinces on b.IdProvince equals pv.Id
                             join ds in Context.Districts on b.IdDistrict equals ds.Id
+                            join c in Context.Accounts on b.IdAccount equals c.Id
                             where b.IdAccount == idAccount && b.IMEI_ID.Contains(Imeid) && b.ESTADOAGGREGATE=="S"
                                   && b.StatusRegister==CStatusRegister.Active
 
@@ -136,9 +137,9 @@ namespace Chariot.Engine.DataAccess.MardisCore
                                 PersonOwner = p,
                                 Province = pv,
                                 District = ds,
-                                geoupdate=b.geoupdate
+                                geoupdate=b.geoupdate,
+                                isclient=c.versionapp
 
-                            
                             };
 
                     consulta = consulta1.ToList();

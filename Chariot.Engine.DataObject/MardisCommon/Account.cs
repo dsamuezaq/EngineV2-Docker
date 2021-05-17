@@ -26,6 +26,7 @@ namespace Chariot.Engine.DataObject.MardisCommon
         public string Name { get; set; }
 
         public string StatusRegister { get; set; }
+        public string versionapp { get; set; }
 
         //public List<Person> People { get; set; }
 

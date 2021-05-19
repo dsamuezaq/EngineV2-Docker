@@ -743,27 +743,28 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
         }
 
-        public Boolean GuardarBodegaMovil(int warehouseid, int productid, int quantity, int entregadorid, int userid, string comment)
+        public Boolean GuardarBodegaMovil(int warehouseid, int productid, int quantity, int entregadorid, int userid, string comment,int tipo)
         {
             try
             {
+                int tipoIngreso = 1 * tipo;
 
                 Movil_Warenhouse movil_Warenhouse = new Movil_Warenhouse();
                 movil_Warenhouse.IDVENDEDOR = entregadorid;
                 movil_Warenhouse.BALANCE = quantity;
                 movil_Warenhouse.DESCRIPTION = "INGRESO DE INVENTARIO APP";
-                movil_Warenhouse.MOVEMENT = "1";
+                movil_Warenhouse.MOVEMENT = tipoIngreso.ToString();
                 movil_Warenhouse.IDPRODUCTO = productid;
                 movil_Warenhouse.COMMENT = comment;
                 Context.Movil_Warenhouses.Add(movil_Warenhouse);
                 Context.SaveChanges();
 
-
+                int tipoIngresoWarenhouse = -1 * tipo;
                 Central_Warenhouse central_Warenhouse = new Central_Warenhouse();
                 central_Warenhouse.IDDISTRIBUTOR = warehouseid;
                 central_Warenhouse.BALANCE = quantity;
                 central_Warenhouse.DESCRIPTION = "INGRESO DE INVENTARIO APP";
-                central_Warenhouse.MOVEMENT = "-1";
+                central_Warenhouse.MOVEMENT = tipoIngresoWarenhouse.ToString();
                 central_Warenhouse.IDPRODUCTO = productid;
 
                 Context.Central_Warenhouses.Add(central_Warenhouse);
@@ -801,6 +802,22 @@ namespace Chariot.Engine.DataAccess.MardisOrders
             }
 
         }
+        public int CuentaIDUsuario(Guid IdUsuario)
+        {
+            try
+            {
+                var usuario = Context.Users.Where(x => x.Id == IdUsuario);
+                return usuario.Count() > 0 ? usuario.First().IdAccount : 0;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return 0;
+            }
+
+        }
 
         public int VendedorID(string Cedula)
         {
@@ -822,7 +839,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
         {
             try
             {
-                var  Producto = Context.ProductOrders.Where(x => x.IdArticulo ==CodigoProducto && x.Idaccount==13 && x.StatusRegister==CStatusRegister.Active);
+                var  Producto = Context.ProductOrders.Where(x => x.IdArticulo ==CodigoProducto && x.Idaccount== idcuenta && x.StatusRegister==CStatusRegister.Active);
                 return Producto.Count() > 0 ? Producto.First().Id : 0;
 
             }
@@ -831,6 +848,22 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
                 throw;
                 return 0;
+            }
+
+        }
+        public String Stock(int CodigoProducto, int iddistribuidor,int cantidad)
+        {
+            try
+            {
+                var Producto = Context.Central_Warenhouse_Resumes.Where(x => x.IDPRODUCTO == CodigoProducto && x.IDDISTRIBUTOR == iddistribuidor );
+                return Producto.Count() > 0 ? Producto.First().BALANCE> (decimal?)cantidad? "" : Producto.First().BALANCE.ToString():"";
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+                return "";
             }
 
         }

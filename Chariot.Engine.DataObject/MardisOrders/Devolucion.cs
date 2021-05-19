@@ -13,14 +13,13 @@ namespace Chariot.Engine.DataObject.MardisOrders
     {
         [Key]
         public int Id { get; set; }
-        public int P_ORDENDEV { get; set; }
-
-        public string P_FECHA { get; set; }
-        public string P_PRODUCTO { get; set; }
-        public float P_CANTIDAD { get; set; }
+        public int p_ORDENDEV { get; set; }
+        public string p_FECHA { get; set; }
+        public string p_PRODUCTO { get; set; }
+        public float p_CANTIDAD { get; set; }
         public string p_CLIENTE { get; set; }
-        public string P_VENDEDOR { get; set; }
-        public string P_unidad { get; set; }
+        public string p_VENDEDOR { get; set; }
+        public string p_unidad { get; set; }
 
 
     }

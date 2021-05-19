@@ -1495,7 +1495,7 @@ namespace Chariot.Engine.Business.Mardiscore
                 using (ExcelPackage package = new ExcelPackage(file))
                 {
 
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("ErroresCarga");
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Formato");
 
                     Color colFromHex = System.Drawing.ColorTranslator.FromHtml("#B7DEE8");
 

@@ -2051,7 +2051,7 @@ namespace Chariot.Engine.Business.MardisOrders
             {
                 reply.messege = "Los datos fueron guardados correctamente";
                 reply.status = "Ok";
-                var FueGuardoExitoso = _ordersDao.GuardarBodegaMovil(warehouseid, productid, quantity, entregadorid, userid, comment);
+                var FueGuardoExitoso = _ordersDao.GuardarBodegaMovil(warehouseid, productid, quantity, entregadorid, userid, comment,1);
                 if (FueGuardoExitoso)
                 {
                     reply.data = "Ok";
@@ -2200,7 +2200,7 @@ namespace Chariot.Engine.Business.MardisOrders
             {
                 reply.messege = "Los datos fueron guardados correctamente";
                 reply.status = "Ok";
-
+                int tipo = cargaStockModeloWeb.option == 1 ? 1 : -1;
                 string errores = "";
                 int Iddistribuidor = _ordersDao.DistribuidorID(Guid.Parse(cargaStockModeloWeb.iduser));
                 int idvendedor = _ordersDao.VendedorID(cargaStockModeloWeb.stockCamion.Cedula);
@@ -2210,7 +2210,13 @@ namespace Chariot.Engine.Business.MardisOrders
                 if (idvendedor == 0)
                     errores = errores+ "El vendedor no se cuentra asignado al distruibuidor-";
                 if (idProducto == 0)
-                    errores = errores + "El producto no se encuentra registrado";
+                    errores = errores + "El producto no se encuentra registrado-";
+                if (cargaStockModeloWeb.option == 1) {
+                    String stockValido = _ordersDao.Stock(idProducto, Iddistribuidor, int.Parse(cargaStockModeloWeb.stockCamion.Cantidad)); 
+                        if (stockValido != "")
+                        errores = errores + "No tiene suficiente STOCK. Cantidad actual: " + stockValido;
+                }
+         
                 var FueGuardoExitoso = false;
                 if (errores=="")
                   FueGuardoExitoso = _ordersDao.GuardarBodegaMovil(Iddistribuidor,
@@ -2218,7 +2224,7 @@ namespace Chariot.Engine.Business.MardisOrders
                                                                       int.Parse(cargaStockModeloWeb.stockCamion.Cantidad), 
                                                                       idvendedor, 
                                                                      1,
-                                                                      "Cargado Engine");
+                                                                      "Cargado Engine", tipo);
                
                 if (FueGuardoExitoso)
                 {

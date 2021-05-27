@@ -218,7 +218,7 @@ namespace Chariot.Engine.Business.MardisOrders
                                                        Precio10 = mw.BALANCE,
                                                        Idaccount = Idaccount
                                                    }).ToList();
-                return _reply;
+                return _reply.OrderByDescending(x=>x.Precio10).ToList();
 
 
             }
@@ -1785,8 +1785,19 @@ namespace Chariot.Engine.Business.MardisOrders
                 }
                 else
                 {
-                    reply.messege = "Existio un inconveniente Error";
-                    reply.status = "Fail";
+                  var facturasEntregadas = Context.FacturasEntregadas.Where(x => x.cO_FACTURA == NumeroFactura);
+                    if (facturasEntregadas.Count() > 0)
+                    {
+                        reply.messege = "Actualizo el estado ";
+                        reply.status = "Ok";
+                    }
+                    else {
+                        reply.messege = "Existio un inconveniente Error";
+                        reply.status = "Fail";
+                    }
+
+
+                   
                 }
 
                 return reply;
@@ -1994,7 +2005,7 @@ namespace Chariot.Engine.Business.MardisOrders
                     List<ConsolidadoInventarioDetalebodega> bodegas = new List<ConsolidadoInventarioDetalebodega>();
                     foreach (var productobodega in vistaResultado) {
                        ConsolidadoInventarioDetalebodega bodega = new ConsolidadoInventarioDetalebodega();
-                        ConsolidadoProductoBodega _entregadorDetalle = vistaResultado.Where(x=>x.IDPRODUCTO==productobodega.IDPRODUCTO).Select(x => new ConsolidadoProductoBodega
+                        ConsolidadoProductoBodega _entregadorDetalle = vistaResultado.Where(x=>x.idproducto==productobodega.idproducto).Select(x => new ConsolidadoProductoBodega
                         {
                             name = x.nombre,
                             short_description = x.nombre,
@@ -2005,12 +2016,12 @@ namespace Chariot.Engine.Business.MardisOrders
                             stock_quantity = x.cantidad,
                             category_ids = { x.idcategoria },
                             images = ImagenProducto(),
-                            conversion_product_id = x.IDPRODUCTO,
+                            conversion_product_id = x.idproducto,
                             inventory_warehouse = x.cantidad,
                             is_price_by_unit = false,
                             price_by_unit=x.precioUnitario,
                             unit_type = "kgs",
-                            id = x.IDPRODUCTO
+                            id = x.idproducto
 
 
 
@@ -2019,7 +2030,7 @@ namespace Chariot.Engine.Business.MardisOrders
                         bodega.quantity = productobodega.cantidad;
                         bodega.weight = productobodega.cantidad;
                         bodega.warehouse_quantity = warehouse_quantity;
-                        bodega.id = productobodega.IDDISTRIBUTOR;
+                        bodega.id = productobodega.iddistribuidor;
                         bodegas.Add(bodega);
 
                     }
@@ -2086,7 +2097,7 @@ namespace Chariot.Engine.Business.MardisOrders
                 reply.messege = "Los datos fueron guardados correctamente";
                 reply.status = "Ok";
        
-                   reply.data = vistaResultado.Select(x=>new { codigo=x.barcode, sku=x.nombre,cantidad = x.cantidad, precio=x.precio }).ToList();
+                   reply.data = vistaResultado.Select(x=>new { codigo=x.barcode, sku=x.nombre,cantidad = x.cantidad, precio=x.precio,barcode= x.barcode }).ToList();
               
          
 
@@ -2121,7 +2132,7 @@ namespace Chariot.Engine.Business.MardisOrders
                     foreach (var productobodega in vistaResultado)
                     {
                         ConsolidadoInventarioDetalebodega bodega = new ConsolidadoInventarioDetalebodega();
-                        ConsolidadoProductoBodega _entregadorDetalle = vistaResultado.Where(x => x.IDPRODUCTO == productobodega.IDPRODUCTO).Select(x => new ConsolidadoProductoBodega
+                        ConsolidadoProductoBodega _entregadorDetalle = vistaResultado.Where(x => x.idproducto == productobodega.idproducto).Select(x => new ConsolidadoProductoBodega
                         {
                             name = x.nombre,
                             short_description = x.nombre,
@@ -2130,12 +2141,12 @@ namespace Chariot.Engine.Business.MardisOrders
                             stock_quantity = x.cantidad,
                             category_ids = { x.idcategoria },
                             images = ImagenProducto(),
-                            conversion_product_id = x.IDPRODUCTO,
+                            conversion_product_id = x.idproducto,
                             inventory_warehouse = x.cantidad,
                             is_price_by_unit = false,
                             price_by_unit = x.precioUnitario,
                             unit_type = "kgs",
-                            id = x.IDPRODUCTO,
+                            id = x.idproducto,
                             sku = x.barcode
 
 
@@ -2144,7 +2155,7 @@ namespace Chariot.Engine.Business.MardisOrders
                         bodega.quantity = productobodega.cantidad;
                         bodega.weight = productobodega.cantidad;
                         bodega.warehouse_quantity = warehouse_quantity;
-                        bodega.id = productobodega.IDDISTRIBUTOR;
+                        bodega.id = productobodega.idproducto;
                         bodegas.Add(bodega);
 
                     }
@@ -2178,8 +2189,8 @@ namespace Chariot.Engine.Business.MardisOrders
 
                 var warehouse_quantity = vistaResultado.Sum(x => x.cantidad);
               
-                    reply.data = vistaResultado.Select(x=>new { code=x.barcode, producto=x.nombre,cantidad=x.cantidad,precio=x.precio });
-                
+                    reply.data = vistaResultado.Select(x => new { codigo = x.barcode, sku = x.nombre, cantidad = x.cantidad, precio = x.precio, barcode = x.barcode }).ToList();
+
                 return reply;
             }
             catch (Exception e)
@@ -2239,6 +2250,58 @@ namespace Chariot.Engine.Business.MardisOrders
                     reply.messege = "Producto Cargado";
                     cargaStockModeloWeb.stockCamion.Errores= errores;
                     reply.data = cargaStockModeloWeb.stockCamion;
+                }
+
+
+
+                return reply;
+            }
+            catch (Exception e)
+            {
+
+                reply.messege = "No se pudo guardar la información";
+                reply.status = "Fail";
+                reply.error = e.Message;
+                reply.data = "GenericError.WarehouseMissingInventory";
+                return reply;
+            }
+
+        }
+        public ReplyViewModel CrearInventarioAPP(int cuenta, int cantidad, int idvendedorapp, string usuario, int opcion, string codigoproducto)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            try
+            {
+                reply.messege = "Los datos fueron guardados correctamente";
+                reply.status = "Ok";
+                int tipo = opcion == 1 ? 1 : -1;
+                string errores = "";
+                int Iddistribuidor = _ordersDao.DistribuidorID(Guid.Parse(usuario));
+                int idvendedor = idvendedorapp;
+                int idProducto = _ordersDao.ProductoID(codigoproducto, cuenta);
+           
+                var FueGuardoExitoso = false;
+    
+                    FueGuardoExitoso = _ordersDao.GuardarBodegaMovil(Iddistribuidor,
+                                                                        idProducto,
+                                                                       cantidad,
+                                                                        idvendedor,
+                                                                       1,
+                                                                        "Cargado Engine", tipo);
+
+                if (FueGuardoExitoso)
+                {
+
+                    reply.status = "Ok";
+                    reply.messege = "Producto Cargado";
+                    reply.data = "";
+                }
+                else
+                {
+                    reply.status = "Error";
+                    reply.messege = "Producto Cargado";
+            
+                   
                 }
 
 

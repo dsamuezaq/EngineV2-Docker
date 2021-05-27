@@ -209,6 +209,15 @@ namespace Engine_V2.Controllers
 
         }
         [HttpPost]
+        [Route("LoadStockapp")]
+        //  [Authorize]
+        public async Task<IActionResult> LoadStockapp(int cuenta, int cantidad, int idvendedorapp, string usuario, int opcion, string codigoproducto)
+        {
+
+            return Ok(_ordersBusiness.CrearInventarioAPP(cuenta, cantidad, idvendedorapp, usuario, opcion, codigoproducto));
+
+        }
+        [HttpPost]
         [Route("ObtnerVenddoresActivos")]
         //  [Authorize]
         public async Task<IActionResult> ObtnerVenddoresActivos(GetCampaignViewModel _data)
@@ -290,158 +299,19 @@ namespace Engine_V2.Controllers
 
             return Ok(InventarioBodega);
         }
-        #region APIs SURTI SP
-        [HttpGet]
-        [Route("shopping_cart_items/{idvendedor}")]
-        //  [Authorize]
-        public async Task<IActionResult> shopping_cart_items(int idvendedor)
+        [HttpPost]
+        [Route("BodegaMovilList")]
+        [Authorize]
+        public async Task<IActionResult> BodegaMovilList( int idvendedor)
         {
-            ItemCarritoModelSurtiApp _itemCarritoModelSurtiApp = new ItemCarritoModelSurtiApp();
-            _itemCarritoModelSurtiApp.delivery_date = "Mañana";
-            ItemCarritoDetalleModelSurtiApp _itemDetalle = new ItemCarritoDetalleModelSurtiApp();
-            _itemDetalle.created_on_utc = DateTime.UtcNow;
-            _itemDetalle.updated_on_utc = DateTime.UtcNow;
-            _itemDetalle.shopping_cart_type = "ShoppingCart";
-            _itemDetalle.product_id = 117;
-            _itemDetalle.weight = 0.0000;
-            ConsolidadoProductoBodega _productoBodega = new ConsolidadoProductoBodega();
-            _productoBodega.name = "Brazo de Cerdo";
-            _productoBodega.short_description = null;
-            _productoBodega.full_description = null;
-            _productoBodega.sku = null;
-            _productoBodega.approved_rating_sum = 0;
-            _productoBodega.price = 17.0100;
-            _productoBodega.disable_buy_button = false;
-            _productoBodega.stock_quantity = 10000;
-            _productoBodega.has_tier_prices = false;
-            _productoBodega.category_ids.Add(29);
-            ImagePoductoBodega _imagePoductoBodega = new ImagePoductoBodega();
-            _imagePoductoBodega.id = 58;
-            _imagePoductoBodega.picture_id = 81;
-            _imagePoductoBodega.position = 0;
-            _imagePoductoBodega.src = "https://surti-test-nopc.azurewebsites.net/images/thumbs/0000173_brazo-de-cerdo.jpeg";
-            _imagePoductoBodega.attachment = null;
-            _productoBodega.unit_type = "kgs";
-            _productoBodega.price_by_unit = 2.3500;
-            _productoBodega.unit_type = "kgs";
-            _productoBodega.id = 117;
-            _productoBodega.images.Add(_imagePoductoBodega);
-            _itemDetalle.product = _productoBodega;
-            _itemDetalle.customer_id = 2542;
-            _itemDetalle.id= 3847;
-            _itemCarritoModelSurtiApp.shopping_carts.Add(_itemDetalle);
+            var InventarioBodega = _ordersBusiness.ObtenerProductoEnBodegaCentralCamionEngine(idvendedor);
 
-
-            ////////////
-            ///PRODUCTO 2
-            ///////////
-            _itemCarritoModelSurtiApp.delivery_date = "Mañana";
-             _itemDetalle = new ItemCarritoDetalleModelSurtiApp();
-            _itemDetalle.created_on_utc = DateTime.UtcNow;
-            _itemDetalle.updated_on_utc = DateTime.UtcNow;
-            _itemDetalle.shopping_cart_type = "ShoppingCart";
-            _itemDetalle.product_id = 49;
-            _itemDetalle.weight = 0.0000;
-            _productoBodega = new ConsolidadoProductoBodega();
-            _productoBodega.name = "Ajo en Pepa (1 Unidad)";
-            _productoBodega.short_description = "Ajo en Pepa (1 Unidad)";
-            _productoBodega.full_description = null;
-            _productoBodega.sku = null;
-            _productoBodega.approved_rating_sum = 0;
-            _productoBodega.price = 0.1000;
-            _productoBodega.disable_buy_button = false;
-            _productoBodega.stock_quantity = 10000;
-            _productoBodega.has_tier_prices = false;
-            _productoBodega.category_ids.Add(29);
-             _imagePoductoBodega = new ImagePoductoBodega();
-            _imagePoductoBodega.id = 58;
-            _imagePoductoBodega.picture_id = 81;
-            _imagePoductoBodega.position = 0;
-            _imagePoductoBodega.src = "https://surti-test-nopc.azurewebsites.net/images/thumbs/0000173_brazo-de-cerdo.jpeg";
-            _imagePoductoBodega.attachment = null;
-            _productoBodega.unit_type = "kgs";
-            _productoBodega.price_by_unit = 0.1000;
-            _productoBodega.unit_type = "kgs";
-            _productoBodega.id = 49;
-            _productoBodega.images.Add(_imagePoductoBodega);
-            _itemDetalle.product = _productoBodega;
-            _itemDetalle.customer_id = 2542;
-            _itemDetalle.id = 3855;
-            _itemCarritoModelSurtiApp.shopping_carts.Add(_itemDetalle);
-
-            return Ok(_itemCarritoModelSurtiApp);
-
+            return Ok(InventarioBodega);
         }
-            [HttpGet]
-            [Route("products-for-tiendas")]
-            //  [Authorize]
-            public async Task<IActionResult> productsfortiendas(int warehouse_id)
-            {
+        #region APIs SURTI SP
 
-            ProductoTiendaModeloApp _productoTiendaModeloApp = new ProductoTiendaModeloApp();
-
-        
-            ProductoCatalogoTienda _itemDetalle = new ProductoCatalogoTienda();
-            _itemDetalle.Id = 49;
-            _itemDetalle.catalog_name = "TOP Ventas";
  
-            ConsolidadoProductoBodega _productoBodega = new ConsolidadoProductoBodega();
-            _productoBodega.name = "Brazo de Cerdo";
-            _productoBodega.short_description = null;
-            _productoBodega.full_description = null;
-            _productoBodega.sku = null;
-            _productoBodega.approved_rating_sum = 0;
-            _productoBodega.price = 17.0100;
-            _productoBodega.disable_buy_button = false;
-            _productoBodega.stock_quantity = 10000;
-            _productoBodega.has_tier_prices = false;
-            _productoBodega.category_ids.Add(29);
-            ImagePoductoBodega _imagePoductoBodega = new ImagePoductoBodega();
-            _imagePoductoBodega.id = 58;
-            _imagePoductoBodega.picture_id = 81;
-            _imagePoductoBodega.position = 0;
-            _imagePoductoBodega.src = "https://surti-test-nopc.azurewebsites.net/images/thumbs/0000173_brazo-de-cerdo.jpeg";
-            _imagePoductoBodega.attachment = null;
-            _productoBodega.unit_type = "kgs";
-            _productoBodega.price_by_unit = 2.3500;
-            _productoBodega.unit_type = "kgs";
-            _productoBodega.id = 117;
-            _productoBodega.images.Add(_imagePoductoBodega);
 
-
-
-
-            _itemDetalle.products.Add(_productoBodega);
-
-
-             _productoBodega = new ConsolidadoProductoBodega();
-            _productoBodega.name = "Cebolla Colorada (1 Gaveta)";
-            _productoBodega.short_description = "14 libras de Cebolla Colorada";
-            _productoBodega.full_description = null;
-            _productoBodega.sku = null;
-            _productoBodega.approved_rating_sum = 0;
-            _productoBodega.price = 5.9000;
-            _productoBodega.disable_buy_button = false;
-            _productoBodega.stock_quantity = 10000;
-            _productoBodega.has_tier_prices = false;
-            _productoBodega.category_ids.Add(29);
-             _imagePoductoBodega = new ImagePoductoBodega();
-            _imagePoductoBodega.id = 58;
-            _imagePoductoBodega.picture_id = 81;
-            _imagePoductoBodega.position = 0;
-            _imagePoductoBodega.src = "https://surti-test-nopc.azurewebsites.net/images/thumbs/0000155_cebolla-colorada-1-gaveta.jpeg";
-            _imagePoductoBodega.attachment = null;
-            _productoBodega.unit_type = "kgs";
-            _productoBodega.price_by_unit = 2.3500;
-            _productoBodega.unit_type = "kgs";
-            _productoBodega.id = 58;
-            _productoBodega.images.Add(_imagePoductoBodega);
-                  _itemDetalle.products.Add(_productoBodega);
-                  _productoTiendaModeloApp.catalogs.Add(_itemDetalle);
-
-                return Ok(_productoTiendaModeloApp);
-
-             }
 
             #endregion
             #endregion

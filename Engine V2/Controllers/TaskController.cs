@@ -48,7 +48,7 @@ namespace Engine_V2.Controllers
 
             var model = _taskCampaignBusiness.GetListFactLoad(_data.urlfile);
 
-            //_modelVue.idaccount = ApplicationUserCurrent.AccountId;
+            //_modelVue.idaccount = ApplicationUserCurrent.AccountId;       
             //_modelVue.iduser = Guid.Parse(ApplicationUserCurrent.UserId);
             _modelVue.Listbills = model.ToList();
             var regCarga = _modelVue.Listbills.Select(z => z.bardcode).Distinct().Count();

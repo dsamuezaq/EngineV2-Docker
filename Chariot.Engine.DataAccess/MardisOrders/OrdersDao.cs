@@ -54,6 +54,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                             movilw.MOVEMENT = "-1";
                             //Guardar
                             Context.Movil_Warenhouses.Add(movilw);
+
                         }
                     }
                 }
@@ -220,6 +221,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                             movilw.MOVEMENT = "-1";
                             //Guardar
                             Context.Movil_Warenhouses.Add(movilw);
+                            Context.SaveChanges();
                         }
                     }
                 }
@@ -856,7 +858,7 @@ namespace Chariot.Engine.DataAccess.MardisOrders
             try
             {
                 var Producto = Context.Central_Warenhouse_Resumes.Where(x => x.IDPRODUCTO == CodigoProducto && x.IDDISTRIBUTOR == iddistribuidor );
-                return Producto.Count() > 0 ? Producto.First().BALANCE> (decimal?)cantidad? "" : Producto.First().BALANCE.ToString():"";
+                return Producto.Count() > 0 ? Producto.First().BALANCE >= (decimal?)cantidad? "" : Producto.First().BALANCE.ToString():"";
 
             }
             catch (Exception ex)

@@ -9,7 +9,7 @@ namespace Chariot.Engine.Business.ClientRest
 {
    public class HelpersHttpClientENGINEBussiness
     {
-        private string BaseUrl = "https://enginestoreaudit.azurewebsites.net/TaskExterno/";
+        private string BaseUrl = "https://chariotengine.azurewebsites.net/Task/TaskExterno/";
         public async Task<List<T>> GetApi<T>(string API) where T : class
         {
             using (var client = new HttpClient())

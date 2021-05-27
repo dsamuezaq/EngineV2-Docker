@@ -1157,7 +1157,7 @@ namespace Chariot.Engine.Business.Mardiscore
         #region llamadas API ENGINE
         public async Task<string> GeneratePdf(string campana, string uri) {
             HelpersHttpClientENGINEBussiness httpEngine = new HelpersHttpClientENGINEBussiness();
-            var clienteCupo = await httpEngine.PostApiString("/TaskExterno/PdfMasive?ids=uuid:10e69e5d-f430-4e3d-a14a-d233df40351b");
+            var clienteCupo = await httpEngine.PostApiString("/TaskExterno/PdfMasive?ids="+ uri);
             
             return clienteCupo;
         }

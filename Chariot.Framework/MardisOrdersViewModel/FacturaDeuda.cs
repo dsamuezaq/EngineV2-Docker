@@ -18,6 +18,7 @@ namespace Chariot.Framework.MardisOrdersViewModel
         public string codigoVendedor { get; set; }
 
         public DateTime  Fecha { get; set; }
+        public string credito { get; set; }
 
     }
 }

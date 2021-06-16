@@ -467,8 +467,10 @@ namespace Engine_V2.Controllers
         //  [Authorize]
         public async Task<IActionResult> POSTActualizarEstadoEntregaFacturaXFumerotest(int NumeroFactura, String CodigoLocal, string cO_observacion, string cO_estado, double lat, double lon)
         {
-
-            return Ok(await _ordersBusiness.BSSActualizarEstadoEntregaFacturaXFumeroTest(NumeroFactura, CodigoLocal, cO_observacion, cO_estado, lat, lon));
+            ReplyViewModel reply = new ReplyViewModel();
+            reply.messege = "Actualizo el estado ";
+            reply.status = "Ok";
+            return Ok(reply);
         }
 
         
@@ -481,7 +483,16 @@ namespace Engine_V2.Controllers
 
             return Ok(await _ordersBusiness.BSSActualizarPagosCarteraXFumero(_datoCarteraPago));
         }
-
+        [HttpPost]
+        [Route("POSTCrearPagoCarteraXFacturaTest")]
+        //  [Authorize]
+        public async Task<IActionResult> POSTCrearPagoCarteraXFacturaTest(CarteraPagoViewModel _datoCarteraPago)
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            reply.messege = "Actualizo el estado ";
+            reply.status = "Ok";
+            return Ok(reply);
+        }
         [HttpPost]
         [Route("CrearDevoluciones")]
         //  [Authorize]
@@ -490,7 +501,17 @@ namespace Engine_V2.Controllers
 
             return Ok( _ordersBusiness.GuardarDevolucionFactura(DevolucionFacturas));
         }
+        [HttpPost]
+        [Route("CrearDevolucionestest")]
+        //  [Authorize]
+        public async Task<IActionResult> CrearDevolucionestest(List<DevolucionFactura> DevolucionFacturas)
+        {
 
+            ReplyViewModel reply = new ReplyViewModel();
+            reply.messege = "Actualizo el estado ";
+            reply.status = "Ok";
+            return Ok(reply);
+        }
         [HttpPost]
         [Route("ObtenerInformacionHistoricaFactura")]
         //  [Authorize]

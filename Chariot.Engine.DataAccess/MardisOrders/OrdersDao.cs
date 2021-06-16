@@ -192,36 +192,39 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                 int idVende = 0;
                 foreach (var x in _data)
                 {
-                    Context.Orders.Add(x);
-                    Context.SaveChanges();
-                    //Nutri
-                    if (x.Idaccount == 13)
+                    if (Context.Orders.Where(s => s.p_PEDIDO_MARDIS.Equals(x.p_PEDIDO_MARDIS)).Count() == 0)
                     {
-
-                        IQueryable<Salesman> vendedor = Enumerable.Empty<Salesman>().AsQueryable();
-                        vendedor = Context.Salesmans.Where(v => v.codigoDeValidacion == x.idVendedor && v.idaccount == x.Idaccount);
-
-                        if (vendedor.Count() > 0)
+                        Context.Orders.Add(x);
+                        Context.SaveChanges();
+                        //Nutri
+                        if (x.Idaccount == 13)
                         {
-                            idVende = vendedor.First().id;
-                        }
 
-                        foreach (var detalle in x.pedidosItems)
-                        {
-                            IQueryable<Product> producto = Enumerable.Empty<Product>().AsQueryable();
-                            Movil_Warenhouse movilw = new Movil_Warenhouse();
+                            IQueryable<Salesman> vendedor = Enumerable.Empty<Salesman>().AsQueryable();
+                            vendedor = Context.Salesmans.Where(v => v.codigoDeValidacion == x.idVendedor && v.idaccount == x.Idaccount);
 
-                            producto = Context.ProductOrders.Where(p => p.IdArticulo == detalle.idArticulo);
+                            if (vendedor.Count() > 0)
+                            {
+                                idVende = vendedor.First().id;
+                            }
+
+                            foreach (var detalle in x.pedidosItems)
+                            {
+                                IQueryable<Product> producto = Enumerable.Empty<Product>().AsQueryable();
+                                Movil_Warenhouse movilw = new Movil_Warenhouse();
+
+                                producto = Context.ProductOrders.Where(p => p.IdArticulo == detalle.idArticulo);
 
 
-                            movilw.BALANCE = detalle.cantidad;
-                            movilw.DESCRIPTION = "Venta";
-                            movilw.IDVENDEDOR = vendedor.Count() > 0 ? vendedor.First().id : 0;
-                            movilw.IDPRODUCTO = producto.Count() > 0 ? producto.First().Id : 0;
-                            movilw.MOVEMENT = "-1";
-                            //Guardar
-                            Context.Movil_Warenhouses.Add(movilw);
-                            Context.SaveChanges();
+                                movilw.BALANCE = detalle.cantidad;
+                                movilw.DESCRIPTION = "Venta";
+                                movilw.IDVENDEDOR = vendedor.Count() > 0 ? vendedor.First().id : 0;
+                                movilw.IDPRODUCTO = producto.Count() > 0 ? producto.First().Id : 0;
+                                movilw.MOVEMENT = "-1";
+                                //Guardar
+                                Context.Movil_Warenhouses.Add(movilw);
+                                Context.SaveChanges();
+                            }
                         }
                     }
                 }
@@ -480,11 +483,11 @@ namespace Chariot.Engine.DataAccess.MardisOrders
 
                 var consulta1 = from b in Context.Branches
                                 join p in Context.Persons on b.IdPersonOwner equals p.Id
-                                where code.Contains(b.Code)  && b.IdAccount == idAccount
+                                where code.Contains(b.ExternalCode)  && b.IdAccount == idAccount && b.StatusRegister==CStatusRegister.Active
                                 select new DeliveryBranches
                                 {
                                     Id=b.Id,
-                                    Code = b.Code,
+                                    Code = b.ExternalCode,
                                     ExternalCode = b.ExternalCode,
                                     Name = b.Name,
                                     Neighborhood = b.Neighborhood,
@@ -704,7 +707,8 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                                                                                    IDDISTRIBUTOR,
                                                                                    IDPRODUCTO,
                                                                                    idcategoria,
-                                                                                   barcode  FROM MardisOrders.vw_resumen_Stock_bodegaCentral where IDDISTRIBUTOR={idnumeroDisitribuidores}");
+                                                                                   barcode,
+                                                                                   codigoProducto FROM MardisOrders.vw_resumen_Stock_bodegaCentral where IDDISTRIBUTOR={idnumeroDisitribuidores}");
                 return _dataTable.Count() > 0 ? _dataTable.ToList() : null;
 
 
@@ -731,7 +735,8 @@ namespace Chariot.Engine.DataAccess.MardisOrders
                                                                                    IDDISTRIBUTOR,
                                                                                    IDPRODUCTO,
                                                                                    idcategoria,
-                                                                                   barcode FROM MardisOrders.vw_resumen_Stock_bodegaCentral_CAMION where IDVENDEDOR={IdVendedor}");
+                                                                                   barcode,
+                                                                                   codigoProducto FROM MardisOrders.vw_resumen_Stock_bodegaCentral_CAMION where IDVENDEDOR={IdVendedor}");
                 return _dataTable.Count() > 0 ? _dataTable.ToList() : null;
 
 

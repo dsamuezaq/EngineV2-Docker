@@ -302,6 +302,7 @@
     <Compile Include="MardisSecurity\Menu.cs" />
     <Compile Include="MardisSecurity\Profile.cs" />
     <Compile Include="MardisSecurity\User.cs" />
+    <Compile Include="Molinera\FacturasApi.cs" />
     <Compile Include="Procedure\keyAttribute.cs" />
     <Compile Include="Procedure\SP_dato_tracking_encuestadores.cs" />
     <Compile Include="Program.cs" />

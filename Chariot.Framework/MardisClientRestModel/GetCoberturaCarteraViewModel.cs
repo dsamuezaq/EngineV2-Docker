@@ -20,5 +20,7 @@ namespace Chariot.Framework.MardisClientRestModel
         public Double? valor { get; set; }
         public int codvendedor { get; set; }
         public string nombrevendedor { get; set; }
+        public string formA_PAGO { get; set; }
+        
     }
 }

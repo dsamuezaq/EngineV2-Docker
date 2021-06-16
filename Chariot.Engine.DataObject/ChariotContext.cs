@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Z.EntityFramework.Extensions;
 using Chariot.Engine.DataObject.Procedure;
 using Dapper;
+using Chariot.Engine.DataObject.Molinera;
 
 namespace Chariot.Engine.DataObject
 {
@@ -304,6 +305,11 @@ namespace Chariot.Engine.DataObject
         /// Parametros de locales por ruta
         /// </summary>
         public DbSet<ParameterRoute> ParametrosRuta { get; set; }
+
+        /// <summary>
+        /// Parametros de locales por ruta
+        /// </summary>
+        public DbSet<FacturasApi> FacturasApis { get; set; }
         public IEnumerable<T> Query<T>(string query) where T : class
         {
             return connection.Query<T>(query);

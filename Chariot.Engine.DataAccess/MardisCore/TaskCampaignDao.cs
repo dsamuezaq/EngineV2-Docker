@@ -55,9 +55,17 @@ namespace Chariot.Engine.DataAccess.MardisCore
         public List<ParameterRoute> ObtenerParametrosRutas(string idusuario, string ruta, int cuenta)
         {
             //   var consulta = Context.Campaigns.Include(t => t.Account).Where(c => c.StatusRegister == CStatusRegister.Active).ToList();
-
-            var consulta = Context.ParametrosRuta.Where(x => x.codigoRuta == ruta && x.estado == CStatusRegister.Active && x.idaccount== cuenta);
-            return consulta.ToList();
+            try
+            {
+                var consulta = Context.ParametrosRuta.Where(x => x.codigoRuta == ruta && x.estado == CStatusRegister.Active && x.idaccount == cuenta);
+                return consulta.ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        
         }
 
         public bool ConsultarEstadoDeRutaDeEncuestadorXIDDevice(string IDdevice, string Nombrecuenta)
@@ -183,7 +191,9 @@ namespace Chariot.Engine.DataAccess.MardisCore
                 consulta.LatitudeBranch = lat;
                 consulta.LenghtBranch = lon;
                 consulta.geoupdate = 1;
+                if(consulta.CommentBranch!="nuevo")
                 consulta.CommentBranch = "G";
+
                 Context.Update(consulta);
                 Context.SaveChanges();
                 return "Exitoso";

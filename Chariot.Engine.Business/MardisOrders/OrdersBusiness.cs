@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Chariot.Engine.Business.MardisOrders
@@ -1165,6 +1166,8 @@ namespace Chariot.Engine.Business.MardisOrders
                     var ExisteFactura = _FacturaEntrega.Where(x => x.factura == FacturaConDeuda.nrodocumento);
 
                     _FacturaDeuda.EstadoFactura = ExisteFactura.Count() > 0 ? "POR ENTREGAR" : "POR COBRAR";
+                    _FacturaDeuda.EstadoFactura = ExisteFactura.Count() > 0 ? "POR ENTREGAR" : "POR COBRAR";
+                    _FacturaDeuda.credito = FacturaConDeuda.formA_PAGO == "CREDITO" ? "C" : "P";
                     _FacturaDeuda.Fecha = DateTime.ParseExact(FacturaConDeuda.f_FACTURA.ToString(),
                                                        "yyyyMMdd",
                                                        CultureInfo.InvariantCulture,
@@ -1535,8 +1538,11 @@ namespace Chariot.Engine.Business.MardisOrders
                 foreach (int facturaIndividual in Fact) {
                     try
                     {
-                        var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFactura/obtenerxfactura?factura=" + facturaIndividual.ToString());
 
+                        var _FacturaEntrega = Context.FacturasApis.Where(x => x.factura == facturaIndividual).ToList();
+                            
+                            // await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFactura/obtenerxfactura?factura=" + facturaIndividual.ToString());
+                         
                         //if (_FacturaEntrega.Count() > 0) {
                         //   var  ca = _FacturaEntregaca.Where(x=>x.factura == facturaIndividual);
                         //    if (ca.Count() > 0)
@@ -1548,8 +1554,8 @@ namespace Chariot.Engine.Business.MardisOrders
 
                         //}
 
-                        var CoberturaDevolucion =
-                            await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaDevolucion>("CoberturaFacturaDevolucion/obtenerxfactura?factura=" + facturaIndividual.ToString());
+                        var CoberturaDevolucion = new List<GetCoberturaFacturaDevolucion>();
+                          //  await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaDevolucion>("CoberturaFacturaDevolucion/obtenerxfactura?factura=" + facturaIndividual.ToString());
 
 
 
@@ -2097,7 +2103,7 @@ namespace Chariot.Engine.Business.MardisOrders
                 reply.messege = "Los datos fueron guardados correctamente";
                 reply.status = "Ok";
        
-                   reply.data = vistaResultado.Select(x=>new { codigo=x.barcode, sku=x.nombre,cantidad = x.cantidad, precio=x.precio,barcode= x.barcode }).ToList();
+                   reply.data = vistaResultado.Select(x=>new { codigo=x.codigoProducto, sku=x.nombre,cantidad = x.cantidad, precio=x.precio,barcode= x.barcode }).ToList();
               
          
 
@@ -2189,7 +2195,7 @@ namespace Chariot.Engine.Business.MardisOrders
 
                 var warehouse_quantity = vistaResultado.Sum(x => x.cantidad);
               
-                    reply.data = vistaResultado.Select(x => new { codigo = x.barcode, sku = x.nombre, cantidad = x.cantidad, precio = x.precio, barcode = x.barcode }).ToList();
+                    reply.data = vistaResultado.Select(x => new { codigo = x.codigoProducto, sku = x.nombre, cantidad = x.cantidad, precio = x.precio, barcode = x.barcode, code = x.barcode, producto = x.nombre, }).ToList();
 
                 return reply;
             }

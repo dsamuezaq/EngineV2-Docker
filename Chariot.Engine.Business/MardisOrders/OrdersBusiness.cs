@@ -266,7 +266,7 @@ namespace Chariot.Engine.Business.MardisOrders
 
                 List<ArticulosViewModel> DatosProducto = _mapper.Map<List<ArticulosViewModel>>(_ordersDao.DAOObtenerProductoXCodigo(CodigoProducto));
                 ProductoCartera.Wait();
-
+                decimal? bandera = (decimal?) 1.0;
                 List<ArticulosViewModel> DatoProductoYCartera = (from _productoCartera in ProductoCartera.Result.Result
                                                                  join _datoProducto in DatosProducto on _productoCartera.codigoprod.Trim() equals _datoProducto.IdArticulo.Trim()
                                                                  select new ArticulosViewModel
@@ -287,7 +287,7 @@ namespace Chariot.Engine.Business.MardisOrders
                                                                      Precio7 = _datoProducto.Precio7,
                                                                      Precio8 = _datoProducto.Precio8,
                                                                      Precio9 = _datoProducto.Precio9,
-                                                                     Precio10 = _productoCartera.stock,
+                                                                     Precio10 = _productoCartera.stock < bandera ? bandera : _productoCartera.stock
                                                                  }).ToList();
                 return DatoProductoYCartera.FirstOrDefault();
             }
@@ -2340,7 +2340,9 @@ namespace Chariot.Engine.Business.MardisOrders
             return _imagenes;
         }
         #endregion
+        #region Promociones
 
+        #endregion
 
     }
 }

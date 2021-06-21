@@ -104,8 +104,8 @@ namespace Chariot.Engine.Business.Mardiscore
                     isclient = x.isclient,
                     Propietarioape = x.PersonOwner.Name  ,
                     ZonaPeliograsa=x.Zone,
-                    ActualizoGeo=x.geoupdate
-                    //correo = x.PersonOwner.mail,
+                    ActualizoGeo=x.geoupdate,
+                    correo = x.PersonOwner.mail
 
 
                     //Contacts = x.Contacts.Select(t => new ViewContact

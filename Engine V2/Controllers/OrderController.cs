@@ -36,7 +36,7 @@ namespace Engine_V2.Controllers
         public OrderController(ILogger<OrderController> logger,
                                            RedisCache distributedCache
                                            , IOptions<AppSettings> appSettings,
-                                           ChariotContext _chariotContext, IMapper mapper,IHostingEnvironment envrnmt) : base(_chariotContext, distributedCache, appSettings, mapper)
+                                           ChariotContext _chariotContext, IMapper mapper, IHostingEnvironment envrnmt) : base(_chariotContext, distributedCache, appSettings, mapper)
         {
             _ordersBusiness = new OrdersBusiness(_chariotContext, distributedCache, mapper);
             _Env = envrnmt;
@@ -58,7 +58,8 @@ namespace Engine_V2.Controllers
 
         [HttpGet]
         [Route("getRubros")]
-        public async Task<IActionResult> getRubros( int Idaccount=15 )
+
+        public async Task<IActionResult> getRubros(int Idaccount = 15)
         {
             reply.messege = "No puedo guardar la ubicación del encuestador";
             reply.status = "Fail";
@@ -67,7 +68,6 @@ namespace Engine_V2.Controllers
         }
 
         [HttpGet]
-        [Route("getClientes")]
         [Route("getClientes")]
         public async Task<IActionResult> getClientes()
         {
@@ -89,9 +89,17 @@ namespace Engine_V2.Controllers
         [Route("getArticulos")]
         public async Task<IActionResult> getArticulos(int Idaccount = 15, string Idvendedor = "9999999999")
         {
-           
+
             return Ok(_ordersBusiness.GetArticulos(Idaccount, Idvendedor));
         }
+        [HttpGet]
+        [Route("obterprom")]
+        public async Task<IActionResult> obterprom(int Idaccount = 15, string Idvendedor = "9999999999")
+        {
+
+            return Ok("1");
+        }
+
         [HttpGet]
         [Route("ObtenerLogCierreDia")]
         public object ObtenerLogCierreDia( string Idvendedor = "9999999999")

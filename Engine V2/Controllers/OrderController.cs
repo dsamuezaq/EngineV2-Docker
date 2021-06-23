@@ -42,6 +42,8 @@ namespace Engine_V2.Controllers
             _Env = envrnmt;
         }
         #endregion
+
+
         #region APIs
         #region Obtener data Pedidos
         [HttpGet]
@@ -530,6 +532,29 @@ namespace Engine_V2.Controllers
             return Ok(await _ordersBusiness.ObtenerInformacionHistoricaFacturaTotal(Fact, idaccount));
         }
         #endregion
+
+        #region Promociones
+        [HttpPost]
+        [Route("getPromociones")]
+        public async Task<IActionResult> getPromociones(int Idaccount = 13, string Idvendedor = "9999999999")
+        {
+
+            return Ok(_ordersBusiness.GetPromociones(Idaccount, Idvendedor));
+            
+        }
+
+        [HttpPost]
+        [Route("getRegalos")]
+        public async Task<IActionResult> getRegalos(int Idaccount = 13, string Idvendedor = "9999999999")
+        {
+
+           return Ok(_ordersBusiness.GetRegalos(Idaccount, Idvendedor));
+        }
+
         #endregion
+
+        #endregion
+
+        
     }
 }

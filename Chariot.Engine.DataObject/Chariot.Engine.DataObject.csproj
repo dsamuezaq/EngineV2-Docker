@@ -247,6 +247,8 @@
     <Compile Include="Helpers\DeliveryRouteHelpers.cs" />
     <Compile Include="Helpers\HelpersHttpClient.cs" />
     <Compile Include="Helpers\PedidosAPI.cs" />
+    <Compile Include="Helpers\RegalosHelpers.cs" />
+    <Compile Include="Helpers\PromocionesHelpers.cs" />
     <Compile Include="Helpers\ReceivableModel.cs" />
     <Compile Include="Helpers\RouteBranch.cs" />
     <Compile Include="Helpers\StatusPollster.cs" />
@@ -286,6 +288,9 @@
     <Compile Include="MardisOrders\Invoice.cs" />
     <Compile Include="MardisOrders\Order.cs" />
     <Compile Include="MardisOrders\OrderDetail.cs" />
+    <Compile Include="MardisOrders\Promocion.cs" />
+    <Compile Include="MardisOrders\Promocion_Regalo.cs" />
+    <Compile Include="MardisOrders\Promocion_articulos.cs" />
     <Compile Include="MardisOrders\Product.cs" />
     <Compile Include="MardisOrders\Client.cs" />
     <Compile Include="MardisOrders\IEntity.cs" />

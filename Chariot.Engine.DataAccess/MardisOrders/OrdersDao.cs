@@ -876,5 +876,112 @@ namespace Chariot.Engine.DataAccess.MardisOrders
         }
         #endregion
 
+        #region Promociones
+
+        public List<PromocionesHelpers> GetPromociones(int idAccount)
+        {
+
+            try
+            {
+
+            
+
+                var consultaPromo = from a in Context.Products
+                                join b in Context.Promociones_articulos on a.Id  equals b.Id_pro
+                                join c in Context.Promociones on b.Id_prom  equals c.Id
+                                    where  a.Idaccount == idAccount 
+                                select new PromocionesHelpers
+                                {                                  
+
+                                    id_articulo=a.IdArticulo,
+                                    descripcion=a.Descripcion,
+                                    id_promocion=b.Id_prom.ToString(),
+                                    id_producto =b.Id_pro.ToString(), 
+                                    articulo_cantidad =(int)b.Pro_art_cantidad,
+                                    articulo_descuento = b.Pro_art_apl_descuento.ToString(),
+                                    promocion_nombre =c.Pro_nombre,
+                                    promocion_distribuidor = c.Pro_iddistribuidor.ToString(),
+                                    promocion_tipo =c.Pro_tipo
+
+                                };
+
+
+
+                var _model = consultaPromo.ToList();
+
+
+                if (_model.Count() > 0)
+                {
+                    return _model;
+
+                }
+                else
+                {
+                    return null;
+
+                }
+
+
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception("No hay promociones");
+            }
+
+        }
+
+        public List<RegalosHelpers> GetRegalos(int idAccount)
+        {
+
+            try
+            {
+
+
+
+                var consultaRegalo = from a in Context.Products
+                                    join b in Context.Promociones_Regalos on a.Id equals b.Id_pro
+                                    join c in Context.Promociones on b.Id_prom equals c.Id
+                                    where a.Idaccount == idAccount
+                                    select new RegalosHelpers
+                                    {
+
+                                        id_articulo = a.IdArticulo,
+                                        descripcion = a.Descripcion,
+                                        id_promocion_regalo = b.Id_prom.ToString(),
+                                        id_producto_regalo = b.Id_pro.ToString(),
+                                        regalo_cantidad = (int)b.Pro_art_cantidad,                                        
+                                        promocion_nombre = c.Pro_nombre,
+                                        promocion_distribuidor = c.Pro_iddistribuidor.ToString(),
+                                        promocion_tipo = c.Pro_tipo
+
+                                    };
+
+
+
+                var _model = consultaRegalo.ToList();
+
+
+                if (_model.Count() > 0)
+                {
+                    return _model;
+
+                }
+                else
+                {
+                    return null;
+
+                }
+
+
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception("No hay promociones");
+            }
+
+        }
+        #endregion
     }
 }

@@ -21,25 +21,25 @@ namespace Chariot.Engine.DataAccess
             Context = _chariotContext;
             EntityFrameworkManager.ContextFactory = context => _chariotContext;
         }
-        public bool InsertUpdateOrDelete<T>(T entity,  string transaction) where T : class
+        public bool InsertUpdateOrDelete<T>(T entity, string transaction) where T : class
         {
-            
-                var stateRegister = transaction=="I" ? EntityState.Added : transaction == "U" ? EntityState.Modified : EntityState.Deleted; ;
 
-                if (stateRegister != EntityState.Deleted)
-                {
-                    Context.Set<T>().Add(entity);
-                    Context.Entry(entity).State = stateRegister;
-                }
-                else {
-                    Context.Set<T>().Remove(entity);
-                }
+            var stateRegister = transaction == "I" ? EntityState.Added : transaction == "U" ? EntityState.Modified : EntityState.Deleted; ;
 
-               
+            if (stateRegister != EntityState.Deleted)
+            {
+                Context.Set<T>().Add(entity);
+                Context.Entry(entity).State = stateRegister;
+            }
+            else {
+                Context.Set<T>().Remove(entity);
+            }
 
-                Context.SaveChanges();
-            
-        
+
+
+            Context.SaveChanges();
+
+
 
             return true;
         }
@@ -68,11 +68,11 @@ namespace Chariot.Engine.DataAccess
             {
 
                 return null;
-            }    
-          
+            }
 
 
-           
+
+
         }
         public List<T> GetPaginatedList<T>(int pageIndex, int pageSize) where T : class, IEntity
         {
@@ -85,7 +85,7 @@ namespace Chariot.Engine.DataAccess
         }
 
 
-        public List<T> SelectEntity<T>() where T : class
+        public List<T>SelectEntity<T>() where T : class
         {
 
             try

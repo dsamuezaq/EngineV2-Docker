@@ -310,6 +310,18 @@ namespace Chariot.Engine.DataObject
         /// Parametros de locales por ruta
         /// </summary>
         public DbSet<FacturasApi> FacturasApis { get; set; }
+
+          /// <summary>
+        /// Promociones
+        /// </summary>
+        public DbSet<Promocion> Promociones { get; set; }
+
+        public DbSet<Promocion_Regalo> Promociones_Regalos { get; set; }
+
+        public DbSet<Promocion_articulos> Promociones_articulos { get; set; }
+
+        public DbSet<Product> Products { get; set; }
+
         public IEnumerable<T> Query<T>(string query) where T : class
         {
             return connection.Query<T>(query);

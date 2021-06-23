@@ -48,7 +48,8 @@ namespace Chariot.Engine.Business.MardisOrders
                 List<VendedoresViewModel> mapperVendedores = _mapper.Map<List<Salesman>, List<VendedoresViewModel>>(_ordersDao.SelectEntity<Salesman>().ToList());
                 return mapperVendedores;
             }
-            else {
+            else
+            {
                 List<VendedoresViewModel> mapperVendedores = _mapper.Map<List<Salesman>, List<VendedoresViewModel>>(_ordersDao.SelectEntity<Salesman>().Where(x => x.idaccount == Idaccount).ToList());
                 return mapperVendedores;
             }
@@ -74,29 +75,29 @@ namespace Chariot.Engine.Business.MardisOrders
 
                 return null;
             }
-         
-          
+
+
         }
         public bool SaveLog_Cierre_Dia(Log_Cierre_Dia _responselist)
         {
             List<ReplyViewModel> _data = new List<ReplyViewModel>();
-          
-            
-                var _insert = _ordersDao.InsertUpdateOrDeleteSelectAll(_responselist, "I");
 
-                if (_insert != null)
-                {
+
+            var _insert = _ordersDao.InsertUpdateOrDeleteSelectAll(_responselist, "I");
+
+            if (_insert != null)
+            {
                 return true;
 
-                }
-                else
-                {
+            }
+            else
+            {
                 return false;
 
-                 }
-          
+            }
 
-           
+
+
             return false;
 
         }
@@ -137,7 +138,7 @@ namespace Chariot.Engine.Business.MardisOrders
 
         }
 
-        public List<ArticulosViewModel> GetArticulos(int Idaccount,string idVendedor)
+        public List<ArticulosViewModel> GetArticulos(int Idaccount, string idVendedor)
         {
 
             if (Idaccount == 15)
@@ -219,11 +220,12 @@ namespace Chariot.Engine.Business.MardisOrders
                                                        Precio10 = mw.BALANCE,
                                                        Idaccount = Idaccount
                                                    }).ToList();
-                return _reply.OrderByDescending(x=>x.Precio10).ToList();
+                return _reply.OrderByDescending(x => x.Precio10).ToList();
 
 
             }
-            else {
+            else
+            {
 
                 List<ArticulosViewModel> mapperRubros = _mapper.Map<List<ArticulosViewModel>>(_ordersDao.SelectEntity<Product>().Where(x => x.StatusRegister == "A" && x.Idaccount == Idaccount));
                 List<ArticulosViewModel> _reply = (from ar in mapperRubros
@@ -260,7 +262,8 @@ namespace Chariot.Engine.Business.MardisOrders
         {
             try
             {
-                var ProductoCartera = Task.Factory.StartNew(() => {
+                var ProductoCartera = Task.Factory.StartNew(() =>
+                {
                     return _helpersHttpClientBussiness.GetApi<GetCoberturaProductoViewModel>("CoberturaProducto/obtener");
                 });
 
@@ -630,7 +633,8 @@ namespace Chariot.Engine.Business.MardisOrders
 
                     ).ToList();
                     var json = JsonConvert.SerializeObject(Post);
-                    var EstadoRespuestaCrearDevoluciones = Task.Factory.StartNew(() => {
+                    var EstadoRespuestaCrearDevoluciones = Task.Factory.StartNew(() =>
+                    {
                         return _helpersHttpClientBussiness.PostApi("CoberturaDevolucion/AgregarLista", json);
                     });
 
@@ -807,7 +811,8 @@ namespace Chariot.Engine.Business.MardisOrders
             try
             {
                 Task<List<GetCoberturaCarteraViewModel>> data;
-                var CarteraCob = Task.Factory.StartNew(() => {
+                var CarteraCob = Task.Factory.StartNew(() =>
+                {
                     return _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
                 });
 
@@ -848,7 +853,8 @@ namespace Chariot.Engine.Business.MardisOrders
 
                     detailBranch.AsParallel()
                             .ForAll(
-                                    s => {
+                                    s =>
+                                    {
                                         s.camion = _RouteUser.Where(x => x.codigocliente.ToString() == s.Code).Select(x => x.camion).FirstOrDefault();
                                         s.factura = _RouteUser.Where(x => x.codigocliente.ToString() == s.Code).Select(x => x.factura).FirstOrDefault();
                                         s.Receivables = _CarteraConPagos
@@ -869,7 +875,8 @@ namespace Chariot.Engine.Business.MardisOrders
                 {
                     detailBranch.AsParallel()
                             .ForAll(
-                                    s => {
+                                    s =>
+                                    {
                                         s.camion = _RouteUser.Where(x => x.codigocliente.ToString() == s.Code).Select(x => x.camion).FirstOrDefault();
                                         s.factura = _RouteUser.Where(x => x.codigocliente.ToString() == s.Code).Select(x => x.factura).FirstOrDefault();
                                         s.Receivables = _Cartera
@@ -940,7 +947,8 @@ namespace Chariot.Engine.Business.MardisOrders
 
                     detailBranch.AsParallel()
                             .ForAll(
-                                    s => {
+                                    s =>
+                                    {
                                         s.camion = int.Parse(idcamion);
                                         s.factura = facturaNumero(_RouteUser, ClienteCartera, s.Code);
 
@@ -954,7 +962,8 @@ namespace Chariot.Engine.Business.MardisOrders
                 {
                     detailBranch.AsParallel()
                             .ForAll(
-                                    s => {
+                                    s =>
+                                    {
                                         s.camion = int.Parse(idcamion); ;
                                         s.factura = facturaNumero(_RouteUser, ClienteCartera, s.Code);
 
@@ -980,7 +989,8 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
-        private int facturaNumero(List<GetCoberturaFacturaRutaViewModel> factura, List<GetCoberturaCarteraViewModel> cartera, string cliente) {
+        private int facturaNumero(List<GetCoberturaFacturaRutaViewModel> factura, List<GetCoberturaCarteraViewModel> cartera, string cliente)
+        {
 
             int numero = 0;
             if (factura.Where(x => x.codigocliente.ToString() == cliente).Select(x => x.factura).Count() > 0)
@@ -988,7 +998,8 @@ namespace Chariot.Engine.Business.MardisOrders
                 numero = factura.Where(x => x.codigocliente.ToString() == cliente).Select(x => x.factura).FirstOrDefault();
 
             }
-            else {
+            else
+            {
                 numero = cartera.Where(x => x.codcli.ToString() == cliente).Select(x => x.nrodocumento).FirstOrDefault();
 
             }
@@ -1002,7 +1013,8 @@ namespace Chariot.Engine.Business.MardisOrders
             {
 
 
-                var CarteraCob = Task.Factory.StartNew(() => {
+                var CarteraCob = Task.Factory.StartNew(() =>
+                {
                     return _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
                 });
 
@@ -1067,7 +1079,8 @@ namespace Chariot.Engine.Business.MardisOrders
             {
 
 
-                var CarteraCob = Task.Factory.StartNew(() => {
+                var CarteraCob = Task.Factory.StartNew(() =>
+                {
                     return _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
                 });
 
@@ -1134,7 +1147,8 @@ namespace Chariot.Engine.Business.MardisOrders
                 //var CarteraCob = Task.Factory.StartNew(() => {
                 //    return _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
                 //});
-                var CarteraCob = Task.Factory.StartNew(() => {
+                var CarteraCob = Task.Factory.StartNew(() =>
+                {
                     return _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtenerxcamion?codigo=0" + camion);
                 });
 
@@ -1350,7 +1364,8 @@ namespace Chariot.Engine.Business.MardisOrders
             {
 
 
-                var CarteraCob = Task.Factory.StartNew(() => {
+                var CarteraCob = Task.Factory.StartNew(() =>
+                {
                     return _helpersHttpClientBussiness.GetApi<GetCoberturaCarteraViewModel>("CoberturaCartera/obtener");
                 });
 
@@ -1442,7 +1457,8 @@ namespace Chariot.Engine.Business.MardisOrders
             {
 
                 var _FacturaEntrega = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFactura/obtenerxfactura?factura=" + Fact.ToString());
-                var CoberturaDevolucion = Task.Factory.StartNew(() => {
+                var CoberturaDevolucion = Task.Factory.StartNew(() =>
+                {
                     return _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaDevolucion>("CoberturaFacturaDevolucion/obtenerxfactura?factura=" + Fact.ToString());
                 });
 
@@ -1466,7 +1482,8 @@ namespace Chariot.Engine.Business.MardisOrders
                             ).FirstOrDefault();
                     data.TotalFactura = totalFactura;
                     double totaldevolucion = 0;
-                    if (CoberturaDevolucion.Result.Result.Count() > 0) {
+                    if (CoberturaDevolucion.Result.Result.Count() > 0)
+                    {
 
                         var listaDevolucion = CoberturaDevolucion.Result.Result.Where(x => x.dF_FACTURA == item)
                       .GroupBy(l => l.dF_PRODUCTO)
@@ -1535,14 +1552,15 @@ namespace Chariot.Engine.Business.MardisOrders
             {
                 List<Model_FacturaHistorica> _InvoiceViewModel = new List<Model_FacturaHistorica>();
                 //  var _FacturaEntregaca = await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFacturaRuta/obtener");
-                foreach (int facturaIndividual in Fact) {
+                foreach (int facturaIndividual in Fact)
+                {
                     try
                     {
 
                         var _FacturaEntrega = Context.FacturasApis.Where(x => x.factura == facturaIndividual).ToList();
-                            
-                            // await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFactura/obtenerxfactura?factura=" + facturaIndividual.ToString());
-                         
+
+                        // await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaRutaViewModel>("CoberturaFactura/obtenerxfactura?factura=" + facturaIndividual.ToString());
+
                         //if (_FacturaEntrega.Count() > 0) {
                         //   var  ca = _FacturaEntregaca.Where(x=>x.factura == facturaIndividual);
                         //    if (ca.Count() > 0)
@@ -1555,7 +1573,7 @@ namespace Chariot.Engine.Business.MardisOrders
                         //}
 
                         var CoberturaDevolucion = new List<GetCoberturaFacturaDevolucion>();
-                          //  await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaDevolucion>("CoberturaFacturaDevolucion/obtenerxfactura?factura=" + facturaIndividual.ToString());
+                        //  await _helpersHttpClientBussiness.GetApi<GetCoberturaFacturaDevolucion>("CoberturaFacturaDevolucion/obtenerxfactura?factura=" + facturaIndividual.ToString());
 
 
 
@@ -1774,7 +1792,8 @@ namespace Chariot.Engine.Business.MardisOrders
                 postEstadoFacturas.Add(_PostEstadoFactura);
 
                 var json = JsonConvert.SerializeObject(postEstadoFacturas);
-                var RespuestaActualizacionEstadoFacturaExter = Task.Factory.StartNew(() => {
+                var RespuestaActualizacionEstadoFacturaExter = Task.Factory.StartNew(() =>
+                {
                     return _helpersHttpClientBussiness.PostApi("CoberturaFacturaEstado/AgregarLista", json);
                 });
 
@@ -1791,19 +1810,20 @@ namespace Chariot.Engine.Business.MardisOrders
                 }
                 else
                 {
-                  var facturasEntregadas = Context.FacturasEntregadas.Where(x => x.cO_FACTURA == NumeroFactura);
+                    var facturasEntregadas = Context.FacturasEntregadas.Where(x => x.cO_FACTURA == NumeroFactura);
                     if (facturasEntregadas.Count() > 0)
                     {
                         reply.messege = "Actualizo el estado ";
                         reply.status = "Ok";
                     }
-                    else {
+                    else
+                    {
                         reply.messege = "Existio un inconveniente Error";
                         reply.status = "Fail";
                     }
 
 
-                   
+
                 }
 
                 return reply;
@@ -1868,7 +1888,8 @@ namespace Chariot.Engine.Business.MardisOrders
 
                 _datoCarteraPagos.Add(_datoCarteraPago);
                 var json = JsonConvert.SerializeObject(_datoCarteraPagos);
-                var EstadoRespuestaPagosCartera = Task.Factory.StartNew(() => {
+                var EstadoRespuestaPagosCartera = Task.Factory.StartNew(() =>
+                {
                     return _helpersHttpClientBussiness.PostApi("CoberturaCobroMardis/agregarlista", json);
                 });
                 PagoCartera TablaPagoDeCartera = _mapper.Map<PagoCartera>(_datoCarteraPago);
@@ -1926,7 +1947,7 @@ namespace Chariot.Engine.Business.MardisOrders
                         deleted = false,
                         delivery_count = x.cantidad.ToString(),
                         status = x.statusV,
-                       
+
 
 
 
@@ -1975,7 +1996,7 @@ namespace Chariot.Engine.Business.MardisOrders
 
 
                     }).ToList();
-      
+
                     _entregadorModeloApp.entregadores.AddRange(_entregadorDetalle);
                     reply.data = _entregadorModeloApp;
                 }
@@ -1991,7 +2012,8 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
-        public int Distribuidor(string iduser) {
+        public int Distribuidor(string iduser)
+        {
             int Iddistribuidor = _ordersDao.DistribuidorID(Guid.Parse(iduser));
             return Iddistribuidor;
 
@@ -2009,9 +2031,10 @@ namespace Chariot.Engine.Business.MardisOrders
                 if (vistaResultado.Count() > 0)
                 {
                     List<ConsolidadoInventarioDetalebodega> bodegas = new List<ConsolidadoInventarioDetalebodega>();
-                    foreach (var productobodega in vistaResultado) {
-                       ConsolidadoInventarioDetalebodega bodega = new ConsolidadoInventarioDetalebodega();
-                        ConsolidadoProductoBodega _entregadorDetalle = vistaResultado.Where(x=>x.idproducto==productobodega.idproducto).Select(x => new ConsolidadoProductoBodega
+                    foreach (var productobodega in vistaResultado)
+                    {
+                        ConsolidadoInventarioDetalebodega bodega = new ConsolidadoInventarioDetalebodega();
+                        ConsolidadoProductoBodega _entregadorDetalle = vistaResultado.Where(x => x.idproducto == productobodega.idproducto).Select(x => new ConsolidadoProductoBodega
                         {
                             name = x.nombre,
                             short_description = x.nombre,
@@ -2025,7 +2048,7 @@ namespace Chariot.Engine.Business.MardisOrders
                             conversion_product_id = x.idproducto,
                             inventory_warehouse = x.cantidad,
                             is_price_by_unit = false,
-                            price_by_unit=x.precioUnitario,
+                            price_by_unit = x.precioUnitario,
                             unit_type = "kgs",
                             id = x.idproducto
 
@@ -2068,7 +2091,7 @@ namespace Chariot.Engine.Business.MardisOrders
             {
                 reply.messege = "Los datos fueron guardados correctamente";
                 reply.status = "Ok";
-                var FueGuardoExitoso = _ordersDao.GuardarBodegaMovil(warehouseid, productid, quantity, entregadorid, userid, comment,1);
+                var FueGuardoExitoso = _ordersDao.GuardarBodegaMovil(warehouseid, productid, quantity, entregadorid, userid, comment, 1);
                 if (FueGuardoExitoso)
                 {
                     reply.data = "Ok";
@@ -2093,7 +2116,7 @@ namespace Chariot.Engine.Business.MardisOrders
             }
 
         }
-        public ReplyViewModel  ObtenerBodegaCentralXDistribuidor(int Iddistribuidor)
+        public ReplyViewModel ObtenerBodegaCentralXDistribuidor(int Iddistribuidor)
         {
             ReplyViewModel reply = new ReplyViewModel();
             try
@@ -2102,17 +2125,17 @@ namespace Chariot.Engine.Business.MardisOrders
                 List<vw_resumen_Stock_bodegaCentral> vistaResultado = _ordersDao.ConsularBodegaCentralXDistribuidor(Iddistribuidor);
                 reply.messege = "Los datos fueron guardados correctamente";
                 reply.status = "Ok";
-       
-                   reply.data = vistaResultado.Select(x=>new { codigo=x.codigoProducto, sku=x.nombre,cantidad = x.cantidad, precio=x.precio,barcode= x.barcode }).ToList();
-              
-         
 
-           
+                reply.data = vistaResultado.Select(x => new { codigo = x.codigoProducto, sku = x.nombre, cantidad = x.cantidad, precio = x.precio, barcode = x.barcode }).ToList();
+
+
+
+
                 return reply;
             }
             catch (Exception e)
             {
-              
+
                 reply.messege = "No se encontrar inventario";
                 reply.status = "Fail";
                 reply.error = e.Message;
@@ -2194,8 +2217,8 @@ namespace Chariot.Engine.Business.MardisOrders
                 reply.status = "Ok";
 
                 var warehouse_quantity = vistaResultado.Sum(x => x.cantidad);
-              
-                    reply.data = vistaResultado.Select(x => new { codigo = x.codigoProducto, sku = x.nombre, cantidad = x.cantidad, precio = x.precio, barcode = x.barcode, code = x.barcode, producto = x.nombre, }).ToList();
+
+                reply.data = vistaResultado.Select(x => new { codigo = x.codigoProducto, sku = x.nombre, cantidad = x.cantidad, precio = x.precio, barcode = x.barcode, code = x.barcode, producto = x.nombre, }).ToList();
 
                 return reply;
             }
@@ -2221,31 +2244,32 @@ namespace Chariot.Engine.Business.MardisOrders
                 string errores = "";
                 int Iddistribuidor = _ordersDao.DistribuidorID(Guid.Parse(cargaStockModeloWeb.iduser));
                 int idvendedor = _ordersDao.VendedorID(cargaStockModeloWeb.stockCamion.Cedula);
-                int idProducto = _ordersDao.ProductoID(cargaStockModeloWeb.stockCamion.Id_Producto,cargaStockModeloWeb.account);
+                int idProducto = _ordersDao.ProductoID(cargaStockModeloWeb.stockCamion.Id_Producto, cargaStockModeloWeb.account);
                 if (Iddistribuidor == 0)
                     errores = "El distribuidor no se encuentra registrado-";
                 if (idvendedor == 0)
-                    errores = errores+ "El vendedor no se cuentra asignado al distruibuidor-";
+                    errores = errores + "El vendedor no se cuentra asignado al distruibuidor-";
                 if (idProducto == 0)
                     errores = errores + "El producto no se encuentra registrado-";
-                if (cargaStockModeloWeb.option == 1) {
-                    String stockValido = _ordersDao.Stock(idProducto, Iddistribuidor, int.Parse(cargaStockModeloWeb.stockCamion.Cantidad)); 
-                        if (stockValido != "")
+                if (cargaStockModeloWeb.option == 1)
+                {
+                    String stockValido = _ordersDao.Stock(idProducto, Iddistribuidor, int.Parse(cargaStockModeloWeb.stockCamion.Cantidad));
+                    if (stockValido != "")
                         errores = errores + "No tiene suficiente STOCK. Cantidad actual: " + stockValido;
                 }
-         
+
                 var FueGuardoExitoso = false;
-                if (errores=="")
-                  FueGuardoExitoso = _ordersDao.GuardarBodegaMovil(Iddistribuidor,
-                                                                      idProducto,
-                                                                      int.Parse(cargaStockModeloWeb.stockCamion.Cantidad), 
-                                                                      idvendedor, 
-                                                                     1,
-                                                                      "Cargado Engine", tipo);
-               
+                if (errores == "")
+                    FueGuardoExitoso = _ordersDao.GuardarBodegaMovil(Iddistribuidor,
+                                                                        idProducto,
+                                                                        int.Parse(cargaStockModeloWeb.stockCamion.Cantidad),
+                                                                        idvendedor,
+                                                                       1,
+                                                                        "Cargado Engine", tipo);
+
                 if (FueGuardoExitoso)
                 {
-       
+
                     reply.status = "Ok";
                     reply.messege = "Producto Cargado";
                     reply.data = cargaStockModeloWeb;
@@ -2254,7 +2278,7 @@ namespace Chariot.Engine.Business.MardisOrders
                 {
                     reply.status = "Error";
                     reply.messege = "Producto Cargado";
-                    cargaStockModeloWeb.stockCamion.Errores= errores;
+                    cargaStockModeloWeb.stockCamion.Errores = errores;
                     reply.data = cargaStockModeloWeb.stockCamion;
                 }
 
@@ -2285,15 +2309,15 @@ namespace Chariot.Engine.Business.MardisOrders
                 int Iddistribuidor = _ordersDao.DistribuidorID(Guid.Parse(usuario));
                 int idvendedor = idvendedorapp;
                 int idProducto = _ordersDao.ProductoID(codigoproducto, cuenta);
-           
+
                 var FueGuardoExitoso = false;
-    
-                    FueGuardoExitoso = _ordersDao.GuardarBodegaMovil(Iddistribuidor,
-                                                                        idProducto,
-                                                                       cantidad,
-                                                                        idvendedor,
-                                                                       1,
-                                                                        "Cargado Engine", tipo);
+
+                FueGuardoExitoso = _ordersDao.GuardarBodegaMovil(Iddistribuidor,
+                                                                    idProducto,
+                                                                   cantidad,
+                                                                    idvendedor,
+                                                                   1,
+                                                                    "Cargado Engine", tipo);
 
                 if (FueGuardoExitoso)
                 {
@@ -2306,8 +2330,8 @@ namespace Chariot.Engine.Business.MardisOrders
                 {
                     reply.status = "Error";
                     reply.messege = "Producto Cargado";
-            
-                   
+
+
                 }
 
 
@@ -2327,7 +2351,8 @@ namespace Chariot.Engine.Business.MardisOrders
         }
 
 
-        private List<ImagePoductoBodega> ImagenProducto() {
+        private List<ImagePoductoBodega> ImagenProducto()
+        {
             List<ImagePoductoBodega> _imagenes = new List<ImagePoductoBodega>();
             ImagePoductoBodega _imagePoductoBodega = new ImagePoductoBodega();
             _imagePoductoBodega.id = 58;
@@ -2340,6 +2365,54 @@ namespace Chariot.Engine.Business.MardisOrders
             return _imagenes;
         }
         #endregion
+
+        #region Promociones
+        public List<PromocionesHelpers> GetPromociones(int Idaccount, string idVendedor)
+
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            List<PromocionesHelpers> Promociones = new List<PromocionesHelpers>();
+            if (Idaccount == 13)
+            {
+                Promociones = _ordersDao.GetPromociones(Idaccount);
+
+                return Promociones;
+
+            }
+            else
+            {
+                reply.messege = "Existio un Error";
+                reply.status = "Fail";
+                return null;
+            }
+
+
+        }
+
+        public List<RegalosHelpers> GetRegalos(int Idaccount, string idVendedor)
+
+        {
+            ReplyViewModel reply = new ReplyViewModel();
+            List<RegalosHelpers> Regalos = new List<RegalosHelpers>();
+            if (Idaccount == 13)
+            {
+                Regalos = _ordersDao.GetRegalos(Idaccount);
+
+                return Regalos;
+
+            }
+            else
+            {
+                reply.messege = "Existio un Error";
+                reply.status = "Fail";
+                return null;
+            }
+
+
+        }
+        #endregion
+
+
 
 
     }

@@ -207,6 +207,7 @@ namespace Chariot.Engine.Business.Mardiscore
                     Region = "da",
                     type = x.TypeBusiness
        ,
+                    codigo=x.ExternalCode,
                     SpeedLimit = -1
        ,
                     lat = double.Parse(x.LatitudeBranch),

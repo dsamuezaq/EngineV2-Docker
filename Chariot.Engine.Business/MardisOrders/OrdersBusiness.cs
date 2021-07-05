@@ -162,7 +162,7 @@ namespace Chariot.Engine.Business.MardisOrders
                                                        IdArticulo = ar.IdArticulo,
                                                        Descripcion = ar.Descripcion,
                                                        IdRubro = ar.IdRubro,
-                                                       Iva = ar.Iva,
+                                                       Iva = ext.pagaiva=="N"? Decimal.Parse("1"): Decimal.Parse("1.12"),
                                                        ImpuestosInternos = ar.ImpuestosInternos,
                                                        Exento = ar.Exento,
                                                        Precio1 = ext.precioprod,

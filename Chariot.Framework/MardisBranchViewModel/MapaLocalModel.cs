@@ -10,6 +10,7 @@ namespace Chariot.Framework.MardisBranchViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string codigo { get; set; }
         public string Region { get; set; }
         public string type { get; set; }
         public int SpeedLimit { get; set; }

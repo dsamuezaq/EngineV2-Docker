@@ -267,10 +267,30 @@ namespace Chariot.Engine.Business.Mardiscore
                 constructor.AppendLine(fileBrachMassive);
 
                 //Persistencia
-                string pathTxt = "C://xmls//xml_ejemplo.xml";
+                var CurrentDirectory = Directory.GetCurrentDirectory();
+                string pathTxt = CurrentDirectory + "\\xmls\\xml_ejemplo.xml";
+
+                if (!Directory.Exists(CurrentDirectory + "\\xmls"))
+                {
+                    Directory.CreateDirectory(CurrentDirectory + "\\xmls");
+                    Console.WriteLine(CurrentDirectory + "\\xmls");
+
+                    XmlTextWriter writer = new XmlTextWriter(Path.Combine(CurrentDirectory + "\\xmls", "xml_ejemplo.xml"), null);
+                    writer.Formatting = System.Xml.Formatting.Indented;
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("xml_ejemplo");
+                    writer.WriteElementString("nodo1", "texto del nodo1");
+                    writer.WriteElementString("nodo2", "texto del nodo2");
+                    writer.WriteEndElement();
+                    writer.WriteEndDocument();
+                    writer.Flush();
+                    writer.Close();
+
+                }
+
                 File.WriteAllText(pathTxt, constructor.ToString());
 
-                doc.Load("C://xmls//xml_ejemplo.xml");//Leer el XML
+                doc.Load(pathTxt);//Leer el XML
                 var cultureInfo = new CultureInfo("en-US");
                 XmlNode node = doc.DocumentElement.SelectSingleNode(@"/autorizacion/comprobante");
                 XmlNode childNode = node.ChildNodes[0];

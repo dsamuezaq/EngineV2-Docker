@@ -1,0 +1,401 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+    <estado>AUTORIZADO</estado>
+    <numeroAutorizacion>2806202101039001102400120020010008833890111198512</numeroAutorizacion>
+    <fechaAutorizacion>2021-06-28T16:18:26-05:00</fechaAutorizacion>
+    <ambiente>PRODUCCIÓN</ambiente>
+    <comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<factura id="comprobante" version="1.1.0">
+  <infoTributaria>
+    <ambiente>2</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>LACTEOS SAN ANTONIO C.A.</razonSocial>
+    <nombreComercial>NUTRILECHE</nombreComercial>
+    <ruc>0390011024001</ruc>
+    <claveAcceso>2806202101039001102400120020010008833890111198512</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>002</estab>
+    <ptoEmi>001</ptoEmi>
+    <secuencial>000883389</secuencial>
+    <dirMatriz>KM 80.Hacienda San Antonio Vía Durán-Tambo</dirMatriz>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>28/06/2021</fechaEmision>
+    <dirEstablecimiento>CARLOS TOSI S/N Y CORNELIO VINTIMILLA</dirEstablecimiento>
+    <contribuyenteEspecial>0195</contribuyenteEspecial>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+    <razonSocialComprador>HORTONEDA LOPEZ MARIA LUZ</razonSocialComprador>
+    <identificacionComprador>1706476775001</identificacionComprador>
+    <direccionComprador>CDLA. PANORAMA MZ. D VILLA 26 S/N  NO ASIGNADA</direccionComprador>
+    <totalSinImpuestos>7231.44</totalSinImpuestos>
+    <totalDescuento>300.58</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>0</codigoPorcentaje>
+        <descuentoAdicional>0.00</descuentoAdicional>
+        <baseImponible>7231.44</baseImponible>
+        <valor>0.00</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <propina>0.00</propina>
+    <importeTotal>7231.44</importeTotal>
+    <moneda>USD</moneda>
+    <pagos>
+      <pago>
+        <formaPago>20</formaPago>
+        <total>7231.44</total>
+        <plazo>45</plazo>
+        <unidadTiempo>DIAS</unidadTiempo>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>60000049</codigoPrincipal>
+      <codigoAuxiliar>7861055903349</codigoAuxiliar>
+      <descripcion>LECHE ENTERA UHT TETRAFINO 900ML</descripcion>
+      <cantidad>2208.000000</cantidad>
+      <precioUnitario>0.775000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>1711.20</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Cajas" valor="184"></detAdicional>
+        <detAdicional nombre="DetExtra" valor="12 ;0;UN"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>1711.20</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>60000049</codigoPrincipal>
+      <codigoAuxiliar>7861055903349</codigoAuxiliar>
+      <descripcion>LECHE ENTERA UHT TETRAFINO 900ML</descripcion>
+      <cantidad>96.000000</cantidad>
+      <precioUnitario>0.775000</precioUnitario>
+      <descuento>74.40</descuento>
+      <precioTotalSinImpuesto>0.00</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Cajas" valor="8"></detAdicional>
+        <detAdicional nombre="DetExtra" valor="12 ;0;UN"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>0.00</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>60000050</codigoPrincipal>
+      <codigoAuxiliar>7861055903356</codigoAuxiliar>
+      <descripcion>LECHE SEMIDESCREMADA UHT TETRAFINO 900ML</descripcion>
+      <cantidad>4416.000000</cantidad>
+      <precioUnitario>0.800000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>3532.80</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Cajas" valor="368"></detAdicional>
+        <detAdicional nombre="DetExtra" valor="12 ;0;UN"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>3532.80</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>60000050</codigoPrincipal>
+      <codigoAuxiliar>7861055903356</codigoAuxiliar>
+      <descripcion>LECHE SEMIDESCREMADA UHT TETRAFINO 900ML</descripcion>
+      <cantidad>192.000000</cantidad>
+      <precioUnitario>0.800000</precioUnitario>
+      <descuento>153.60</descuento>
+      <precioTotalSinImpuesto>0.00</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Cajas" valor="16"></detAdicional>
+        <detAdicional nombre="DetExtra" valor="12 ;0;UN"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>0.00</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>60000052</codigoPrincipal>
+      <codigoAuxiliar>7861055903370</codigoAuxiliar>
+      <descripcion>LECHE DESLACTOSADA UHT TETRAFINO 900ML</descripcion>
+      <cantidad>1380.000000</cantidad>
+      <precioUnitario>0.980000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>1352.40</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Cajas" valor="115"></detAdicional>
+        <detAdicional nombre="DetExtra" valor="12 ;0;UN"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>1352.40</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>60000052</codigoPrincipal>
+      <codigoAuxiliar>7861055903370</codigoAuxiliar>
+      <descripcion>LECHE DESLACTOSADA UHT TETRAFINO 900ML</descripcion>
+      <cantidad>60.000000</cantidad>
+      <precioUnitario>0.980000</precioUnitario>
+      <descuento>58.80</descuento>
+      <precioTotalSinImpuesto>0.00</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Cajas" valor="5"></detAdicional>
+        <detAdicional nombre="DetExtra" valor="12 ;0;UN"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>0.00</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>60000051</codigoPrincipal>
+      <codigoAuxiliar>7861055903363</codigoAuxiliar>
+      <descripcion>LECHE DESCREMADA UHT TETRAFINO 900ML</descripcion>
+      <cantidad>144.000000</cantidad>
+      <precioUnitario>0.830000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>119.52</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Cajas" valor="12"></detAdicional>
+        <detAdicional nombre="DetExtra" valor="12 ;0;UN"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>119.52</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>60000312</codigoPrincipal>
+      <codigoAuxiliar>7861055905275</codigoAuxiliar>
+      <descripcion>LECHE ENTERA UHT POLIETILENO 400ML</descripcion>
+      <cantidad>192.000000</cantidad>
+      <precioUnitario>0.365000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>70.08</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Cajas" valor="8"></detAdicional>
+        <detAdicional nombre="DetExtra" valor="24 ;0;UN"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>70.08</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>60000041</codigoPrincipal>
+      <codigoAuxiliar>7861055900706</codigoAuxiliar>
+      <descripcion>LECHE DESLACTOSADA UHT TETRA SQUARE 1L</descripcion>
+      <cantidad>240.000000</cantidad>
+      <precioUnitario>1.220000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>292.80</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Cajas" valor="20"></detAdicional>
+        <detAdicional nombre="DetExtra" valor="12 ;0;UN"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>292.80</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>60000045</codigoPrincipal>
+      <codigoAuxiliar>7861055900928</codigoAuxiliar>
+      <descripcion>LECHE SEMIDESCREMADA UHT SQUARE 1L</descripcion>
+      <cantidad>144.000000</cantidad>
+      <precioUnitario>1.060000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>152.64</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Cajas" valor="12"></detAdicional>
+        <detAdicional nombre="DetExtra" valor="12 ;0;UN"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>152.64</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>60000045</codigoPrincipal>
+      <codigoAuxiliar>7861055900928</codigoAuxiliar>
+      <descripcion>LECHE SEMIDESCREMADA UHT SQUARE 1L</descripcion>
+      <cantidad>13.000000</cantidad>
+      <precioUnitario>1.060000</precioUnitario>
+      <descuento>13.78</descuento>
+      <precioTotalSinImpuesto>0.00</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Cajas" valor="1"></detAdicional>
+        <detAdicional nombre="DetExtra" valor="12 ;1;UN"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>0.00</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="ID DEUDOR">0200002167</campoAdicional>
+    <campoAdicional nombre="Documento Comercial">0090286868</campoAdicional>
+    <campoAdicional nombre="Documento FI">1800050503</campoAdicional>
+    <campoAdicional nombre="Grupo clientes">Distribuidores</campoAdicional>
+    <campoAdicional nombre="Forma Pago">SAP S4</campoAdicional>
+    <campoAdicional nombre="Forma Pago">OTROS CON UTILIZACION DEL SISTEMA FINANCIERO USD 7231.44</campoAdicional>
+    <campoAdicional nombre="Email">hectorymarilu@hotmail.com</campoAdicional>
+    <campoAdicional nombre="Telefono">2805629</campoAdicional>
+    <campoAdicional nombre="DireccionDestinatario">DURAN CDLA. PANORAMA MZ. D VILLA 26 S/N NO ASIGNADA</campoAdicional>
+    <campoAdicional nombre="Fecha Pago">12/08/2021</campoAdicional>
+    <campoAdicional nombre="Orden Compra">ENTREGAR - MARTES 29 JUNIO</campoAdicional>
+  </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature907084">
+<ds:SignedInfo Id="Signature-SignedInfo873775">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
+<ds:Reference Id="SignedPropertiesID507555" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature907084-SignedProperties355619">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>n3xcNbleUQB21bdzDQPE+YxFrlo=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1234235">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>qRGzedFpcjcSlRONM9Msocvy7BU=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-355805" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>a88Nr/hu6kWG2OH4JhG1No9dmUs=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue550674">
+TdhcW2fYK9XQW29v4T76/gVNrU7KL4fiQayPft8zv7M1OVI2mgGalESmMMruzG6zfd/RyV9fqL14
+qv+guwFzY2R2S+x9aTtZe7Az3n8uFLJLsR+5rCBEHDna72OQ8JUSYjeqIzTwn2kZoK38E38UQ4RS
+z4TCljpuwuQ3Y04gP6iwbLISvzcjoAsGNmo2oMd/FlGjcyv1YSaqVrFPh8XIwJkOmSlDLBQ+CHja
+0e7L7Ze2i13WYquYh2kys201HccybqI9/X1Z+e6XfAO4kpYp4vzR6kAOfoUju6AijInyVApt5abR
+6bpNIoTw/JjEpk2MVGwhpBct2Igg62RmDvkORQ==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1234235">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIJ+zCCB+OgAwIBAgIEW2SCdDANBgkqhkiG9w0BAQsFADCBoTELMAkGA1UEBhMCRUMxIjAgBgNV
+BAoTGUJBTkNPIENFTlRSQUwgREVMIEVDVUFET1IxNzA1BgNVBAsTLkVOVElEQUQgREUgQ0VSVElG
+SUNBQ0lPTiBERSBJTkZPUk1BQ0lPTi1FQ0lCQ0UxDjAMBgNVBAcTBVFVSVRPMSUwIwYDVQQDExxB
+QyBCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMB4XDTIwMDcyOTE5NDQ0NFoXDTIyMDcyOTIwMTQ0
+NFowgbQxCzAJBgNVBAYTAkVDMSIwIAYDVQQKExlCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMTcw
+NQYDVQQLEy5FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04tRUNJQkNFMQ4w
+DAYDVQQHEwVRVUlUTzE4MBEGA1UEBRMKMDAwMDUwMjgyMzAjBgNVBAMTHEpPU0UgUklDQVJETyBC
+RUxUUkFOIE5PVklMTE8wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCgin987112R4AW
+4If4j98XVEIUUMQayFTdJyr0R4iGFePccm//HYewU8gz5O7hs6FiYfjf/CkvyUoQmPUOkqSlZd9R
+LBXBoy/M2MEHSBaBwuWOGiiASXIiCoRDaE3noNj9oP8ldhC0RugAgb9yZLAXkukot29cSHagiKFE
+BcA+Kv7W5llru88MnnNWuH4aPKCouCukFNjZrWo5JOf8GdfmC8Lb91gvCwfdIQKCL7LyHbjRdgd+
+QfHo9IoRtqUY5QRC2fbjtWEScwdrWBW2OWndmor4HMZPNEsFAAyU8d0SkIhoLLinfa83ePdWQ2bB
+pRk1fPUcrLz5H6gj/gmvxFpFAgMBAAGjggUkMIIFIDALBgNVHQ8EBAMCB4AwZwYDVR0gBGAwXjBc
+BgsrBgEEAYKoOwICATBNMEsGCCsGAQUFBwIBFj9odHRwOi8vd3d3LmVjaS5iY2UuZWMvcG9saXRp
+Y2EtY2VydGlmaWNhZG8vcGVyc29uYS1qdXJpZGljYS5wZGYwgZEGCCsGAQUFBwEBBIGEMIGBMD4G
+CCsGAQUFBzABhjJodHRwOi8vb2NzcC5lY2kuYmNlLmVjL2VqYmNhL3B1YmxpY3dlYi9zdGF0dXMv
+b2NzcDA/BggrBgEFBQcwAYYzaHR0cDovL29jc3AxLmVjaS5iY2UuZWMvZWpiY2EvcHVibGljd2Vi
+L3N0YXR1cy9vY3NwMCYGCisGAQQBgqg7AwoEGBMWTEFDVEVPUyBTQU4gQU5UT05JTyBDQTAdBgor
+BgEEAYKoOwMLBA8TDTAzOTAwMTEwMjQwMDEwGgYKKwYBBAGCqDsDAQQMEwowMTA0MjI0OTg1MBwG
+CisGAQQBgqg7AwIEDhMMSk9TRSBSSUNBUkRPMBcGCisGAQQBgqg7AwMECRMHQkVMVFJBTjAXBgor
+BgEEAYKoOwMEBAkTB05PVklMTE8wGgYKKwYBBAGCqDsDBQQMEwpURUNOSUNPIFRJMDEGCisGAQQB
+gqg7AwcEIxMhQ09STkVMSU8gVklOVElNSUxMQSBZIENBUkxPUyBUT1NJMBkGCisGAQQBgqg7AwgE
+CxMJMDcyODYyMTI3MBYGCisGAQQBgqg7AwkECBMGQ3VlbmNhMBcGCisGAQQBgqg7AwwECRMHRUNV
+QURPUjAgBgorBgEEAYKoOwMzBBITEFNPRlRXQVJFLUFSQ0hJVk8wLAYDVR0RBCUwI4EhcmljYXJk
+by5iZWx0cmFuQG51dHJpbGVjaGUuY29tLmVjMIIB4QYDVR0fBIIB2DCCAdQwggHQoIIBzKCCAciG
+gdZsZGFwOi8vYmNlcWxkYXBzdWJwMS5iY2UuZWMvY249Q1JMMTAyMSxjbj1BQyUyMEJBTkNPJTIw
+Q0VOVFJBTCUyMERFTCUyMEVDVUFET1IsbD1RVUlUTyxvdT1FTlRJREFEJTIwREUlMjBDRVJUSUZJ
+Q0FDSU9OJTIwREUlMjBJTkZPUk1BQ0lPTi1FQ0lCQ0Usbz1CQU5DTyUyMENFTlRSQUwlMjBERUwl
+MjBFQ1VBRE9SLGM9RUM/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9iYXNlhjRodHRwOi8vd3d3
+LmVjaS5iY2UuZWMvQ1JML2VjaV9iY2VfZWNfY3JsZmlsZWNvbWIuY3JspIG2MIGzMQswCQYDVQQG
+EwJFQzEiMCAGA1UEChMZQkFOQ08gQ0VOVFJBTCBERUwgRUNVQURPUjE3MDUGA1UECxMuRU5USURB
+RCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLUVDSUJDRTEOMAwGA1UEBxMFUVVJVE8x
+JTAjBgNVBAMTHEFDIEJBTkNPIENFTlRSQUwgREVMIEVDVUFET1IxEDAOBgNVBAMTB0NSTDEwMjEw
+KwYDVR0QBCQwIoAPMjAyMDA3MjkxOTQ0NDRagQ8yMDIyMDcyOTIwMTQ0NFowHwYDVR0jBBgwFoAU
+SKLfIx8d+CxReowDzUkypQnBlKswHQYDVR0OBBYEFGVxkZqp24LYeeAknOgPCojmAtnzMAkGA1Ud
+EwQCMAAwGQYJKoZIhvZ9B0EABAwwChsEVjguMQMCBLAwDQYJKoZIhvcNAQELBQADggIBADCgdq8a
+JVXc6zC6J3x/gN32TpYlAR1fDIUFgJs2hiohJM8y0n+17aUIwu6Vs7GtKvs+nnOx56kOLDQB9iB+
+sbX/+VZpVtHjLs4KRcuYKbTpj0NRjg5R/8UP1qyIhQMuGm/fSFxt+GSz5RBxHA384wKuLE+nKtKe
+kLNzpQ74Wmcfsis6p3tNiMUqMSTD+T2qn2FCf2AOTTEsyoUTaJpQjmy7wYcMc3UbeGbLbCFfNLO4
+jcAzNL6uODXcj4+oPezPPhgAqXpVXU1+l2OWPMo+Plfd9EcY/EkCtTw6ThJnkFBy/9A3DRXhgEHX
+LYJagyKW5f4yNxyjSRWwVdFiIlaJToD4Gk5DE6oh+s2wRy5c2tcIVP4DgaQ5q9dVFCkrFZHIqWrJ
+S70L6pyP9Yomi1luFrGZvgdeZf+DwFQAj8IxwgxNg5Tpmu0kND9GKOtJHnPreH+J2Ed2v1L6qpDy
+LV98UYLTi+V8aY6zsuNV+YzjoAmgDtiIDXEIBJ1zMuOmZ0NNkQSXCvBFiffmfPXmSFBYEal+vSMB
+TfmfxzQU+nAcM7fzGgM54/8WZL7UFhYTR64sIIl6u2v0NPTPExeGpolfFS5vmC8OGGP+y6j5hbQ2
+8eiweWkwQ5LXILNjP0sIopp+H9X9NBWPmtyaAWg2UIYEfHwwwGRHTTXlXV2HsWImq6uR
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+oIp/fO9ddkeAFuCH+I/fF1RCFFDEGshU3Scq9EeIhhXj3HJv/x2HsFPIM+Tu4bOhYmH43/wpL8lK
+EJj1DpKkpWXfUSwVwaMvzNjBB0gWgcLljhoogElyIgqEQ2hN56DY/aD/JXYQtEboAIG/cmSwF5Lp
+KLdvXEh2oIihRAXAPir+1uZZa7vPDJ5zVrh+GjygqLgrpBTY2a1qOSTn/BnX5gvC2/dYLwsH3SEC
+gi+y8h240XYHfkHx6PSKEbalGOUEQtn247VhEnMHa1gVtjlp3ZqK+BzGTzRLBQAMlPHdEpCIaCy4
+p32vN3j3VkNmwaUZNXz1HKy8+R+oI/4Jr8RaRQ==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature907084-Object660895"><etsi:QualifyingProperties Target="#Signature907084"><etsi:SignedProperties Id="Signature907084-SignedProperties355619"><etsi:SignedSignatureProperties><etsi:SigningTime>2021-06-28T16:18:20-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>thS8q/HjNCp9KtYowAUrcaV4L2k=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533313652</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-355805"><etsi:Description>DOCUMENTO EMITIDO CON ECUAFACT. LA FACTURACION ELECTRONICA DEL ECUADOR. Visitenos en http://www.ecuanexus.com </etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante> <mensajes>  </mensajes> </autorizacion>
